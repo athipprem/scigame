@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<title>Puzzle Citadel — Sky World</title>
+<style>
+  :root{
+    --bg:#1a1030; --bg2:#3a1f42; --panel:#241533; --line:#4a2c52;
+    --ink:#fff3e6; --grey:#c9b3d9; --gold:#FFD700; --amber:#FFA500;
+    --world:#ff8a65;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;font-family:'Segoe UI',Arial,sans-serif;background:radial-gradient(circle at 50% -10%,var(--bg2),var(--bg));color:var(--ink);min-height:100vh;padding-bottom:30px}
+  .wrap{max-width:900px;margin:0 auto;padding:20px 16px}
+
+  header{text-align:center;margin-bottom:10px}
+  .brand-badge{display:flex;justify-content:center}
+  .brand-badge svg{animation:brandPulse 3s ease-in-out infinite}
+  @keyframes brandPulse{0%,100%{filter:drop-shadow(0 0 5px #ff8a6544)}50%{filter:drop-shadow(0 0 11px #ff8a6588)}}
+  h1{font-size:1.6rem;margin:6px 0 4px;background:linear-gradient(135deg,var(--world),#ffcf7a);-webkit-background-clip:text;background-clip:text;color:transparent}
+  header .sub{color:var(--grey);font-size:.85rem;margin-bottom:4px}
+  #back-link{display:inline-block;margin-top:6px;color:var(--grey);font-size:.82rem;text-decoration:none;border:1.5px solid var(--line);border-radius:20px;padding:6px 14px}
+  #back-link:hover{color:var(--world);border-color:var(--world)}
+
+  /* ---------- DUSK SKY SCENE STRIP ---------- */
+  #scene{position:relative;width:100%;height:110px;border-radius:20px;overflow:hidden;margin-top:16px;border:1.5px solid var(--line);
+    background:linear-gradient(180deg,#241533 0%,#3a1f42 55%,#1a1030 100%);box-shadow:0 8px 26px #0007}
+  #moon-glow{position:absolute;top:-26px;right:16%;width:80px;height:80px;border-radius:50%;background:radial-gradient(circle,#ffd76c88,transparent 70%)}
+  .star{position:absolute;border-radius:50%;background:#ffffffcc;animation:starTwinkle ease-in-out infinite}
+  @keyframes starTwinkle{0%,100%{opacity:.3}50%{opacity:1}}
+  .spire{position:absolute;bottom:0;pointer-events:none}
+  .spire-tower{width:16px;background:#3a2447;border-radius:2px 2px 0 0}
+  .spire-roof{width:0;height:0;border-left:11px solid transparent;border-right:11px solid transparent;margin-left:-3px}
+  .spire-a{left:38%}
+  .spire-a .spire-tower{height:44px}
+  .spire-a .spire-roof{border-bottom:16px solid #ff8a65}
+  .spire-b{left:48%}
+  .spire-b .spire-tower{height:60px;width:20px}
+  .spire-b .spire-roof{border-bottom:22px solid #ffcf7a;border-left-width:13px;border-right-width:13px;margin-left:-3px}
+  .spire-c{left:60%}
+  .spire-c .spire-tower{height:36px}
+  .spire-c .spire-roof{border-bottom:14px solid #ff8a65}
+  .sparkle{position:absolute;bottom:-6px;border-radius:50%;background:#ffcf7a99;animation:sparkleUp linear infinite}
+  @keyframes sparkleUp{to{transform:translateY(-120px) translateX(14px);opacity:0}}
+
+  /* ---------- TRIAL CARDS ---------- */
+  #trials{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin-top:20px}
+  .trial-card{background:var(--panel);border:1.5px solid var(--line);border-radius:18px;padding:20px 18px;text-align:center;position:relative;transition:transform .15s,border-color .2s}
+  .trial-card:hover{transform:translateY(-4px);border-color:var(--world)}
+  .trial-icon-wrap{position:relative;width:66px;height:66px;margin:0 auto 10px}
+  .trial-aura{position:absolute;inset:0;border-radius:50%;background:var(--world);filter:blur(16px);opacity:.5;animation:auraPulse 3s ease-in-out infinite}
+  @keyframes auraPulse{0%,100%{transform:scale(1);opacity:.4}50%{transform:scale(1.12);opacity:.65}}
+  .trial-icon{position:relative;font-size:2.4rem;display:flex;align-items:center;justify-content:center;height:100%}
+  .trial-unit{font-size:.66rem;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:var(--world)}
+  .trial-name{font-weight:800;font-size:1.05rem;margin:2px 0 6px}
+  .trial-tagline{font-size:.8rem;color:var(--grey);line-height:1.5;margin-bottom:12px;min-height:58px}
+  .trial-meta{display:flex;justify-content:center;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+  .meta-chip{background:#00000030;border:1px solid var(--line);border-radius:20px;padding:4px 10px;font-size:.7rem;font-weight:700;color:var(--grey)}
+  .trial-btn{display:block;width:100%;border:none;border-radius:12px;padding:11px;font-weight:800;font-size:.88rem;cursor:pointer;text-decoration:none;background:linear-gradient(135deg,var(--gold),var(--amber));color:#3a2a00}
+  .trial-btn:hover{filter:brightness(1.05)}
+
+  footer{text-align:center;margin-top:26px;color:var(--grey);font-size:.76rem;line-height:1.6;max-width:560px;margin-left:auto;margin-right:auto}
+  footer b{color:var(--ink)}
+  #footer-back-link{display:inline-block;color:var(--grey);font-size:.82rem;text-decoration:none;border:1.5px solid var(--line);border-radius:20px;padding:6px 14px}
+  #footer-back-link:hover{color:var(--world);border-color:var(--world)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="brand-badge">
+      <svg width="46" height="46" viewBox="0 0 52 52">
+        <defs>
+          <linearGradient id="wGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#ff8a65"/>
+            <stop offset="100%" stop-color="#ffcf7a"/>
+          </linearGradient>
+        </defs>
+        <circle cx="26" cy="26" r="24" fill="none" stroke="url(#wGrad)" stroke-width="2.5"/>
+        <circle cx="26" cy="26" r="18.5" fill="#241533" stroke="#4a2c52" stroke-width="1"/>
+        <text x="26" y="33" text-anchor="middle" font-size="20">&#129513;</text>
+      </svg>
+    </div>
+    <h1>Puzzle Citadel</h1>
+    <div class="sub">Choose a trial — multi-step reasoning, floating beyond the stars</div>
+    <a id="back-link" href="index.html">&#8592; Back to World Map</a>
+  </header>
+
+  <div id="scene">
+    <div id="moon-glow"></div>
+    <div class="spire spire-a"><div class="spire-tower"></div><div class="spire-roof"></div></div>
+    <div class="spire spire-b"><div class="spire-tower"></div><div class="spire-roof"></div></div>
+    <div class="spire spire-c"><div class="spire-tower"></div><div class="spire-roof"></div></div>
+  </div>
+
+  <div id="trials">
+    <div class="trial-card">
+      <div class="trial-icon-wrap"><div class="trial-aura"></div><div class="trial-icon">&#128274;</div></div>
+      <div class="trial-unit">Compiled</div>
+      <div class="trial-name">The Gatehouse Trials</div>
+      <div class="trial-tagline">A balanced mix of applying knowledge and full reasoning — your first climb into the Citadel.</div>
+      <div class="trial-meta"><span class="meta-chip">20 Qs</span><span class="meta-chip">Cross-test</span></div>
+      <a class="trial-btn" href="Citadel_Gatehouse_Trial.html">&#9876;&#65039; Begin Trial</a>
+    </div>
+
+    <div class="trial-card">
+      <div class="trial-icon-wrap"><div class="trial-aura"></div><div class="trial-icon">&#127984;</div></div>
+      <div class="trial-unit">Compiled</div>
+      <div class="trial-name">The Spire Trials</div>
+      <div class="trial-tagline">Higher up the tower, the puzzles sharpen — mostly full multi-step reasoning now.</div>
+      <div class="trial-meta"><span class="meta-chip">20 Qs</span><span class="meta-chip">Cross-test</span></div>
+      <a class="trial-btn" href="Citadel_Spire_Trial.html">&#9876;&#65039; Begin Trial</a>
+    </div>
+
+    <div class="trial-card">
+      <div class="trial-icon-wrap"><div class="trial-aura"></div><div class="trial-icon">&#128081;</div></div>
+      <div class="trial-unit">Compiled</div>
+      <div class="trial-name">The Apex Trials</div>
+      <div class="trial-tagline">The Citadel's summit — ASMOPSS's hardest room, saved for very last.</div>
+      <div class="trial-meta"><span class="meta-chip">20 Qs</span><span class="meta-chip">Cross-test</span></div>
+      <a class="trial-btn" href="Citadel_Apex_Trial.html">&#9876;&#65039; Begin Trial</a>
+    </div>
+  </div>
+
+  <footer>
+    <a id="footer-back-link" href="index.html">&#8592; Back to World Map</a>
+    <div style="margin-top:10px">Copyright &copy; 2026 Luikishi. All rights reserved. Have fun !</div>
+  </footer>
+</div>
+
+<script>
+const scene = document.getElementById('scene');
+for (let i=0;i<10;i++){
+  const s = document.createElement('div');
+  s.className = 'star';
+  const size = 1+Math.random()*1.6;
+  s.style.width = size+'px'; s.style.height = size+'px';
+  s.style.left = Math.random()*100+'%';
+  s.style.top = Math.random()*55+'%';
+  s.style.animationDuration = (2+Math.random()*3)+'s';
+  s.style.animationDelay = (Math.random()*3)+'s';
+  scene.appendChild(s);
+}
+for (let i=0;i<8;i++){
+  const d = document.createElement('div');
+  d.className = 'sparkle';
+  const size = 2+Math.random()*3;
+  d.style.width = size+'px'; d.style.height = size+'px';
+  d.style.left = Math.random()*100+'%';
+  d.style.animationDuration = (4+Math.random()*4)+'s';
+  d.style.animationDelay = (Math.random()*5)+'s';
+  scene.appendChild(d);
+}
+</script>
+</body>
+</html>

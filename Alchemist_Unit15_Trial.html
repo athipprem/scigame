@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<title>Chemistry Quest — The Density Trials (Unit 15)</title>
+<style>
+  :root{
+    --gold:#FFD700; --gold-d:#DAA520; --amber:#FFA500;
+    --steel:#00695c; --steel-d:#004d40; --steel-l:#e0f2f1;
+    --bg:#0a1128; --bg2:#16213e; --panel:#11192f; --chip:#152544; --line:#2a3a5c;
+    --ink:#fff8e6; --grey:#a9b8d9;
+    --ok:#43e97b; --bad:#ff5c6c;
+    --a:#00e5c9; --b:#5fa8ff; --c:#c77dff;
+    /* --world = this trial's identity color, matching Alchemist's Depths on the World Map.
+       Chemistry / The Alchemist's Depths = teal, shared across all Chemistry trials. */
+    --world:#00e5c9;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:'Segoe UI',Arial,sans-serif;background:radial-gradient(circle at 50% 0%,var(--bg2),var(--bg));color:var(--ink);min-height:100vh;padding-bottom:30px}
+  .wrap{max-width:760px;margin:0 auto;padding:18px}
+  .screen{display:none} .screen.active{display:block}
+
+  /* ---------- INTRO ---------- */
+  #screen-intro{text-align:center;padding-top:40px}
+  #screen-intro h1{font-size:1.8rem;margin:14px 0 6px;background:linear-gradient(135deg,var(--gold),var(--amber));-webkit-background-clip:text;background-clip:text;color:transparent}
+  #screen-intro .sub{color:var(--grey);font-size:.95rem;margin-bottom:22px}
+  .intro-emoji{font-size:3.2rem}
+  .zone-card{background:var(--panel);border:1.5px solid var(--line);border-radius:16px;padding:20px;margin:0 auto 22px;max-width:420px;text-align:left}
+  .zone-card b{color:var(--gold)}
+  .zone-card ul{margin:10px 0 0;padding-left:18px;font-size:.85rem;color:var(--grey);line-height:1.7}
+  .btn{border:none;border-radius:12px;padding:14px 30px;font-size:1.05rem;font-weight:800;cursor:pointer;color:#3a2a00;text-decoration:none;display:inline-block}
+  .btn.gold{background:linear-gradient(135deg,var(--gold),var(--amber));box-shadow:0 6px 18px #ffa50055}
+  .btn.gold:hover{transform:translateY(-1px)}
+  .btn.ghost{background:transparent;border:1.5px solid var(--line);color:var(--ink);margin-top:10px}
+  .world-badge{display:inline-flex;align-items:center;gap:7px;background:var(--panel);border:1.5px solid var(--world);color:var(--world);font-weight:800;font-size:.85rem;padding:8px 16px;border-radius:20px;margin-bottom:12px}
+  .world-badge span{color:var(--grey);font-weight:600;font-size:.76rem}
+  .world-badge.small{padding:5px 12px;font-size:.75rem;margin-bottom:0}
+  .w-map-link{display:inline-block;color:var(--grey);font-size:.8rem;text-decoration:none;margin-top:12px}
+  .w-map-link:hover{color:var(--world)}
+  .w-map-link.pill{border:1.5px solid var(--line);border-radius:20px;padding:6px 14px}
+  .w-map-link.pill:hover{border-color:var(--world)}
+  #world-topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+  #world-topbar .w-map-link{margin-top:0;font-weight:700}
+
+  /* ---------- PATH TRACKER ---------- */
+  #path{display:flex;gap:4px;overflow-x:auto;padding:10px 4px 14px;margin-bottom:10px}
+  .node{flex-shrink:0;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.68rem;font-weight:800;border:2px solid var(--line);color:var(--grey);background:var(--panel)}
+  .node.A{border-color:var(--a)} .node.B{border-color:var(--b)} .node.C{border-color:var(--c)}
+  .node.done-ok{background:var(--ok);color:#04331b;border-color:var(--ok)}
+  .node.done-bad{background:var(--bad);color:#3a0007;border-color:var(--bad)}
+  .node.current{transform:scale(1.25);box-shadow:0 0 0 3px #ffd70066}
+
+  /* ---------- STATS BAR ---------- */
+  #stats{display:flex;justify-content:space-between;align-items:center;background:var(--panel);border:1.5px solid var(--line);border-radius:14px;padding:10px 16px;margin-bottom:16px;font-size:.85rem;flex-wrap:wrap;gap:8px}
+  .stat{display:flex;align-items:center;gap:6px;font-weight:700}
+  #hearts span{filter:grayscale(0);margin-right:1px}
+  #hearts span.lost{filter:grayscale(1) opacity(.35)}
+  #streak-badge{background:linear-gradient(135deg,#ff8a00,#ff3d00);padding:3px 10px;border-radius:20px;font-size:.78rem}
+  #streak-badge.hide{display:none}
+
+  /* ---------- BATTLE CARD ---------- */
+  .battle{background:var(--panel);border:1.5px solid var(--line);border-radius:18px;padding:22px 20px;text-align:center;position:relative;overflow:hidden}
+  .battle.boss{border-color:var(--gold);box-shadow:0 0 30px #ffd70033}
+  .boss-tag{position:absolute;top:10px;right:14px;background:linear-gradient(135deg,var(--gold),var(--amber));color:#3a2a00;font-size:.68rem;font-weight:800;padding:3px 10px;border-radius:20px}
+  .tierlbl{display:inline-block;font-size:.66rem;font-weight:800;letter-spacing:.4px;text-transform:uppercase;padding:2px 10px;border-radius:20px;margin-bottom:8px}
+  .tierlbl.Basic{background:#00e5c933;color:var(--a)}
+  .tierlbl.Intermediate{background:#5fa8ff33;color:var(--b)}
+  .tierlbl.Applied{background:#c77dff33;color:var(--c)}
+  .monster-emoji{font-size:3.4rem;margin:4px 0 2px;display:inline-block;transition:transform .25s}
+  .monster-emoji.hit{animation:shake .35s}
+  @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-10px) rotate(-6deg)}75%{transform:translateX(10px) rotate(6deg)}}
+  .monster-name{font-weight:800;color:var(--gold);font-size:1.02rem;margin-bottom:2px}
+  .monster-hp{width:140px;height:8px;background:#3a2a55;border-radius:5px;margin:6px auto 14px;overflow:hidden}
+  .monster-hp .fill{height:100%;width:100%;background:linear-gradient(90deg,#ff5c6c,#ff8a00);transition:width .35s}
+  .q-body{font-size:1rem;font-weight:600;line-height:1.5;margin:6px 0 16px;color:var(--ink)}
+  .opts{display:grid;gap:9px;text-align:left}
+  .opt{background:var(--chip);border:1.5px solid var(--line);color:var(--ink);border-radius:11px;padding:12px 14px;font-size:.9rem;cursor:pointer;text-align:left}
+  .opt:hover{border-color:var(--gold)}
+  .opt.correct{background:#0e3d22;border-color:var(--ok);color:#a4f7c4;font-weight:700}
+  .opt.wrong{background:#3d0e13;border-color:var(--bad);color:#ffb4bb;font-weight:700}
+  .opt:disabled{cursor:default}
+  .fx{font-size:1.4rem;font-weight:900;margin-top:10px;display:none}
+  .fx.show{display:block;animation:pop .4s}
+  .fx.ok{color:var(--ok)} .fx.bad{color:var(--bad)}
+  @keyframes pop{0%{transform:scale(.6)}60%{transform:scale(1.15)}100%{transform:scale(1)}}
+  .why{display:none;text-align:left;margin-top:14px;padding:12px 14px;border-radius:10px;background:var(--chip);border-left:4px solid var(--gold);font-size:.85rem;color:#f0ddb8}
+  .why.show{display:block}
+  #next-btn{display:none;margin-top:16px}
+
+  /* ---------- END SCREEN ---------- */
+  #screen-end{text-align:center;padding-top:20px}
+  .rank{font-size:3.4rem;margin:10px 0 0}
+  .rank-lbl{font-size:1.5rem;font-weight:900;background:linear-gradient(135deg,var(--gold),var(--amber));-webkit-background-clip:text;background-clip:text;color:transparent;margin-bottom:16px}
+  .end-stats{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin:18px 0}
+  .end-chip{background:var(--panel);border:1.5px solid var(--line);border-radius:12px;padding:12px 16px;min-width:100px}
+  .end-chip .v{font-size:1.3rem;font-weight:800;color:var(--gold)}
+  .end-chip .l{font-size:.7rem;color:var(--grey);text-transform:uppercase;letter-spacing:.4px;margin-top:2px}
+  .sec-breakdown{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin:14px 0}
+  .sec-chip{background:var(--chip);border:1px solid var(--line);border-radius:20px;padding:5px 12px;font-size:.75rem;font-weight:700}
+  #save-status{font-size:.8rem;color:var(--grey);margin-top:10px}
+  .note{font-size:.75rem;color:var(--grey);margin-top:22px;line-height:1.6;max-width:480px;margin-left:auto;margin-right:auto}
+
+  /* ---------- BACKDROP & THEME ---------- */
+  #bg-particles{position:fixed;inset:0;z-index:-2;background-image:
+    radial-gradient(1.6px 1.6px at 10% 20%,#ffffff55,transparent),
+    radial-gradient(1.6px 1.6px at 80% 10%,#ffffff33,transparent),
+    radial-gradient(1.2px 1.2px at 40% 70%,#ffffff44,transparent),
+    radial-gradient(1.8px 1.8px at 65% 45%,#ffffff33,transparent),
+    radial-gradient(1.4px 1.4px at 90% 85%,#ffffff44,transparent),
+    radial-gradient(1.2px 1.2px at 25% 90%,#ffffff33,transparent);
+    background-repeat:repeat;background-size:280px 280px;animation:drift 70s linear infinite}
+  @keyframes drift{from{background-position:0 0}to{background-position:-560px 280px}}
+  #theme-glow{position:fixed;inset:0;z-index:-1;opacity:.55;transition:background 1s ease;pointer-events:none}
+  #theme-glow.world{background:radial-gradient(600px 400px at 50% 20%,#00e5c930,transparent 70%)}
+  #theme-glow.boss{background:radial-gradient(680px 460px at 50% 20%,#00e5c925,transparent 55%),radial-gradient(650px 450px at 50% 20%,#ffd70045,transparent 70%)}
+  #confetti-layer{position:fixed;inset:0;pointer-events:none;z-index:50;overflow:hidden}
+  .confetti-piece{position:absolute;top:-20px;border-radius:2px;animation:confettiFall linear forwards}
+  @keyframes confettiFall{to{transform:translateY(110vh) rotate(540deg);opacity:.2}}
+
+  /* ---------- PATH ICONS ---------- */
+  #path{padding-top:22px}
+  .node{position:relative}
+  .node .nico{position:absolute;top:-18px;left:50%;transform:translateX(-50%);font-size:.72rem;opacity:.85}
+  .node.current{animation:nodePulse 1.1s ease-in-out infinite}
+  @keyframes nodePulse{0%,100%{box-shadow:0 0 0 3px #ffd70066}50%{box-shadow:0 0 0 8px #ffd70099}}
+
+  /* ---------- MONSTER AURA & MOTION ---------- */
+  .monster-wrap{position:relative;display:inline-block;margin:6px 0 2px}
+  .monster-aura{position:absolute;left:50%;top:50%;width:130px;height:130px;transform:translate(-50%,-50%);border-radius:50%;filter:blur(20px);opacity:.6;z-index:0;transition:background 1s ease;animation:auraPulse 2.6s ease-in-out infinite}
+  @keyframes auraPulse{0%,100%{opacity:.45;transform:translate(-50%,-50%) scale(1)}50%{opacity:.7;transform:translate(-50%,-50%) scale(1.12)}}
+  .monster-aura.world{background:var(--world)} .monster-aura.boss{background:var(--gold)}
+  .monster-emoji{position:relative;z-index:1;animation:bob 2.4s ease-in-out infinite}
+  @keyframes bob{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-9px) rotate(2deg)}}
+  .monster-emoji.defeat{animation:defeatSpin .5s forwards}
+  @keyframes defeatSpin{to{transform:scale(0) rotate(200deg);opacity:0}}
+  .battle.boss .monster-emoji{font-size:4.4rem}
+  .battle.boss{background:linear-gradient(160deg,#2a1a10,var(--panel));animation:bossFlicker 3s ease-in-out infinite}
+  @keyframes bossFlicker{0%,100%{box-shadow:0 0 30px #ffd70033}50%{box-shadow:0 0 46px #ffd70055}}
+
+  /* ---------- SPARKS & FLOAT TEXT ---------- */
+  .spark{font-size:1.1rem;pointer-events:none;animation:sparkOut .7s ease-out forwards;z-index:80}
+  @keyframes sparkOut{to{transform:translate(var(--dx),var(--dy)) scale(0.3);opacity:0}}
+  .float-coin{font-weight:800;color:var(--gold);font-size:.9rem;pointer-events:none;animation:floatUp .8s ease-out forwards;z-index:80}
+  @keyframes floatUp{to{transform:translateY(-30px);opacity:0}}
+
+  /* ---------- HEARTS ---------- */
+  #hearts span{display:inline-block;transition:transform .2s}
+  #hearts span.crack{animation:heartCrack .45s}
+  #hearts span.heal{animation:heartHeal .5s}
+  @keyframes heartCrack{0%{transform:scale(1)}30%{transform:scale(1.4) rotate(-10deg)}60%{transform:scale(.8) rotate(8deg)}100%{transform:scale(1)}}
+  @keyframes heartHeal{0%{transform:scale(1)}50%{transform:scale(1.5);filter:drop-shadow(0 0 8px #43e97b)}100%{transform:scale(1)}}
+  #shield-flash{position:fixed;inset:0;background:radial-gradient(circle,#ff5c6c55,#3d0e1399);opacity:0;pointer-events:none;z-index:60;transition:opacity .25s}
+  #shield-flash.show{opacity:1}
+  #toast{position:fixed;top:18px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#3d0e13,var(--bg2));border:1.5px solid var(--bad);color:#ffd3d8;padding:10px 20px;border-radius:14px;font-weight:800;font-size:.82rem;z-index:70;opacity:0;transition:opacity .3s,top .3s;pointer-events:none;max-width:88vw;text-align:center}
+  #toast.show{opacity:1;top:30px}
+  #toast.heal{border-color:var(--ok);color:#c8ffe0}
+
+  /* ---------- RANK SHINE ---------- */
+  .rank{position:relative;display:inline-block}
+  .rank::after{content:'';position:absolute;inset:-14px;background:radial-gradient(circle,#ffffff40,transparent 60%);animation:shine 2s ease-in-out infinite;z-index:-1}
+  @keyframes shine{0%,100%{opacity:.2}50%{opacity:.6}}
+</style>
+</head>
+<body>
+<div id="bg-particles"></div>
+<div id="theme-glow" class="world"></div>
+<div id="confetti-layer"></div>
+<div id="shield-flash"></div>
+<div id="toast"></div>
+<div class="wrap">
+
+  <!-- INTRO -->
+  <div class="screen active" id="screen-intro">
+    <div class="world-badge">&#9879;&#65039; The Alchemist's Depths <span>&middot; Chemistry world</span></div>
+    <div class="intro-emoji">&#9878;&#65039;&#127754;</div>
+    <h1>The Density Trials</h1>
+    <div class="sub">Density, floating &amp; sinking — work out what rises and what sinks, one beaker at a time.</div>
+    <div class="zone-card">
+      <div><b>Zone:</b> Unit 15 &mdash; Density &amp; Buoyancy</div>
+      <ul>
+        <li>20 monsters guard this trial &mdash; defeat each by picking the right answer</li>
+        <li>Same questions &amp; explanations as your real Unit 15 test &mdash; just shuffled, so it plays differently every time</li>
+        <li>Wrong pick? You'll see why, then keep going &mdash; no game over, this is about learning</li>
+        <li>Build a streak for bonus coins &middot; the final monster is a BOSS fight</li>
+      </ul>
+    </div>
+    <button class="btn gold" onclick="startGame()">&#9876;&#65039; Begin the Trial</button><br>
+    <a class="w-map-link pill" href="Alchemist_Map.html">&#8592; Back to Alchemist's Depths</a>
+  </div>
+
+  <!-- GAME -->
+  <div class="screen" id="screen-game">
+    <div id="world-topbar">
+      <div class="world-badge small">&#9879;&#65039; Alchemist's Depths</div>
+      <a class="w-map-link" href="Alchemist_Map.html">&#8592; Back</a>
+    </div>
+    <div id="path"></div>
+    <div id="stats">
+      <div class="stat">&#128081; <span id="coins">0</span> coins</div>
+      <div class="stat" id="hearts"><span id="heart-0">&#10084;&#65039;</span><span id="heart-1">&#10084;&#65039;</span><span id="heart-2">&#10084;&#65039;</span></div>
+      <div class="stat" id="streak-badge">&#128293; 0 streak</div>
+    </div>
+    <div class="battle" id="battle-card">
+      <div class="boss-tag" id="boss-tag" style="display:none">&#128128; BOSS</div>
+      <span class="tierlbl" id="q-tier"></span>
+      <div class="monster-wrap">
+        <div class="monster-aura world" id="monster-aura"></div>
+        <div class="monster-emoji" id="monster-emoji">&#128126;</div>
+      </div>
+      <div class="monster-name" id="monster-name">???</div>
+      <div class="monster-hp"><div class="fill" id="monster-hp-fill"></div></div>
+      <div class="q-body" id="q-body"></div>
+      <div class="opts" id="q-opts"></div>
+      <div class="fx" id="fx"></div>
+      <div class="why" id="why"></div>
+      <button class="btn gold" id="next-btn" onclick="nextQuestion()">Next &#8594;</button>
+    </div>
+  </div>
+
+  <!-- END -->
+  <div class="screen" id="screen-end">
+    <div class="rank" id="rank-emoji">&#127942;</div>
+    <div class="rank-lbl" id="rank-lbl">Trial Complete!</div>
+    <div id="end-msg" style="color:var(--grey);font-size:.9rem"></div>
+    <div class="end-stats">
+      <div class="end-chip"><div class="v" id="end-score">0/20</div><div class="l">Score</div></div>
+      <div class="end-chip"><div class="v" id="end-coins">0</div><div class="l">Coins</div></div>
+      <div class="end-chip"><div class="v" id="end-streak">0</div><div class="l">Best Streak</div></div>
+    </div>
+    <div class="sec-breakdown" id="sec-breakdown"></div>
+    <button class="btn gold" onclick="location.reload()">&#128260; Play Again (reshuffled)</button><br>
+    <button class="btn ghost" onclick="saveResults()">&#128190; Save Results (practice copy)</button><br>
+    <a class="btn ghost" href="Alchemist_Map.html">&#8592; Back to Alchemist's Depths</a>
+    <div id="save-status"></div>
+    <div class="note">Copyright &copy; 2026 Luikishi. All rights reserved. Have fun !</div>
+  </div>
+
+</div>
+
+<script>
+/* ================= SAME CONTENT AS Unit_12_Test — unchanged questions/answers/explanations ================= */
+const UNIT_NUM = 15;
+const UNIT_TITLE = "Chemistry: Density & Buoyancy";
+const PASS_BAR = 16;
+
+/* ================= GITHUB SAVE (optional) =================
+   Fill these in yourself, locally, after creating a PRIVATE repo and a
+   fine-grained token scoped to ONLY that repo with "Contents: Read and
+   write" permission. Never paste your token into chat, and never upload
+   this file anywhere public once the token is filled in below. */
+const GITHUB_CONFIG = {
+  enabled: false,   // set to true once owner/repo/token are filled in
+  owner:   "",      // your GitHub username
+  repo:    "",      // e.g. "science-quest-results" — must already have a "main" branch (tick "Add a README" when creating it)
+  branch:  "main",
+  token:   ""       // fine-grained PAT, starts with github_pat_...
+};
+
+async function pushToGitHub(filename, jsonText){
+  const path = `results/${filename}`;
+  const url = `https://api.github.com/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/contents/${path}`;
+  const body = {
+    message: `Add ${filename}`,
+    content: btoa(unescape(encodeURIComponent(jsonText))),
+    branch: GITHUB_CONFIG.branch
+  };
+  const res = await fetch(url, {
+    method: 'PUT',
+    headers: {
+      'Authorization': `Bearer ${GITHUB_CONFIG.token}`,
+      'Accept': 'application/vnd.github+json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(body)
+  });
+  if (!res.ok){
+    if (res.status === 422) throw new Error('a file with this name already exists in the repo (already saved today?)');
+    const err = await res.json().catch(()=>({}));
+    throw new Error(err.message || `GitHub responded ${res.status}`);
+  }
+  return res.json();
+}
+
+const Q = [
+{ n:1, section:'A', tier:'Basic', body:"At the airport, two suitcases look identical and take up the same amount of overhead-bin space, but a porter notices Suitcase A is noticeably heavier to lift than Suitcase B. Which suitcase is more likely to be denser?",
+  options:["Suitcase B — since it's lighter, it must automatically be the denser one","Both suitcases are equally dense, purely because they look the same on the outside","Suitcase A — carrying more matter inside the same overhead-bin space makes it the denser bag","You can't judge density just from how heavy a suitcase feels to lift"], ans:3,
+  why:"When two objects take up the same amount of space (volume), the one carrying more matter inside that space is denser.", monster:"Suitcase Golem", emoji:"&#129680;" },
+{ n:2, section:'A', tier:'Basic', body:"What is the difference between an object's MASS and its VOLUME?",
+  options:["Mass is how much matter is in it; volume is how much space it takes up","Mass is how much space it takes up; volume is how much matter is in it","Mass and volume both measure exactly the same property of an object","Mass only applies to liquids, while volume only applies to solids"], ans:1,
+  why:"Mass measures how much matter (stuff) is in an object; volume measures how much space it takes up. Density combines both together.", monster:"Mass-Volume Twin", emoji:"&#9878;&#65039;" },
+{ n:3, section:'A', tier:'Basic', body:"During bath time, a toy shaped like a small boat bobs happily at the top of the water instead of dropping down. Based on this behaviour, what must be true about the toy's density compared to water?",
+  options:["The toy must be denser than the water","The toy and the water must share the exact same density","Nothing about density can be worked out just from watching it float","The toy must be less dense than the water"], ans:4,
+  why:"Floating at the top means the toy is less dense than the water it's placed in — that's the core float/sink rule.", monster:"Bath Toy Sprite", emoji:"&#128739;&#65039;" },
+{ n:4, section:'A', tier:'Basic', body:"A candle flame flickers alone in a dark room, acting as a single point source of light. What kind of shadow edge does it produce on a nearby wall?",
+  options:["A blurry edge that fades gradually outward into a wide grey border","A clean, well-defined edge, with almost no blur around it","No shadow at all, because a candle's light is too weak to cast one","A shadow that flickers wildly and keeps changing its overall shape"], ans:2,
+  why:"A point source like a single candle flame sends light from just one place, so it produces a clean, well-defined shadow edge with barely any blur.", monster:"Shadow Wisp", emoji:"&#128367;&#65039;" },
+
+{ n:5, section:'B', tier:'Intermediate', body:"In a science demo, a steel marble and a foam ball take up an identical amount of space inside two matching jars, yet the steel marble weighs 400g while the foam ball weighs only 90g. Which one is denser?",
+  options:["The foam ball, since anything lighter is automatically denser","Both are equally dense, since the two jars hold the same volume","The steel marble, since squeezing more matter into an identical volume makes it denser","You can't compare their densities without knowing their exact shapes"], ans:3,
+  why:"Same volume, more mass, means the steel marble is denser — it squeezes more matter into that identical amount of space.", monster:"Marble Golem", emoji:"&#128302;" },
+{ n:6, section:'B', tier:'Intermediate', body:"In an art class, a lump of clay and a scrap of packing foam happen to weigh exactly the same on a scale, but the foam takes up far more room in the storage box. Which material is denser?",
+  options:["The clay — squeezing the same mass into much less room makes it the denser material","The foam — taking up more room in the box automatically makes something the denser one","Both are equally dense, purely because the scale showed exactly the same weight for each","Neither has a real density, since foam isn't considered a proper solid material at all"], ans:1,
+  why:"With equal mass, the material that takes up LESS room (less volume) is denser — the clay squeezes the same mass into much less space.", monster:"Clay Weigher", emoji:"&#9878;&#65039;" },
+{ n:7, section:'B', tier:'Intermediate', body:"At a lake, a fishing float made of cork bobs back up to the top of the water no matter how many times it's pushed under and released. What does this repeated behaviour tell you about cork's density compared to water's?",
+  options:["Cork keeps rising because it is secretly denser than water","Cork and water must be identical in density, which is why it stays near the top","Repeated floating tells us nothing at all about density","Cork keeps rising back up because it is less dense than water"], ans:4,
+  why:"Floating back to the top every time always means an object is less dense than water.", monster:"Cork Bobber", emoji:"&#127907;" },
+{ n:8, section:'B', tier:'Intermediate', body:"A solid iron nail is dropped into a glass of water and sinks straight to the bottom within a second. What can you conclude about iron's density?",
+  options:["Iron floats better than water, so it must be less dense","Iron sank because it is denser than water","Iron and water are density-neutral, so neither floats nor sinks","Sinking speed has nothing to do with density at all"], ans:2,
+  why:"Sinking always means an object is denser than the liquid it was placed in.", monster:"Iron Nail Wraith", emoji:"&#128296;" },
+{ n:9, section:'B', tier:'Intermediate', body:"A scientist has two liquids in beakers: water and cooking oil. She pours the oil carefully on top of the water. What will happen, and why?",
+  options:["The oil will sink below the water and settle at the very bottom, because oil is actually denser than water","The oil and water will mix completely into one uniform liquid, with no separation visible at all","The oil will float on top of the water, because oil is less dense than water","Nothing at all will happen, because oil and water always stay exactly wherever they are first poured"], ans:3,
+  why:"Oil floats on top of water because oil is less dense than water — the same float/sink rule applies to liquids poured into other liquids.", monster:"Oil Slick Phantom", emoji:"&#129371;" },
+{ n:10, section:'B', tier:'Intermediate', body:"A science teacher tells the class that lead is a denser material than aluminium. She then shows two identical-looking coins, exactly the same size, one made from each metal. Which coin should have the greater mass?",
+  options:["The lead coin, since a denser material packs more mass into the same size","The aluminium coin, since a denser material always feels lighter to hold","Both coins must have exactly the same mass, since they are the same size","Mass cannot be compared without first melting both coins"], ans:1,
+  why:"For two objects of the same size, the denser material (lead, as stated) will always have the greater mass.", monster:"Coin Golem", emoji:"&#129689;" },
+
+{ n:11, section:'C', tier:'Applied', body:"In a coin-collecting club, four unusual coins turn out to be identical in size despite being minted from four different metals. Coin W has a mass of 70g, Coin X has a mass of 180g, Coin Y has a mass of 95g, and Coin Z has a mass of 135g. Which order lists the coins from LEAST dense to MOST dense?",
+  options:["X, Z, Y, W","Z, W, X, Y","Y, X, W, Z","W, Y, Z, X"], ans:4,
+  why:"Since all four coins are the same size, mass alone tells us density order: W (70g), Y (95g), Z (135g), X (180g) — from least to most dense.", monster:"Density Ranker", emoji:"&#128202;" },
+{ n:12, section:'C', tier:'Applied', body:"A student says: 'Since Object A is bigger than Object B, Object A must be denser.' Is this reasoning correct?",
+  options:["Yes — bigger objects are always denser than smaller ones, no matter what material either object happens to be made from","No — being bigger (having more volume) doesn't by itself tell you which object is denser; you need to know both mass and volume together","Yes, but only when the two objects being compared happen to be made from exactly the same type of metal, never for wood or plastic","No — density can only ever be measured for liquids, and can never be worked out for any solid objects at all"], ans:2,
+  why:"Size (volume) alone never tells you density — you need to compare mass AND volume together, or compare two objects where one of those is held equal.", monster:"Size Trickster", emoji:"&#128207;" },
+{ n:13, section:'C', tier:'Applied', body:"While tidying up after science class, a student notices a rubber eraser bobbing at the top of a bucket of soapy water. In her notes she writes: 'The eraser is floating, therefore this proves without any doubt that rubber is less dense than water.' Is her reasoning fully sound?",
+  options:["Yes — floating always proves density beyond any doubt, with no further reasoning or measurement needed at all, no matter what the object is made from or what liquid it's placed in","No — she should have used a proper bar of soap instead of a rubber eraser, since soap is specifically designed to behave in a very particular, well-understood way whenever it is placed into soapy water","Her observation is correct, but 'this proves rubber is less dense than water' goes beyond what she directly saw — floating is the observation, while the density conclusion is something she worked out (inferred) from it","Yes, but only because soapy water behaves in a completely different and unpredictable way compared to plain, unsoapy water, which would completely change how any object floats or sinks in it"], ans:3,
+  why:"Floating is the observation (what she actually saw). 'This proves rubber is less dense than water' is an inference — a conclusion worked out from that observation, not something visible by itself.", monster:"Inference Imp", emoji:"&#129445;" },
+{ n:14, section:'C', tier:'Applied', body:"A marble and a table-tennis ball are almost the same size, but the marble sinks quickly to the bottom of a bowl of water, while the table-tennis ball floats easily on top. What is the BEST explanation?",
+  options:["The marble is denser than water, while the table-tennis ball is less dense than water","The marble is less dense than water, while the table-tennis ball is denser than water","Both objects must have exactly the same density, since they are almost the same size","Size alone determines whether an object floats or sinks, not density"], ans:1,
+  why:"Sinking means denser than water; floating means less dense than water — so the marble is denser and the table-tennis ball is less dense than water.", monster:"Ping-Pong Sprite", emoji:"&#127955;&#65039;" },
+{ n:15, section:'C', tier:'Applied', body:"During a class experiment, a student drops a lump of modelling clay into a beaker of water. Note 1 in her notebook says: 'The clay disappeared below the surface and settled at the bottom of the beaker.' Note 2 says: 'This must mean the clay is denser than water.' Which note describes something she directly OBSERVED, rather than worked out?",
+  options:["The clay must be denser than the water it was dropped into","The clay is most likely made from a heavy, tightly packed natural material","The clay would probably also sink if dropped into a beaker of vegetable oil","The clay disappeared below the surface and settled at the bottom of the beaker"], ans:4,
+  why:"'Disappeared and settled at the bottom' is what she actually watched happen — the observation. Everything about density and material is a conclusion she worked out (inferred) afterwards.", monster:"Clay Observer", emoji:"&#128065;&#65039;" },
+{ n:16, section:'C', tier:'Applied', body:"Two identical-sized balloons are released at the same time. Balloon A is filled with helium and floats up into the air. Balloon B is filled with regular air and stays at ground level. What does this tell you about helium's density compared to air's?",
+  options:["Helium is denser than air","Helium is less dense than air","Helium and air must have exactly the same density","Density cannot be compared for gases, only for liquids and solids"], ans:2,
+  why:"The helium balloon rising through the air is exactly like an object floating in a liquid — it happens because helium is less dense than the air around it.", monster:"Helium Wisp", emoji:"&#127880;" },
+{ n:17, section:'C', tier:'Applied', body:"A student is given three identical-sized cubes made of different materials, all placed in the same tub of water. Cube 1 sinks quickly to the bottom. Cube 2 floats but sits mostly underwater, just barely at the surface. Cube 3 floats high, mostly above the water. Which order, from LEAST dense to MOST dense, is correct?",
+  options:["Cube 1, Cube 2, Cube 3","Cube 2, Cube 1, Cube 3","Cube 3, Cube 2, Cube 1","All three cubes must have exactly the same density"], ans:3,
+  why:"Floating higher out of the water means a cube is less dense; sinking means denser. So the order from least to most dense is Cube 3, Cube 2, Cube 1.", monster:"Cube Triplet", emoji:"&#127922;" },
+{ n:18, section:'C', tier:'Applied', body:"A student claims: 'If I can't see an object underwater, that proves it has sunk because it's denser than water.' What is the BEST critique of this claim?",
+  options:["Not seeing an object could also just mean the water is cloudy or the object is deep, not necessarily that it sank — you'd need to directly check whether it's resting on the bottom before inferring anything about density","The claim is completely correct, since not being able to see something in water always proves beyond any doubt that it has sunk to the very bottom because it is denser than the surrounding water","The claim is wrong because objects never actually sink in water at all, no matter how dense or heavy the material they happen to be made from is, since water always holds everything up","The claim is correct as long as the water is perfectly clean and clear, with absolutely no cloudiness, sediment, or floating particles anywhere inside the container, and with good bright lighting shining directly overhead the whole time"], ans:1,
+  why:"Not seeing an object isn't the same as observing it sink — cloudy water or depth could also explain it, so you'd need to confirm the object is actually resting on the bottom before inferring anything about its density.", monster:"Murky Water Deceiver", emoji:"&#127754;" },
+{ n:19, section:'C', tier:'Applied', body:"A cube of unknown material has a mass of 270g and exactly the same volume as a cube of pure water, which has a mass of 100g. Based on this, what would you predict happens if the unknown cube is placed in water?",
+  options:["It will float on the surface, because it has much more mass than an equal volume of water, despite appearing heavier overall","It will dissolve completely into the water and disappear without leaving any trace of solid material behind","It will stay exactly halfway between the surface and the bottom, neither fully floating nor fully sinking at any point","It will sink, because it has much more mass than an equal volume of water, meaning it is denser than water"], ans:4,
+  why:"Since the unknown cube has far more mass than an equal volume of water, it is denser than water, so it will sink.", monster:"Unknown Cube Golem", emoji:"&#127922;" },
+{ n:20, section:'C', tier:'Applied', body:"A scientist wants to know which of two liquids, X and Y, is denser. She pours liquid X into a container, then slowly pours liquid Y on top. Liquid Y sinks straight through liquid X and settles at the bottom. What can she conclude?",
+  options:["Liquid X is denser than liquid Y","Liquid Y is denser than liquid X","Both liquids must have exactly the same density","No conclusion about density can be drawn from this experiment"], ans:2,
+  why:"Liquid Y sinking through liquid X and settling at the bottom means liquid Y is denser than liquid X — the same float/sink logic applies between two liquids.", monster:"The Density Oracle", emoji:"&#128302;" },
+];
+/* ================= END unchanged content ================= */
+
+function shuffle(arr){
+  const a = arr.slice();
+  for (let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
+  return a;
+}
+
+// Shuffle question order, and shuffle each question's own options (remapping the answer index)
+let deck = shuffle(Q).map(q => {
+  const optIdx = shuffle(q.options.map((_,i)=>i));
+  const options = optIdx.map(i => q.options[i]);
+  const ans = optIdx.indexOf(q.ans-1) + 1;
+  return {...q, options, ans};
+});
+const TOTAL = Q.length;
+const GOLD_BAR = Math.round(TOTAL * 0.9);
+
+let pos = 0, score = 0, coins = 0, streak = 0, maxStreak = 0, hearts = 3;
+const sectionTally = { A:{c:0,t:0}, B:{c:0,t:0}, C:{c:0,t:0} };
+const SECTION_LABEL = { A:'Basic', B:'Intermediate', C:'Applied' };
+
+function startGame(){
+  document.getElementById('screen-intro').classList.remove('active');
+  document.getElementById('screen-game').classList.add('active');
+  buildPath();
+  renderQuestion();
+}
+
+function buildPath(){
+  const path = document.getElementById('path');
+  const icon = {A:'&#127793;',B:'&#127760;',C:'&#128302;'};
+  path.innerHTML = deck.map((q,i) => `<div class="node ${q.section}" id="node-${i}"><span class="nico">${i===deck.length-1?'&#128081;':icon[q.section]}</span>${i+1}</div>`).join('');
+}
+
+/* ---------- juicy feedback helpers ---------- */
+function spawnSparks(el){
+  const rect = el.getBoundingClientRect();
+  const glyphs = ['&#10024;','&#11088;','&#128165;','&#127775;'];
+  for (let i=0;i<10;i++){
+    const s = document.createElement('span');
+    s.className = 'spark';
+    s.innerHTML = glyphs[Math.floor(Math.random()*glyphs.length)];
+    const angle = Math.random()*Math.PI*2, dist = 40+Math.random()*55;
+    s.style.setProperty('--dx', Math.cos(angle)*dist+'px');
+    s.style.setProperty('--dy', Math.sin(angle)*dist+'px');
+    s.style.position = 'fixed';
+    s.style.left = (rect.left+rect.width/2)+'px';
+    s.style.top = (rect.top+rect.height/2)+'px';
+    document.body.appendChild(s);
+    setTimeout(()=>s.remove(),750);
+  }
+}
+function floatCoin(gain){
+  const rect = document.getElementById('coins').getBoundingClientRect();
+  const f = document.createElement('span');
+  f.className = 'float-coin';
+  f.textContent = '+'+gain;
+  f.style.position = 'fixed';
+  f.style.left = rect.left+'px';
+  f.style.top = rect.top+'px';
+  document.body.appendChild(f);
+  setTimeout(()=>f.remove(),850);
+}
+let toastTimer;
+function showToast(msg, heal){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.toggle('heal', !!heal);
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>t.classList.remove('show'), 2000);
+}
+function launchConfetti(n){
+  const layer = document.getElementById('confetti-layer');
+  const colors = ['#FFD700','#FFA500','#43e97b','#5fa8ff','#c77dff','#ff5c6c'];
+  for (let i=0;i<n;i++){
+    const p = document.createElement('div');
+    p.className = 'confetti-piece';
+    const size = 6+Math.random()*6;
+    p.style.width = size+'px';
+    p.style.height = (size*0.4)+'px';
+    p.style.left = Math.random()*100+'%';
+    p.style.background = colors[Math.floor(Math.random()*colors.length)];
+    p.style.animationDuration = (2.2+Math.random()*1.6)+'s';
+    p.style.animationDelay = (Math.random()*0.6)+'s';
+    layer.appendChild(p);
+    setTimeout(()=>p.remove(), 4300);
+  }
+}
+function countUp(elId, target){
+  const el = document.getElementById(elId);
+  let cur = 0;
+  const step = Math.max(1, Math.round(target/22));
+  const t = setInterval(()=>{
+    cur = Math.min(target, cur+step);
+    el.textContent = cur;
+    if (cur >= target) clearInterval(t);
+  }, 30);
+}
+
+function renderQuestion(){
+  const q = deck[pos];
+  const isBoss = pos === deck.length-1;
+  const theme = isBoss ? 'boss' : 'world';
+  document.getElementById('theme-glow').className = theme;
+  document.getElementById('monster-aura').className = 'monster-aura ' + theme;
+  document.getElementById(`node-${pos}`).classList.add('current');
+  document.getElementById('boss-tag').style.display = isBoss ? 'block' : 'none';
+  document.getElementById('battle-card').classList.toggle('boss', isBoss);
+  document.getElementById('q-tier').textContent = q.tier;
+  document.getElementById('q-tier').className = 'tierlbl ' + q.tier;
+  document.getElementById('monster-emoji').innerHTML = q.emoji;
+  document.getElementById('monster-emoji').className = 'monster-emoji';
+  document.getElementById('monster-name').textContent = (isBoss ? 'BOSS: ' : '') + q.monster;
+  document.getElementById('monster-hp-fill').style.width = '100%';
+  document.getElementById('q-body').textContent = q.body;
+  document.getElementById('fx').className = 'fx';
+  document.getElementById('why').className = 'why';
+  document.getElementById('next-btn').style.display = 'none';
+  document.getElementById('q-opts').innerHTML = q.options.map((opt,i) =>
+    `<button class="opt" onclick="answer(${i+1})">${String.fromCharCode(65+i)}. ${opt}</button>`).join('');
+  updateStats();
+}
+
+function updateStats(){
+  document.getElementById('coins').textContent = coins;
+  const sb = document.getElementById('streak-badge');
+  if (streak >= 2){ sb.classList.remove('hide'); sb.textContent = `🔥 ${streak} streak`; }
+  else { sb.classList.add('hide'); }
+}
+
+function answer(idx){
+  const q = deck[pos];
+  const correct = idx === q.ans;
+  sectionTally[q.section].t++;
+  document.querySelectorAll('#q-opts .opt').forEach((b,i) => {
+    b.disabled = true;
+    if (i+1 === q.ans) b.classList.add('correct');
+    if (i+1 === idx && !correct) b.classList.add('wrong');
+  });
+
+  const fx = document.getElementById('fx');
+  const emo = document.getElementById('monster-emoji');
+  if (correct){
+    score++; sectionTally[q.section].c++;
+    streak++; maxStreak = Math.max(maxStreak, streak);
+    const gain = 10 + Math.min(streak-1,5)*4;
+    coins += gain;
+    document.getElementById('monster-hp-fill').style.width = '0%';
+    emo.classList.add('defeat');
+    spawnSparks(emo);
+    floatCoin(gain);
+    fx.textContent = `✨ Defeated! +${gain} coins`;
+    fx.className = 'fx show ok';
+    document.getElementById(`node-${pos}`).classList.add('done-ok');
+
+    if (streak > 0 && streak % 3 === 0 && hearts < 3){
+      const el = document.getElementById('heart-'+hearts);
+      el.classList.remove('lost'); el.classList.add('heal');
+      setTimeout(()=>el.classList.remove('heal'), 500);
+      hearts++;
+      showToast('💚 3 in a row — a shield heals back!', true);
+    }
+  } else {
+    streak = 0;
+    emo.classList.add('hit');
+    document.getElementById(`node-${pos}`).classList.add('done-bad');
+    if (hearts > 0){
+      hearts--;
+      const el = document.getElementById('heart-'+hearts);
+      el.classList.add('crack');
+      setTimeout(()=>{ el.classList.remove('crack'); el.classList.add('lost'); }, 420);
+      fx.textContent = `💥 It got you — read the tip below`;
+      fx.className = 'fx show bad';
+    } else {
+      // already at 0 hearts: the shield breaks for real — costs coins, but grants a second wind
+      coins = Math.max(0, coins - 15);
+      hearts = 1;
+      for (let i=0;i<3;i++){ const el=document.getElementById('heart-'+i); el.classList.remove('lost'); if (i>0) el.classList.add('lost'); }
+      document.getElementById('shield-flash').classList.add('show');
+      setTimeout(()=>document.getElementById('shield-flash').classList.remove('show'), 350);
+      showToast('🛡️ Shield broken! -15 coins... but you get a second wind (1 ❤️ back)');
+      fx.textContent = `💥 Shield broken! Second wind granted`;
+      fx.className = 'fx show bad';
+    }
+  }
+  document.getElementById(`node-${pos}`).classList.remove('current');
+  document.getElementById('why').innerHTML = `💡 <b>Why:</b> ${q.why}`;
+  document.getElementById('why').classList.add('show');
+  document.getElementById('next-btn').style.display = 'inline-block';
+  document.getElementById('next-btn').textContent = (pos === deck.length-1) ? 'See Results →' : 'Next →';
+  updateStats();
+}
+
+function nextQuestion(){
+  pos++;
+  if (pos >= deck.length){ showEnd(); return; }
+  renderQuestion();
+}
+
+function showEnd(){
+  document.getElementById('screen-game').classList.remove('active');
+  document.getElementById('screen-end').classList.add('active');
+  document.getElementById('theme-glow').className = 'boss';
+  const pct = Math.round(score/TOTAL*100);
+  const pass = score >= PASS_BAR;
+  document.getElementById('rank-emoji').textContent = score >= GOLD_BAR ? '🥇' : (pass ? '🥈' : '🥉');
+  document.getElementById('rank-lbl').textContent = score >= GOLD_BAR ? 'Gold Explorer!' : (pass ? 'Silver Explorer!' : 'Trial Survived');
+  document.getElementById('end-msg').textContent = pass
+    ? `Great job — that's a PASS! Same content as your real Unit 15 test.`
+    : `Good effort! Worth a rematch once you've reviewed the tips.`;
+  document.getElementById('end-score').textContent = `${score}/${TOTAL} (${pct}%)`;
+  countUp('end-coins', coins);
+  countUp('end-streak', maxStreak);
+  document.getElementById('sec-breakdown').innerHTML =
+    ['A','B','C'].map(s => `<div class="sec-chip">${SECTION_LABEL[s]}: ${sectionTally[s].c}/${sectionTally[s].t}</div>`).join('');
+  if (pass) launchConfetti(80); else launchConfetti(30);
+  window._lastResults = {
+    student:"Player", unit:UNIT_NUM, unitTitle:UNIT_TITLE, mode:"GameMode",
+    dateTaken:new Date().toISOString().slice(0,10), score, outOf:TOTAL, pct, passBar:PASS_BAR, passed:pass,
+    coins, maxStreak, sections:['A','B','C'].map(s=>({name:s,score:sectionTally[s].c,outOf:sectionTally[s].t}))
+  };
+}
+
+async function saveResults(){
+  const filename = `U15_GameMode_Results_${window._lastResults.dateTaken}.json`;
+  const json = JSON.stringify(window._lastResults, null, 2);
+  const statusEl = document.getElementById('save-status');
+
+  if (GITHUB_CONFIG.enabled && GITHUB_CONFIG.owner && GITHUB_CONFIG.repo && GITHUB_CONFIG.token){
+    statusEl.textContent = '⏳ Saving to GitHub...';
+    try {
+      await pushToGitHub(filename, json);
+      statusEl.textContent = `✅ Saved to GitHub — ${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/results/${filename}`;
+      return;
+    } catch(e){
+      statusEl.textContent = `⚠️ GitHub save failed (${e.message}) — downloading a local copy instead.`;
+      // fall through to local download so a result is never lost
+    }
+  }
+
+  const blob = new Blob([json], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  document.body.appendChild(a); a.click(); a.remove();
+  if (!GITHUB_CONFIG.enabled) statusEl.textContent = `Downloaded ${filename} (GitHub save not set up yet — separate from the official Unit 15 record).`;
+}
+</script>
+</body>
+</html>

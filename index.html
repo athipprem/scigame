@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<title>Science Quest — World Map</title>
+<style>
+  :root{
+    --bg:#0a1128; --bg2:#16213e; --panel:#11192f; --line:#2a3a5c;
+    --ink:#fff8e6; --grey:#a9b8d9; --gold:#FFD700; --amber:#FFA500;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;font-family:'Segoe UI',Arial,sans-serif;background:radial-gradient(circle at 50% -10%,var(--bg2),var(--bg));color:var(--ink);min-height:100vh;padding-bottom:30px}
+  .wrap{max-width:900px;margin:0 auto;padding:20px 16px}
+
+  header{text-align:center;margin-bottom:16px}
+  .brand-badge{display:flex;justify-content:center}
+  .brand-badge svg{animation:brandPulse 3s ease-in-out infinite}
+  @keyframes brandPulse{0%,100%{filter:drop-shadow(0 0 5px #ffd70044)}50%{filter:drop-shadow(0 0 11px #ffd70088)}}
+  h1{font-size:1.75rem;margin:6px 0 4px;background:linear-gradient(135deg,var(--gold),var(--amber));-webkit-background-clip:text;background-clip:text;color:transparent}
+  #guide-link{display:inline-block;margin-top:6px;color:var(--grey);font-size:.82rem;text-decoration:none;border:1.5px solid var(--line);border-radius:20px;padding:6px 14px}
+  #guide-link:hover{color:var(--gold);border-color:var(--gold)}
+
+  /* ---------- THE MAP SCENE ---------- */
+  #map-scene{position:relative;width:100%;aspect-ratio:4/3;border-radius:22px;overflow:hidden;margin-top:18px;border:1.5px solid var(--line);
+    background:linear-gradient(to bottom,
+      #0a1128 0%, #142850 26%,
+      #17301f 30%, #1d3d28 52%, #16301f 74%,
+      #0d2b36 77%, #071a24 100%);
+    box-shadow:0 10px 40px #0008}
+  /* ---- SKY: stars (2 layers), moon, clouds, aurora ---- */
+  #sky-band{position:absolute;top:0;left:0;right:0;height:32%;overflow:hidden;z-index:1}
+  #sky-stars-far{position:absolute;inset:-20% 0 0 0;height:160%;background-image:
+    radial-gradient(1.4px 1.4px at 10% 30%,#ffffff66,transparent),
+    radial-gradient(1.4px 1.4px at 80% 15%,#ffffff44,transparent),
+    radial-gradient(1.1px 1.1px at 40% 55%,#ffffff55,transparent),
+    radial-gradient(1.5px 1.5px at 62% 35%,#ffffff44,transparent),
+    radial-gradient(1.2px 1.2px at 90% 60%,#ffffff55,transparent),
+    radial-gradient(1.1px 1.1px at 25% 70%,#ffffff44,transparent);
+    background-repeat:repeat;background-size:200px 200px;animation:drift 100s linear infinite}
+  #sky-stars-near{position:absolute;inset:-20% 0 0 0;height:160%;background-image:
+    radial-gradient(1.8px 1.8px at 18% 20%,#ffffffcc,transparent),
+    radial-gradient(2px 2px at 72% 12%,#fff8e0cc,transparent),
+    radial-gradient(1.6px 1.6px at 50% 40%,#ffffffbb,transparent),
+    radial-gradient(1.9px 1.9px at 85% 45%,#fff8e0bb,transparent),
+    radial-gradient(1.7px 1.7px at 32% 62%,#ffffffbb,transparent);
+    background-repeat:repeat;background-size:260px 260px;animation:twinkle 3.6s ease-in-out infinite}
+  @keyframes drift{from{background-position:0 0}to{background-position:-400px 200px}}
+  @keyframes twinkle{0%,100%{opacity:.4}50%{opacity:1}}
+  .moon{position:absolute;top:9%;right:14%;width:34px;height:34px;border-radius:50%;
+    background:
+      radial-gradient(circle at 35% 30%,#00000022 6%,transparent 7%),
+      radial-gradient(circle at 65% 55%,#00000022 8%,transparent 9%),
+      radial-gradient(circle at 45% 72%,#00000018 5%,transparent 6%),
+      radial-gradient(circle at 50% 50%,#fdf6e3,#e8dcc0);
+    box-shadow:0 0 22px 6px #fdf6e355;animation:moonGlow 5s ease-in-out infinite}
+  @keyframes moonGlow{0%,100%{box-shadow:0 0 18px 4px #fdf6e344}50%{box-shadow:0 0 26px 8px #fdf6e366}}
+  #aurora{position:absolute;top:1%;left:0;right:0;height:16%;background:linear-gradient(90deg,#00e5c944,#5fa8ff3a,#c77dff44,#00e5c944);
+    background-size:220% 100%;filter:blur(16px);opacity:.5;animation:auroraShift 14s ease-in-out infinite}
+  @keyframes auroraShift{0%,100%{background-position:0% 0%}50%{background-position:100% 0%}}
+  .cloud{position:absolute;width:60px;height:20px;background:#ffffff99;border-radius:50px;filter:blur(1px);opacity:.55;animation:cloudFloat ease-in-out infinite}
+  .cloud::before,.cloud::after{content:'';position:absolute;background:inherit;border-radius:50%}
+  .cloud::before{width:30px;height:30px;top:-14px;left:6px}
+  .cloud::after{width:22px;height:22px;top:-9px;left:32px}
+  .cloud.c1{top:6%;left:8%;animation-duration:9s}
+  .cloud.c2{top:14%;left:55%;width:44px;height:16px;animation-duration:11s;animation-delay:-4s}
+  .cloud.c3{top:20%;left:30%;width:36px;height:14px;animation-duration:8s;animation-delay:-2s}
+  @keyframes cloudFloat{0%,100%{transform:translateX(0)}50%{transform:translateX(18px)}}
+
+  /* ---- LAND: mountains, trail, landmarks, fireflies ---- */
+  #scenery{position:absolute;inset:0;width:100%;height:100%;z-index:2}
+  .landmark{position:absolute;pointer-events:none;z-index:3}
+  .tower-base{width:9px;height:20px;background:#2a3d4a;border-radius:1px;box-shadow:0 10px 12px -4px #ffd70066}
+  .tower-roof{width:0;height:0;border-left:8px solid transparent;border-right:8px solid transparent;border-bottom:11px solid #3d5566;margin-left:-3.5px}
+  .citadel{top:9%;left:65%}
+  .lab-hut{top:69%;left:64%}
+  .hut-body{width:16px;height:11px;background:#3a2e22;border-radius:2px}
+  .hut-roof{width:0;height:0;border-left:10px solid transparent;border-right:10px solid transparent;border-bottom:8px solid #5a4632;margin-left:-2px}
+  .hut-window{position:absolute;top:12px;left:6px;width:4px;height:4px;background:#ffd166;border-radius:1px;box-shadow:0 0 6px 2px #ffd16688;animation:windowFlicker 3s ease-in-out infinite}
+  @keyframes windowFlicker{0%,100%{opacity:.8}50%{opacity:1}}
+  .crystals{top:52%;left:35%;display:flex;gap:3px;align-items:flex-end}
+  .crystal{width:7px;background:linear-gradient(160deg,#bfe9ff,#5fa8ff);clip-path:polygon(50% 0%,100% 30%,80% 100%,20% 100%,0% 30%);box-shadow:0 0 8px 1px #5fa8ff55}
+  .crystal.c1{height:16px} .crystal.c2{height:24px} .crystal.c3{height:12px}
+  .tree-cluster{top:70%;left:29%;display:flex;gap:4px;align-items:flex-end;transform:scale(2);transform-origin:bottom left}
+  .tree{width:0;height:0;border-left:7px solid transparent;border-right:7px solid transparent}
+  .tree.t1{border-bottom:18px solid #1c4028}
+  .tree.t2{border-bottom:24px solid #234a2e;border-left-width:9px;border-right-width:9px}
+  .tree.t3{border-bottom:14px solid #163a22}
+  .tree.t4{border-bottom:20px solid #1f4529;border-left-width:8px;border-right-width:8px}
+  /* Detective's Lab: sandy patch + cacti, so its ground reads differently from the forest */
+  .desert-patch{top:70%;left:65%;width:130px;height:42px;background:radial-gradient(ellipse at center,#d9b86e80,transparent 72%);border-radius:50%}
+  .cactus-cluster{top:72%;left:70%;display:flex;gap:7px;align-items:flex-end;transform:scale(2);transform-origin:bottom left}
+  .cactus{width:6px;background:#3a7d44;border-radius:3px 3px 1px 1px;position:relative}
+  .cactus::before,.cactus::after{content:'';position:absolute;width:5px;height:9px;background:#3a7d44;border-radius:3px}
+  .cactus::before{left:-5px;top:4px;transform:rotate(-25deg)}
+  .cactus::after{right:-5px;top:5px;transform:rotate(25deg)}
+  .cactus.c1{height:15px} .cactus.c2{height:10px}
+  /* Force Peaks: mountain tarn + a passing storm */
+  .lake{top:56%;left:44%;width:56px;height:15px;border-radius:50%;background:linear-gradient(180deg,#3a8fc7,#1d5a85);box-shadow:0 0 10px 2px #3a8fc744;overflow:hidden}
+  .lake::after{content:'';position:absolute;inset:0;background:linear-gradient(100deg,transparent 30%,#ffffff33 45%,transparent 60%);animation:lakeShimmer 4s ease-in-out infinite}
+  @keyframes lakeShimmer{0%,100%{transform:translateX(-20%)}50%{transform:translateX(20%)}}
+  .storm-cloud{top:27%;left:47%;width:40px;height:14px}
+  .storm-cloud::before{content:'';position:absolute;width:40px;height:14px;background:#4a5a6e;border-radius:14px;box-shadow:-8px 2px 0 -2px #4a5a6e,8px 2px 0 -2px #4a5a6e}
+  .storm-cloud-2{top:24%;left:59%;width:34px;height:12px}
+  .storm-cloud-2::before{content:'';position:absolute;width:34px;height:12px;background:#4a5a6e;border-radius:14px;box-shadow:-7px 2px 0 -2px #4a5a6e,7px 2px 0 -2px #4a5a6e}
+  .rain{position:absolute;top:15px;width:1.5px;height:10px;background:linear-gradient(#bfe9ffcc,transparent);animation:rainFall 1s linear infinite}
+  .rain.r1{left:4px;animation-delay:0s} .rain.r2{left:14px;animation-delay:.3s}
+  .rain.r3{left:24px;animation-delay:.6s} .rain.r4{left:34px;animation-delay:.15s}
+  @keyframes rainFall{0%{transform:translateY(0);opacity:1}100%{transform:translateY(18px);opacity:0}}
+  .planet-deco{top:6%;left:10%;width:12px;height:12px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#e8b3ff,#8e4fc7);box-shadow:0 0 8px 2px #c77dff66}
+  .planet-deco::after{content:'';position:absolute;top:4px;left:-5px;width:22px;height:5px;border:1px solid #e8b3ffaa;border-radius:50%;transform:rotate(-18deg)}
+  #land-motes{position:absolute;inset:30% 0 23% 0;overflow:hidden;pointer-events:none;z-index:3}
+  .firefly{position:absolute;width:3px;height:3px;border-radius:50%;background:#ffe08a;box-shadow:0 0 6px 2px #ffe08a99;animation:fireflyFloat ease-in-out infinite}
+  @keyframes fireflyFloat{0%,100%{transform:translate(0,0);opacity:.3}50%{transform:translate(10px,-14px);opacity:1}}
+
+  /* ---- WATER: waves, coral, rays, bubbles ---- */
+  #water-band{position:absolute;left:0;right:0;bottom:0;height:23%;overflow:hidden;pointer-events:none;z-index:2}
+  #water-rays{position:absolute;inset:0;background:linear-gradient(115deg,#bfe9ff22 0%,transparent 18%,transparent 40%,#bfe9ff1a 55%,transparent 75%);opacity:.7}
+  .coral{position:absolute;bottom:2%;pointer-events:none}
+  .coral-a{left:30%;width:10px;height:16px;background:linear-gradient(180deg,#ff8a7a,#c9506a);border-radius:6px 6px 2px 2px}
+  .coral-b{left:62%;width:8px;height:12px;background:linear-gradient(180deg,#ffb37a,#d9764a);border-radius:6px 6px 2px 2px}
+  .coral-c{left:47%;width:6px;height:9px;background:linear-gradient(180deg,#7ad9c9,#3a9e8f);border-radius:6px 6px 2px 2px}
+  .bubble{position:absolute;bottom:-10px;border-radius:50%;background:#bfe9ff55;animation:bubbleUp linear infinite}
+  @keyframes bubbleUp{to{transform:translateY(-160px);opacity:0}}
+
+  #vignette{position:absolute;inset:0;pointer-events:none;z-index:4;background:radial-gradient(ellipse at 50% 46%,transparent 55%,#00000055 100%)}
+
+  #pins{position:absolute;inset:0;z-index:10}
+  .pin{position:absolute;transform:translate(-50%,-50%);width:78px;height:78px;border-radius:50%;border:none;cursor:pointer;background:transparent;padding:0}
+  .pin-aura{position:absolute;inset:-12px;border-radius:50%;filter:blur(12px);opacity:.65;animation:pinPulse 2.6s ease-in-out infinite}
+  @keyframes pinPulse{0%,100%{opacity:.5;transform:scale(1)}50%{opacity:.85;transform:scale(1.15)}}
+  .pin-body{position:relative;width:78px;height:78px;border-radius:50%;background:var(--panel);border:3px solid var(--pc);display:flex;align-items:center;justify-content:center;font-size:2.25rem;box-shadow:0 4px 14px #0007}
+  .pin:hover .pin-body{transform:scale(1.08)}
+  .pin-label{position:absolute;top:86px;left:50%;transform:translateX(-50%);font-size:.72rem;font-weight:800;color:var(--ink);background:#00000088;padding:3px 10px;border-radius:10px;white-space:nowrap;pointer-events:none}
+  .pin.playable .pin-body{box-shadow:0 0 0 3px var(--gold),0 4px 14px #0007}
+  .pin-badge{position:absolute;top:-8px;right:-6px;background:linear-gradient(135deg,var(--gold),var(--amber));color:#3a2a00;font-size:.66rem;font-weight:900;padding:2px 8px;border-radius:20px}
+
+  #legend{display:flex;justify-content:center;gap:18px;margin-top:14px;font-size:.8rem;color:var(--grey);flex-wrap:wrap}
+
+  /* ---------- HORIZONTAL REALM PANEL ---------- */
+  #realm-panel{scroll-margin-top:20px;margin-top:18px;border-radius:20px;border:1.5px solid var(--line);background:var(--panel);padding:20px 16px 22px;transition:background .6s ease,border-color .6s ease}
+  .rp-row{display:flex;justify-content:center;gap:10px 14px;flex-wrap:wrap}
+  .rp-item{width:76px;display:flex;flex-direction:column;align-items:center;cursor:pointer}
+  .rp-logo{position:relative;width:56px;height:56px;border-radius:50%;border:2.5px solid var(--line);background:#00000030;display:flex;align-items:center;justify-content:center;font-size:1.5rem;transition:transform .15s,border-color .2s,box-shadow .2s}
+  .rp-item:hover .rp-logo{transform:translateY(-3px)}
+  .rp-logo.active{border-color:var(--pc);box-shadow:0 0 0 4px var(--pc)33}
+  .rp-logo.playable::after{content:'';position:absolute;top:-3px;right:-3px;width:11px;height:11px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--amber));border:1.5px solid var(--panel)}
+  .rp-logo-label{margin-top:8px;font-size:.62rem;line-height:1.25;font-weight:700;color:var(--grey);text-align:center;width:100%}
+  .rp-info{margin-top:20px;text-align:center}
+  .rp-placeholder{color:var(--grey);font-size:.85rem;padding:14px 0}
+
+  /* ---------- DETAIL OVERLAY ---------- */
+  #detail-overlay{position:fixed;inset:0;background:#05070fcc;backdrop-filter:blur(3px);display:none;align-items:center;justify-content:center;z-index:100;padding:16px}
+  #detail-overlay.show{display:flex}
+  #detail-card{background:var(--panel);border:1.5px solid var(--dc);border-radius:20px;padding:24px 22px;max-width:380px;width:100%;text-align:center;position:relative}
+  #detail-close{position:absolute;top:12px;right:14px;background:none;border:none;color:var(--grey);font-size:1.2rem;cursor:pointer}
+  .d-world-tag{font-size:.68rem;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:var(--grey)}
+  .d-icon-wrap{position:relative;width:84px;height:84px;margin:10px auto 8px}
+  .d-aura{position:absolute;inset:0;border-radius:50%;background:var(--dc);filter:blur(18px);opacity:.55;animation:auraPulse 3s ease-in-out infinite}
+  @keyframes auraPulse{0%,100%{transform:scale(1);opacity:.45}50%{transform:scale(1.15);opacity:.7}}
+  .d-icon{position:relative;font-size:3rem;display:flex;align-items:center;justify-content:center;height:100%}
+  .d-name{font-weight:800;font-size:1.15rem}
+  .d-skill{font-size:.72rem;color:var(--dc);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin:1px 0 10px}
+  .d-tagline{font-size:.8rem;color:var(--grey);line-height:1.55;margin-bottom:16px}
+  .d-btn{display:block;width:100%;border:none;border-radius:12px;padding:12px;font-weight:800;font-size:.9rem;cursor:pointer;text-decoration:none}
+  .d-btn.play{background:linear-gradient(135deg,var(--gold),var(--amber));color:#3a2a00}
+  .d-btn.soon{background:#00000030;color:var(--grey);cursor:default;border:1.5px dashed var(--line)}
+
+  footer{text-align:center;margin-top:26px;color:var(--grey);font-size:.76rem;line-height:1.6;max-width:560px;margin-left:auto;margin-right:auto}
+  footer b{color:var(--ink)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="brand-badge">
+      <svg width="50" height="50" viewBox="0 0 52 52">
+        <defs>
+          <linearGradient id="brandGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#FFD700"/>
+            <stop offset="100%" stop-color="#FFA500"/>
+          </linearGradient>
+        </defs>
+        <circle cx="26" cy="26" r="24" fill="none" stroke="url(#brandGrad)" stroke-width="2.5"/>
+        <circle cx="26" cy="26" r="18.5" fill="#11192f" stroke="#2a3a5c" stroke-width="1"/>
+        <path d="M26 9 L29.4 22.6 L43 26 L29.4 29.4 L26 43 L22.6 29.4 L9 26 L22.6 22.6 Z" fill="url(#brandGrad)"/>
+        <circle cx="26" cy="26" r="3" fill="#11192f"/>
+      </svg>
+    </div>
+    <h1>Science Quest — World Map</h1>
+    <a id="guide-link" href="#realm-panel">&#128214; What You'll Learn — Realm Guide</a>
+  </header>
+
+  <div id="map-scene">
+    <div id="sky-band">
+      <div id="sky-stars-far"></div>
+      <div id="sky-stars-near"></div>
+      <div id="aurora"></div>
+      <div class="moon"></div>
+      <div class="planet-deco landmark"></div>
+      <div class="cloud c1"></div>
+      <div class="cloud c2"></div>
+      <div class="cloud c3"></div>
+    </div>
+
+    <svg id="scenery" viewBox="0 0 100 100" preserveAspectRatio="none">
+      <!-- far mountain range (parallax) -->
+      <polygon points="0,72 15,50 28,60 40,42 55,58 70,38 85,55 100,68 100,100 0,100" fill="#0f2417" opacity="0.5"/>
+      <!-- near mountain range -->
+      <polygon points="8,76 26,60 34,66 58,25 66,55 80,48 94,76" fill="#16301f"/>
+      <!-- waves at the shoreline -->
+      <path d="M0,79 Q10,75 20,78 T40,77 T60,79 T80,76 T100,78 L100,100 L0,100 Z" fill="#0d2b36" opacity="0.9"/>
+      <path d="M0,82 Q12,79 24,81 T48,80 T72,82 T96,79 T100,81 L100,100 L0,100 Z" fill="#123a47" opacity="0.7"/>
+    </svg>
+
+    <div class="landmark citadel" style="display:flex;flex-direction:column;align-items:center">
+      <div class="tower-roof"></div><div class="tower-base"></div>
+    </div>
+    <div class="landmark desert-patch"></div>
+    <div class="landmark lab-hut" style="position:absolute">
+      <div class="hut-roof"></div><div class="hut-body"><div class="hut-window"></div></div>
+    </div>
+    <div class="landmark cactus-cluster" style="position:absolute">
+      <div class="cactus c1"></div><div class="cactus c2"></div>
+    </div>
+    <div class="landmark crystals" style="position:absolute">
+      <div class="crystal c1"></div><div class="crystal c2"></div><div class="crystal c3"></div>
+    </div>
+    <div class="landmark lake"></div>
+    <div class="landmark storm-cloud" style="position:absolute">
+      <div class="rain r1"></div><div class="rain r2"></div><div class="rain r3"></div><div class="rain r4"></div>
+    </div>
+    <div class="landmark storm-cloud-2" style="position:absolute">
+      <div class="rain r1"></div><div class="rain r2"></div><div class="rain r3"></div>
+    </div>
+    <div class="landmark tree-cluster" style="position:absolute">
+      <div class="tree t1"></div><div class="tree t2"></div><div class="tree t3"></div><div class="tree t4"></div>
+    </div>
+    <div id="land-motes"></div>
+
+    <div id="water-band">
+      <div id="water-rays"></div>
+      <div class="coral coral-a"></div>
+      <div class="coral coral-b"></div>
+      <div class="coral coral-c"></div>
+    </div>
+
+    <div id="vignette"></div>
+    <div id="pins"></div>
+  </div>
+
+  <div id="realm-panel">
+    <div class="rp-row" id="rp-row"></div>
+    <div class="rp-info" id="rp-info">
+      <div class="rp-placeholder">&#128071; Click a realm above to see what it covers</div>
+    </div>
+  </div>
+
+  <div id="legend">
+    <span>&#127754; Water World</span>
+    <span>&#9968;&#65039; Land World</span>
+    <span>&#9729;&#65039; Sky World</span>
+  </div>
+
+  <footer>
+    Copyright &copy; 2026 Luikishi. All rights reserved. Have fun !
+  </footer>
+</div>
+
+<div id="detail-overlay" onclick="if(event.target===this) closeDetail()">
+  <div id="detail-card">
+    <button id="detail-close" onclick="closeDetail()">&#10005;</button>
+    <div class="d-world-tag" id="d-world"></div>
+    <div class="d-icon-wrap"><div class="d-aura" id="d-aura"></div><div class="d-icon" id="d-icon"></div></div>
+    <div class="d-name" id="d-name"></div>
+    <div class="d-skill" id="d-skill"></div>
+    <div class="d-tagline" id="d-tagline"></div>
+    <div id="d-btn-wrap"></div>
+  </div>
+</div>
+
+<script>
+/* World = the 3 biomes. Realm = the 6 named locations (one per skills-radar category). Trial = the actual gameplay screen. */
+const REALMS = [
+  { id:"cosmic",     world:"Sky",   skill:"Earth & Space",            name:"Cosmic Frontier",   icon:"&#127762;", color:"#c77dff",
+    tagline:"Seasons, the solar system, tides & the water cycle — chart a course across the stars.",
+    playable:true, multi:true, link:"Cosmic_Map.html", pin:{top:13,left:32} },
+
+  { id:"citadel",    world:"Sky",   skill:"Applied Reasoning",        name:"Puzzle Citadel",    icon:"&#129513;", color:"#ff8a65",
+    tagline:"Multi-step, chain-it-together problems, floating beyond the stars — ASMOPSS's hardest room, saved for very last.",
+    playable:true, multi:true, link:"Citadel_Map.html", pin:{top:13,left:68} },
+
+  { id:"peaks",      world:"Land",  skill:"Physics",                  name:"Force Peaks",       icon:"&#9889;", color:"#5fa8ff",
+    tagline:"Forces, circuits, magnetism, light & sound — climb the mountain slope ruled by motion and energy.",
+    playable:false, pin:{top:44,left:50} },
+
+  { id:"wilds",      world:"Land",  skill:"Biology",                  name:"Living Wilds",      icon:"&#127807;", color:"#43e97b",
+    tagline:"Ecosystems, cells, photosynthesis & the human body — creatures and life cycles guard the forest floor.",
+    playable:false, pin:{top:64,left:19} },
+
+  { id:"lab",        world:"Land",  skill:"Scientific Investigation", name:"Detective's Lab",   icon:"&#128269;", color:"#d99a44",
+    tagline:"Fair tests, variables & spotting flawed claims — every clue tests how you think, not just what you know.",
+    playable:true, multi:true, link:"Detective_Map.html", pin:{top:64,left:81} },
+
+  { id:"depths",     world:"Water", skill:"Chemistry / Matter",       name:"Alchemist's Depths", icon:"&#9879;&#65039;", color:"#00e5c9",
+    tagline:"Mixtures, solutions, states of matter & reactions — brew, filter and separate your way through the deep.",
+    playable:true, multi:true, link:"Alchemist_Map.html", pin:{top:87,left:50} },
+];
+/* ---------- pins ---------- */
+document.getElementById('pins').innerHTML = REALMS.map(r => `
+  <button class="pin ${r.playable?'playable':''}" style="top:${r.pin.top}%;left:${r.pin.left}%;--pc:${r.color}" onclick="openDetail('${r.id}')">
+    <div class="pin-aura" style="background:${r.color}"></div>
+    <div class="pin-body">${r.icon}</div>
+    ${r.playable ? '<div class="pin-badge">PLAY</div>' : ''}
+    <div class="pin-label">${r.name}</div>
+  </button>
+`).join('');
+
+/* ---------- horizontal realm panel ---------- */
+document.getElementById('rp-row').innerHTML = REALMS.map(r => `
+  <div class="rp-item" data-id="${r.id}" onclick="showRealmInPanel('${r.id}')" title="${r.name}">
+    <div class="rp-logo ${r.playable?'playable':''}" style="--pc:${r.color}">${r.icon}</div>
+    <div class="rp-logo-label">${r.name}</div>
+  </div>
+`).join('');
+
+function showRealmInPanel(id){
+  const r = REALMS.find(x=>x.id===id);
+  document.querySelectorAll('.rp-item').forEach(el => el.querySelector('.rp-logo').classList.toggle('active', el.dataset.id===id));
+  const panel = document.getElementById('realm-panel');
+  panel.style.background = `linear-gradient(160deg, ${r.color}2a, var(--panel) 62%)`;
+  panel.style.borderColor = r.color;
+  document.getElementById('rp-info').innerHTML = `
+    <div class="d-world-tag">${WORLD_ICON[r.world]} ${r.world} World</div>
+    <div class="d-icon-wrap"><div class="d-aura" style="background:${r.color}"></div><div class="d-icon">${r.icon}</div></div>
+    <div class="d-name">${r.name}</div>
+    <div class="d-skill" style="color:${r.color}">${r.skill}</div>
+    <div class="d-tagline">${r.tagline}</div>
+    ${r.playable
+      ? `<a class="d-btn play" href="${r.link}">${r.multi ? '&#128506;&#65039; Explore Realm' : '&#9876;&#65039; Begin Trial'}</a>`
+      : `<button class="d-btn soon" disabled>&#128274; Coming Soon</button>`}
+  `;
+}
+
+/* ---------- water bubbles ---------- */
+const waterBand = document.getElementById('water-band');
+for (let i=0;i<14;i++){
+  const b = document.createElement('div');
+  b.className = 'bubble';
+  const size = 4+Math.random()*7;
+  b.style.width = size+'px'; b.style.height = size+'px';
+  b.style.left = Math.random()*100+'%';
+  b.style.animationDuration = (4+Math.random()*4)+'s';
+  b.style.animationDelay = (Math.random()*5)+'s';
+  waterBand.appendChild(b);
+}
+
+/* ---------- land fireflies ---------- */
+const landMotes = document.getElementById('land-motes');
+for (let i=0;i<10;i++){
+  const f = document.createElement('div');
+  f.className = 'firefly';
+  f.style.left = (10+Math.random()*80)+'%';
+  f.style.top = (10+Math.random()*80)+'%';
+  f.style.animationDuration = (3+Math.random()*3)+'s';
+  f.style.animationDelay = (Math.random()*4)+'s';
+  landMotes.appendChild(f);
+}
+
+/* ---------- detail overlay ---------- */
+const WORLD_ICON = { Water:'&#127754;', Land:'&#9968;&#65039;', Sky:'&#9729;&#65039;' };
+
+function openDetail(id){
+  const r = REALMS.find(x=>x.id===id);
+  const card = document.getElementById('detail-card');
+  card.style.setProperty('--dc', r.color);
+  document.getElementById('d-world').innerHTML = `${WORLD_ICON[r.world]} ${r.world} World`;
+  document.getElementById('d-aura').style.background = r.color;
+  document.getElementById('d-icon').innerHTML = r.icon;
+  document.getElementById('d-name').textContent = r.name;
+  document.getElementById('d-skill').textContent = r.skill;
+  document.getElementById('d-tagline').textContent = r.tagline;
+  document.getElementById('d-btn-wrap').innerHTML = r.playable
+    ? `<a class="d-btn play" href="${r.link}">${r.multi ? '&#128506;&#65039; Explore Realm' : '&#9876;&#65039; Begin Trial'}</a>`
+    : `<button class="d-btn soon" disabled>&#128274; Coming Soon</button>`;
+  document.getElementById('detail-overlay').classList.add('show');
+}
+function closeDetail(){ document.getElementById('detail-overlay').classList.remove('show'); }
+document.addEventListener('keydown', e => { if (e.key==='Escape') closeDetail(); });
+</script>
+</body>
+</html>

@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<title>Puzzle Citadel — The Gatehouse Trials</title>
+<style>
+  :root{
+    --gold:#FFD700; --gold-d:#DAA520; --amber:#FFA500;
+    --steel:#00695c; --steel-d:#004d40; --steel-l:#e0f2f1;
+    --bg:#1a1030; --bg2:#3a1f42; --panel:#241533; --chip:#2e1a3f; --line:#4a2c52;
+    --ink:#fff3e6; --grey:#c9b3d9;
+    --ok:#43e97b; --bad:#ff5c6c;
+    --a:#00e5c9; --b:#5fa8ff; --c:#c77dff;
+    /* --world = this trial's identity color, matching Puzzle Citadel on the World Map.
+       Applied Reasoning / Puzzle Citadel = coral-orange, shared across citadel trials. */
+    --world:#ff8a65;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:'Segoe UI',Arial,sans-serif;background:radial-gradient(circle at 50% 0%,var(--bg2),var(--bg));color:var(--ink);min-height:100vh;padding-bottom:30px}
+  .wrap{max-width:760px;margin:0 auto;padding:18px}
+  .screen{display:none} .screen.active{display:block}
+
+  /* ---------- INTRO ---------- */
+  #screen-intro{text-align:center;padding-top:40px}
+  #screen-intro h1{font-size:1.8rem;margin:14px 0 6px;background:linear-gradient(135deg,var(--gold),var(--amber));-webkit-background-clip:text;background-clip:text;color:transparent}
+  #screen-intro .sub{color:var(--grey);font-size:.95rem;margin-bottom:22px}
+  .intro-emoji{font-size:3.2rem}
+  .zone-card{background:var(--panel);border:1.5px solid var(--line);border-radius:16px;padding:20px;margin:0 auto 22px;max-width:420px;text-align:left}
+  .zone-card b{color:var(--gold)}
+  .zone-card ul{margin:10px 0 0;padding-left:18px;font-size:.85rem;color:var(--grey);line-height:1.7}
+  .btn{border:none;border-radius:12px;padding:14px 30px;font-size:1.05rem;font-weight:800;cursor:pointer;color:#3a2a00;text-decoration:none;display:inline-block}
+  .btn.gold{background:linear-gradient(135deg,var(--gold),var(--amber));box-shadow:0 6px 18px #ffa50055}
+  .btn.gold:hover{transform:translateY(-1px)}
+  .btn.ghost{background:transparent;border:1.5px solid var(--line);color:var(--ink);margin-top:10px}
+  .world-badge{display:inline-flex;align-items:center;gap:7px;background:var(--panel);border:1.5px solid var(--world);color:var(--world);font-weight:800;font-size:.85rem;padding:8px 16px;border-radius:20px;margin-bottom:12px}
+  .world-badge span{color:var(--grey);font-weight:600;font-size:.76rem}
+  .world-badge.small{padding:5px 12px;font-size:.75rem;margin-bottom:0}
+  .w-map-link{display:inline-block;color:var(--grey);font-size:.8rem;text-decoration:none;margin-top:12px}
+  .w-map-link:hover{color:var(--world)}
+  .w-map-link.pill{border:1.5px solid var(--line);border-radius:20px;padding:6px 14px}
+  .w-map-link.pill:hover{border-color:var(--world)}
+  #world-topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+  #world-topbar .w-map-link{margin-top:0;font-weight:700}
+
+  /* ---------- PATH TRACKER ---------- */
+  #path{display:flex;gap:4px;overflow-x:auto;padding:10px 4px 14px;margin-bottom:10px}
+  .node{flex-shrink:0;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.68rem;font-weight:800;border:2px solid var(--line);color:var(--grey);background:var(--panel)}
+  .node.A{border-color:var(--a)} .node.B{border-color:var(--b)} .node.C{border-color:var(--c)}
+  .node.done-ok{background:var(--ok);color:#04331b;border-color:var(--ok)}
+  .node.done-bad{background:var(--bad);color:#3a0007;border-color:var(--bad)}
+  .node.current{transform:scale(1.25);box-shadow:0 0 0 3px #ffd70066}
+
+  /* ---------- STATS BAR ---------- */
+  #stats{display:flex;justify-content:space-between;align-items:center;background:var(--panel);border:1.5px solid var(--line);border-radius:14px;padding:10px 16px;margin-bottom:16px;font-size:.85rem;flex-wrap:wrap;gap:8px}
+  .stat{display:flex;align-items:center;gap:6px;font-weight:700}
+  #hearts span{filter:grayscale(0);margin-right:1px}
+  #hearts span.lost{filter:grayscale(1) opacity(.35)}
+  #streak-badge{background:linear-gradient(135deg,#ff8a00,#ff3d00);padding:3px 10px;border-radius:20px;font-size:.78rem}
+  #streak-badge.hide{display:none}
+
+  /* ---------- BATTLE CARD ---------- */
+  .battle{background:var(--panel);border:1.5px solid var(--line);border-radius:18px;padding:22px 20px;text-align:center;position:relative;overflow:hidden}
+  .battle.boss{border-color:var(--gold);box-shadow:0 0 30px #ffd70033}
+  .boss-tag{position:absolute;top:10px;right:14px;background:linear-gradient(135deg,var(--gold),var(--amber));color:#3a2a00;font-size:.68rem;font-weight:800;padding:3px 10px;border-radius:20px}
+  .tierlbl{display:inline-block;font-size:.66rem;font-weight:800;letter-spacing:.4px;text-transform:uppercase;padding:2px 10px;border-radius:20px;margin-bottom:8px}
+  .tierlbl.Basic{background:#00e5c933;color:var(--a)}
+  .tierlbl.Intermediate{background:#5fa8ff33;color:var(--b)}
+  .tierlbl.Applied{background:#c77dff33;color:var(--c)}
+  .srclbl{display:inline-block;font-size:.62rem;font-weight:700;letter-spacing:.3px;padding:2px 9px;border-radius:20px;margin-bottom:8px;margin-left:6px;background:var(--chip);border:1px solid var(--line);color:var(--grey)}
+  .monster-emoji{font-size:3.4rem;margin:4px 0 2px;display:inline-block;transition:transform .25s}
+  .monster-emoji.hit{animation:shake .35s}
+  @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-10px) rotate(-6deg)}75%{transform:translateX(10px) rotate(6deg)}}
+  .monster-name{font-weight:800;color:var(--gold);font-size:1.02rem;margin-bottom:2px}
+  .monster-hp{width:140px;height:8px;background:#3a2a55;border-radius:5px;margin:6px auto 14px;overflow:hidden}
+  .monster-hp .fill{height:100%;width:100%;background:linear-gradient(90deg,#ff5c6c,#ff8a00);transition:width .35s}
+  .q-body{font-size:1rem;font-weight:600;line-height:1.5;margin:6px 0 16px;color:var(--ink)}
+  .opts{display:grid;gap:9px;text-align:left}
+  .opt{background:var(--chip);border:1.5px solid var(--line);color:var(--ink);border-radius:11px;padding:12px 14px;font-size:.9rem;cursor:pointer;text-align:left}
+  .opt:hover{border-color:var(--gold)}
+  .opt.correct{background:#0e3d22;border-color:var(--ok);color:#a4f7c4;font-weight:700}
+  .opt.wrong{background:#3d0e13;border-color:var(--bad);color:#ffb4bb;font-weight:700}
+  .opt:disabled{cursor:default}
+  .fx{font-size:1.4rem;font-weight:900;margin-top:10px;display:none}
+  .fx.show{display:block;animation:pop .4s}
+  .fx.ok{color:var(--ok)} .fx.bad{color:var(--bad)}
+  @keyframes pop{0%{transform:scale(.6)}60%{transform:scale(1.15)}100%{transform:scale(1)}}
+  .why{display:none;text-align:left;margin-top:14px;padding:12px 14px;border-radius:10px;background:var(--chip);border-left:4px solid var(--gold);font-size:.85rem;color:#f0ddb8}
+  .why.show{display:block}
+  #next-btn{display:none;margin-top:16px}
+
+  /* ---------- END SCREEN ---------- */
+  #screen-end{text-align:center;padding-top:20px}
+  .rank{font-size:3.4rem;margin:10px 0 0}
+  .rank-lbl{font-size:1.5rem;font-weight:900;background:linear-gradient(135deg,var(--gold),var(--amber));-webkit-background-clip:text;background-clip:text;color:transparent;margin-bottom:16px}
+  .end-stats{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin:18px 0}
+  .end-chip{background:var(--panel);border:1.5px solid var(--line);border-radius:12px;padding:12px 16px;min-width:100px}
+  .end-chip .v{font-size:1.3rem;font-weight:800;color:var(--gold)}
+  .end-chip .l{font-size:.7rem;color:var(--grey);text-transform:uppercase;letter-spacing:.4px;margin-top:2px}
+  .sec-breakdown{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin:14px 0}
+  .sec-chip{background:var(--chip);border:1px solid var(--line);border-radius:20px;padding:5px 12px;font-size:.75rem;font-weight:700}
+  #save-status{font-size:.8rem;color:var(--grey);margin-top:10px}
+  .note{font-size:.75rem;color:var(--grey);margin-top:22px;line-height:1.6;max-width:480px;margin-left:auto;margin-right:auto}
+
+  /* ---------- BACKDROP & THEME ---------- */
+  #bg-particles{position:fixed;inset:0;z-index:-2;background-image:
+    radial-gradient(1.6px 1.6px at 10% 20%,#ffffff55,transparent),
+    radial-gradient(1.6px 1.6px at 80% 10%,#ffffff33,transparent),
+    radial-gradient(1.2px 1.2px at 40% 70%,#ffffff44,transparent),
+    radial-gradient(1.8px 1.8px at 65% 45%,#ffffff33,transparent),
+    radial-gradient(1.4px 1.4px at 90% 85%,#ffffff44,transparent),
+    radial-gradient(1.2px 1.2px at 25% 90%,#ffffff33,transparent);
+    background-repeat:repeat;background-size:280px 280px;animation:drift 70s linear infinite}
+  @keyframes drift{from{background-position:0 0}to{background-position:-560px 280px}}
+  #theme-glow{position:fixed;inset:0;z-index:-1;opacity:.55;transition:background 1s ease;pointer-events:none}
+  #theme-glow.world{background:radial-gradient(600px 400px at 50% 20%,#ff8a6530,transparent 70%)}
+  #theme-glow.boss{background:radial-gradient(680px 460px at 50% 20%,#ff8a6525,transparent 55%),radial-gradient(650px 450px at 50% 20%,#ffd70045,transparent 70%)}
+  #confetti-layer{position:fixed;inset:0;pointer-events:none;z-index:50;overflow:hidden}
+  .confetti-piece{position:absolute;top:-20px;border-radius:2px;animation:confettiFall linear forwards}
+  @keyframes confettiFall{to{transform:translateY(110vh) rotate(540deg);opacity:.2}}
+
+  /* ---------- PATH ICONS ---------- */
+  #path{padding-top:22px}
+  .node{position:relative}
+  .node .nico{position:absolute;top:-18px;left:50%;transform:translateX(-50%);font-size:.72rem;opacity:.85}
+  .node.current{animation:nodePulse 1.1s ease-in-out infinite}
+  @keyframes nodePulse{0%,100%{box-shadow:0 0 0 3px #ffd70066}50%{box-shadow:0 0 0 8px #ffd70099}}
+
+  /* ---------- MONSTER AURA & MOTION ---------- */
+  .monster-wrap{position:relative;display:inline-block;margin:6px 0 2px}
+  .monster-aura{position:absolute;left:50%;top:50%;width:130px;height:130px;transform:translate(-50%,-50%);border-radius:50%;filter:blur(20px);opacity:.6;z-index:0;transition:background 1s ease;animation:auraPulse 2.6s ease-in-out infinite}
+  @keyframes auraPulse{0%,100%{opacity:.45;transform:translate(-50%,-50%) scale(1)}50%{opacity:.7;transform:translate(-50%,-50%) scale(1.12)}}
+  .monster-aura.world{background:var(--world)} .monster-aura.boss{background:var(--gold)}
+  .monster-emoji{position:relative;z-index:1;animation:bob 2.4s ease-in-out infinite}
+  @keyframes bob{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-9px) rotate(2deg)}}
+  .monster-emoji.defeat{animation:defeatSpin .5s forwards}
+  @keyframes defeatSpin{to{transform:scale(0) rotate(200deg);opacity:0}}
+  .battle.boss .monster-emoji{font-size:4.4rem}
+  .battle.boss{background:linear-gradient(160deg,#2a1a10,var(--panel));animation:bossFlicker 3s ease-in-out infinite}
+  @keyframes bossFlicker{0%,100%{box-shadow:0 0 30px #ffd70033}50%{box-shadow:0 0 46px #ffd70055}}
+
+  /* ---------- SPARKS & FLOAT TEXT ---------- */
+  .spark{font-size:1.1rem;pointer-events:none;animation:sparkOut .7s ease-out forwards;z-index:80}
+  @keyframes sparkOut{to{transform:translate(var(--dx),var(--dy)) scale(0.3);opacity:0}}
+  .float-coin{font-weight:800;color:var(--gold);font-size:.9rem;pointer-events:none;animation:floatUp .8s ease-out forwards;z-index:80}
+  @keyframes floatUp{to{transform:translateY(-30px);opacity:0}}
+
+  /* ---------- HEARTS ---------- */
+  #hearts span{display:inline-block;transition:transform .2s}
+  #hearts span.crack{animation:heartCrack .45s}
+  #hearts span.heal{animation:heartHeal .5s}
+  @keyframes heartCrack{0%{transform:scale(1)}30%{transform:scale(1.4) rotate(-10deg)}60%{transform:scale(.8) rotate(8deg)}100%{transform:scale(1)}}
+  @keyframes heartHeal{0%{transform:scale(1)}50%{transform:scale(1.5);filter:drop-shadow(0 0 8px #43e97b)}100%{transform:scale(1)}}
+  #shield-flash{position:fixed;inset:0;background:radial-gradient(circle,#ff5c6c55,#3d0e1399);opacity:0;pointer-events:none;z-index:60;transition:opacity .25s}
+  #shield-flash.show{opacity:1}
+  #toast{position:fixed;top:18px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#3d0e13,var(--bg2));border:1.5px solid var(--bad);color:#ffd3d8;padding:10px 20px;border-radius:14px;font-weight:800;font-size:.82rem;z-index:70;opacity:0;transition:opacity .3s,top .3s;pointer-events:none;max-width:88vw;text-align:center}
+  #toast.show{opacity:1;top:30px}
+  #toast.heal{border-color:var(--ok);color:#c8ffe0}
+
+  /* ---------- RANK SHINE ---------- */
+  .rank{position:relative;display:inline-block}
+  .rank::after{content:'';position:absolute;inset:-14px;background:radial-gradient(circle,#ffffff40,transparent 60%);animation:shine 2s ease-in-out infinite;z-index:-1}
+  @keyframes shine{0%,100%{opacity:.2}50%{opacity:.6}}
+</style>
+</head>
+<body>
+<div id="bg-particles"></div>
+<div id="theme-glow" class="world"></div>
+<div id="confetti-layer"></div>
+<div id="shield-flash"></div>
+<div id="toast"></div>
+<div class="wrap">
+
+  <!-- INTRO -->
+  <div class="screen active" id="screen-intro">
+    <div class="world-badge">&#129513; Puzzle Citadel <span>&middot; Applied Reasoning world</span></div>
+    <div class="intro-emoji">&#128274;&#129513;</div>
+    <h1>The Gatehouse Trials</h1>
+    <div class="sub">Your first climb into the Citadel — a balanced mix of applying knowledge and full reasoning, one gate at a time.</div>
+    <div class="zone-card">
+      <div><b>Zone:</b> Compiled Trial &mdash; real Section B &amp; C reasoning questions pulled from the 4 Milestone tests + the ASMOPSS 2026 Mock Test</div>
+      <ul>
+        <li>20 monsters guard this trial &mdash; defeat each by picking the right answer</li>
+        <li>Every question is real, verbatim content from a real Milestone or Mock test — each tagged with its real source test</li>
+        <li>Wrong pick? You'll see why, then keep going &mdash; no game over, this is about learning</li>
+        <li>Build a streak for bonus coins &middot; the final monster is a BOSS fight</li>
+      </ul>
+    </div>
+    <button class="btn gold" onclick="startGame()">&#9876;&#65039; Begin the Trial</button><br>
+    <a class="w-map-link pill" href="Citadel_Map.html">&#8592; Back to Puzzle Citadel</a>
+  </div>
+
+  <!-- GAME -->
+  <div class="screen" id="screen-game">
+    <div id="world-topbar">
+      <div class="world-badge small">&#129513; Puzzle Citadel</div>
+      <a class="w-map-link" href="Citadel_Map.html">&#8592; Back</a>
+    </div>
+    <div id="path"></div>
+    <div id="stats">
+      <div class="stat">&#128081; <span id="coins">0</span> coins</div>
+      <div class="stat" id="hearts"><span id="heart-0">&#10084;&#65039;</span><span id="heart-1">&#10084;&#65039;</span><span id="heart-2">&#10084;&#65039;</span></div>
+      <div class="stat" id="streak-badge">&#128293; 0 streak</div>
+    </div>
+    <div class="battle" id="battle-card">
+      <div class="boss-tag" id="boss-tag" style="display:none">&#128128; BOSS</div>
+      <span class="tierlbl" id="q-tier"></span>
+      <span class="srclbl" id="q-src"></span>
+      <div class="monster-wrap">
+        <div class="monster-aura world" id="monster-aura"></div>
+        <div class="monster-emoji" id="monster-emoji">&#128126;</div>
+      </div>
+      <div class="monster-name" id="monster-name">???</div>
+      <div class="monster-hp"><div class="fill" id="monster-hp-fill"></div></div>
+      <div class="q-body" id="q-body"></div>
+      <div class="opts" id="q-opts"></div>
+      <div class="fx" id="fx"></div>
+      <div class="why" id="why"></div>
+      <button class="btn gold" id="next-btn" onclick="nextQuestion()">Next &#8594;</button>
+    </div>
+  </div>
+
+  <!-- END -->
+  <div class="screen" id="screen-end">
+    <div class="rank" id="rank-emoji">&#127942;</div>
+    <div class="rank-lbl" id="rank-lbl">Trial Complete!</div>
+    <div id="end-msg" style="color:var(--grey);font-size:.9rem"></div>
+    <div class="end-stats">
+      <div class="end-chip"><div class="v" id="end-score">0/15</div><div class="l">Score</div></div>
+      <div class="end-chip"><div class="v" id="end-coins">0</div><div class="l">Coins</div></div>
+      <div class="end-chip"><div class="v" id="end-streak">0</div><div class="l">Best Streak</div></div>
+    </div>
+    <div class="sec-breakdown" id="sec-breakdown"></div>
+    <button class="btn gold" onclick="location.reload()">&#128260; Play Again (reshuffled)</button><br>
+    <button class="btn ghost" onclick="saveResults()">&#128190; Save Results (practice copy)</button><br>
+    <a class="btn ghost" href="Citadel_Map.html">&#8592; Back to Puzzle Citadel</a>
+    <div id="save-status"></div>
+    <div class="note">Copyright &copy; 2026 Luikishi. All rights reserved. Have fun !</div>
+  </div>
+
+</div>
+
+<script>
+/* ================= SAME CONTENT AS Unit_12_Test — unchanged questions/answers/explanations ================= */
+const UNIT_NUM = 0;
+const UNIT_TITLE = "Applied Reasoning: Gatehouse Trials (Compiled)";
+const PASS_BAR = 16;
+
+/* ================= GITHUB SAVE (optional) =================
+   Fill these in yourself, locally, after creating a PRIVATE repo and a
+   fine-grained token scoped to ONLY that repo with "Contents: Read and
+   write" permission. Never paste your token into chat, and never upload
+   this file anywhere public once the token is filled in below. */
+const GITHUB_CONFIG = {
+  enabled: false,   // set to true once owner/repo/token are filled in
+  owner:   "",      // your GitHub username
+  repo:    "",      // e.g. "science-quest-results" — must already have a "main" branch (tick "Add a README" when creating it)
+  branch:  "main",
+  token:   ""       // fine-grained PAT, starts with github_pat_...
+};
+
+async function pushToGitHub(filename, jsonText){
+  const path = `results/${filename}`;
+  const url = `https://api.github.com/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/contents/${path}`;
+  const body = {
+    message: `Add ${filename}`,
+    content: btoa(unescape(encodeURIComponent(jsonText))),
+    branch: GITHUB_CONFIG.branch
+  };
+  const res = await fetch(url, {
+    method: 'PUT',
+    headers: {
+      'Authorization': `Bearer ${GITHUB_CONFIG.token}`,
+      'Accept': 'application/vnd.github+json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(body)
+  });
+  if (!res.ok){
+    if (res.status === 422) throw new Error('a file with this name already exists in the repo (already saved today?)');
+    const err = await res.json().catch(()=>({}));
+    throw new Error(err.message || `GitHub responded ${res.status}`);
+  }
+  return res.json();
+}
+
+const Q = [
+{ n:1, section:'B', tier:'Intermediate', srcTest:'M1', body:"Bread left in a warm, moist bread box for a week grows mould, while an identical slice kept in the freezer stays mould-free. What is the BEST explanation?",
+  options:["Freezing permanently destroys every single mould spore completely", "Cold slows mould growth, since mould needs warmth to grow", "Bread kept in the freezer is no longer real food", "Mould only ever grows inside bread boxes, never in freezers"], ans:2,
+  why:"Mould needs warmth (along with moisture and food) to grow well — cold slows it down.", monster:"Mould Clock Wraith", emoji:"&#129440;" },
+{ n:2, section:'B', tier:'Intermediate', srcTest:'M1', body:"An electrician needs to choose a safe material to cover the handle of a metal tool. Which property should that material have?",
+  options:["Strong electrical conductivity, so current flows through easily", "Strong magnetism, so it sticks firmly to metal", "High density, so the handle feels heavier", "Strong electrical insulation, blocking current from passing through"], ans:4,
+  why:"An insulating material blocks electric current from passing through, protecting the user from a shock.", monster:"Insulator Oracle", emoji:"&#129517;" },
+{ n:3, section:'B', tier:'Intermediate', srcTest:'M2', body:"A wide fluorescent tube light casts a shadow with a soft, blurry edge. What causes this softer edge?",
+  options:["The light source is broad/wide, not a single point","The light is too dim to cast a proper shadow","The object blocking the light is transparent","Shadows are always soft no matter the light source"], ans:1,
+  why:"A broad/wide light source creates a softer shadow with a penumbra fringe, unlike a single point source.", monster:"Penumbra Phantom", emoji:"&#127909;" },
+{ n:4, section:'B', tier:'Intermediate', srcTest:'M2', body:"A student finds a trail of small, half-eaten apples on the ground under a tree, with fresh claw marks scratched into the bark nearby. Which of these is something the student could directly OBSERVE, rather than something they'd have to INFER?",
+  options:["A squirrel visited this tree recently to eat","The animal will probably come back again tomorrow","The claw marks and half-eaten apples are visible on/under the tree right now","The same animal that left the marks also climbed the tree"], ans:3,
+  why:"Seeing the claw marks and apples right now is a direct observation; explaining what caused them or predicting future visits is inference.", monster:"Clue-vs-Guess Illusionist", emoji:"&#128065;" },
+{ n:5, section:'B', tier:'Intermediate', srcTest:'M3', body:"A chunk of granite weighs 45g and fills a space of 15cm³. Calculate its density.",
+  options:["40 g/cm³", "1200 g/cm³", "80 g/cm³", "3 g/cm³"], ans:4,
+  why:"Density = Mass ÷ Volume = 45 ÷ 15 = 3 g/cm³.", monster:"Density Riddle Golem", emoji:"&#9878;&#65039;" },
+{ n:6, section:'B', tier:'Intermediate', srcTest:'M3', body:"A bus drives 180 km over 3 hours without stopping. Apply Speed = Distance ÷ Time to find its speed.",
+  options:["108 km/h", "360 km/h", "177 km/h", "60 km/h"], ans:4,
+  why:"180 km ÷ 3 hours = 60 km/h.", monster:"Pace Puzzle Wisp", emoji:"&#127939;" },
+{ n:7, section:'B', tier:'Intermediate', srcTest:'M4', body:"A camper sits near a lit stove: the metal handle gets hot from touching the flame, warm air rises and drifts toward the camper's face, and heat also reaches the camper's skin directly with no air movement needed. How many different types of heat transfer are happening at once?",
+  options:["All three types — conduction, convection, and radiation — at the same time", "Just one — only conduction is happening here, and nothing else at all", "Just one — only radiation is happening here, and nothing else at all", "Two types only are happening here at once, not all three together"], ans:1,
+  why:"The handle heats by conduction (touching), warm air rising is convection, and heat reaching skin directly is radiation — all three can happen in the very same scene at once.", monster:"Triple-Transfer Wraith", emoji:"&#128293;" },
+{ n:8, section:'B', tier:'Intermediate', srcTest:'M4', body:"A camp counsellor puts out a small campfire by (a) pouring water on it AND (b) shovelling dirt over it, both at the same time. Why might doing both together work faster than either one alone?",
+  options:["Because water and dirt are actually made of the exact same underlying material somehow, deep down", "Because trying more than one method at a time is against the rules and only ever slows things down", "Because dirt works by quietly adding extra fuel to balance out the water being poured", "Because water cools the fire (removes heat) while dirt smothers it (removes oxygen) — two different sides at once"], ans:4,
+  why:"Water removes heat while dirt cuts off oxygen — attacking two different sides of the fire triangle at the same time works faster than removing just one.", monster:"Double-Douse Sprite", emoji:"&#128167;" },
+{ n:9, section:'B', tier:'Intermediate', srcTest:'MOCK', body:"Two children pull on opposite ends of a rope in a tug-of-war. Child A pulls with 120 newtons to the left. Child B pulls with 95 newtons to the right. What is the size and direction of the net (combined) force on the rope?",
+  options:["215 newtons to the left","215 newtons to the right","25 newtons to the right","25 newtons to the left"], ans:4,
+  why:"When forces act in opposite directions, subtract the smaller from the larger: 120 &minus; 95 = 25 newtons. Since Child A's pull (120N, left) is bigger, the net force is 25 newtons to the LEFT — the rope moves toward Child A.", monster:"Rope-Line Golem", emoji:"&#129354;" },
+{ n:10, section:'B', tier:'Intermediate', srcTest:'MOCK', body:"A distance-time graph shows a cyclist's journey: from 0-10 minutes, the line rises steeply and steadily. From 10-20 minutes, the line is completely flat (horizontal). From 20-30 minutes, the line rises again, but less steeply than before. During which time period was the cyclist moving FASTEST?",
+  options:["0-10 minutes, the steepest rising section","10-20 minutes, the completely flat section","20-30 minutes, the gentler rising section","The cyclist's speed was the same throughout"], ans:1,
+  why:"On a distance-time graph, the STEEPER the line, the faster the speed (more distance covered in the same amount of time). The 0-10 minute section is the steepest, so that's when the cyclist was moving fastest. The flat section (10-20 min) means the cyclist wasn't moving at all.", monster:"Graph-Line Wisp", emoji:"&#128200;" },
+{ n:11, section:'C', tier:'Applied', srcTest:'M1', body:"A student wants to test which of two magnets is stronger, but uses a different-sized paperclip for each magnet's test AND holds each magnet a different distance away. Why is this NOT a fair test?",
+  options:["Fair tests must always use the exact same magnet every single time", "Changing more variables together always produces clearer, more reliable results", "Two things changed together, so you can't isolate which one caused the difference", "Magnetism never really affects how paperclips move around at all"], ans:3,
+  why:"A fair test changes only ONE variable — changing both paperclip size and distance makes it impossible to isolate which factor caused any result.", monster:"Unfair-Grip Phantom", emoji:"&#129362;" },
+{ n:12, section:'C', tier:'Applied', srcTest:'M1', body:"A student tests whether warmth affects how fast mould grows on bread using three identical bagged slices: one in a warm cupboard, one in the fridge, and one left at room temperature with nothing else changed. What is the PURPOSE of the room-temperature slice?",
+  options:["It serves no real purpose here and should simply be removed", "It shows the single fastest mould growth rate possible", "It exists only so the student has extra slices to look at", "It acts as a baseline control for comparing the warm and cold results fairly"], ans:4,
+  why:"An untouched control slice lets the experimenter compare the warm and cold results against a true, unaffected baseline.", monster:"Control-Slice Sentinel", emoji:"&#129440;" },
+{ n:13, section:'C', tier:'Applied', srcTest:'M2', body:"A student wants to test whether SEED TYPE affects germination speed, using bean seeds and corn seeds. Both are planted in identical pots, but the bean pot gets more water AND more warmth than the corn pot. Why is this NOT a fair test?",
+  options:["Fair tests must always compare exactly two different seed types side by side, without any exceptions","Two things changed together (water AND warmth), so you can't isolate which one caused any speed difference","Seeds can never be fairly compared to each other in any experiment, no matter how it's designed","More water and warmth always guarantees faster germination speed, regardless of which seed type is used"], ans:2,
+  why:"A fair test changes only ONE variable at a time - changing both water and warmth together makes it impossible to isolate which factor caused any difference.", monster:"Double-Change Trickster", emoji:"&#127793;" },
+{ n:14, section:'C', tier:'Applied', srcTest:'M2', body:"A student claims: 'Since the air inside a sealed, crowded elevator changes as people breathe, new gases must be appearing out of nowhere.' What is the BEST correction?",
+  options:["The claim is wrong - no gas is created; only the ratio of oxygen and carbon dioxide shifts as people breathe","The claim is correct, since new gases can genuinely appear from nothing whenever people breathe in an enclosed space","The claim is wrong, but only because the air inside a sealed elevator never actually changes at all","The claim is correct, but this effect only really happens inside very large, spacious elevators"], ans:1,
+  why:"No new gas is created - breathing simply shifts the existing balance of gases already in the air, using up oxygen and adding carbon dioxide.", monster:"Sealed-Air Illusionist", emoji:"&#128668;" },
+{ n:15, section:'C', tier:'Applied', srcTest:'M3', body:"A toy sled has three ropes attached: two teams pull it forward with 18N and 14N; a third team pulls backward with 9N. What is the net force on the sled, and which way does it move?",
+  options:["32N forward (all added)", "23N total forward", "41N forward", "9N backward"], ans:2,
+  why:"Group by direction first: forward = 18+14 = 32N. Backward = 9N. Then subtract: 32 − 9 = 23N, moving forward.", monster:"Net-Force Golem", emoji:"&#129354;" },
+{ n:16, section:'C', tier:'Applied', srcTest:'M3', body:"A person holds a heavy box completely still above their head for two full minutes at the gym. A friend says: 'That's a huge amount of scientific work.' Is the friend's use of the word 'work' correct?",
+  options:["Yes, holding something heavy always counts as a large amount of work", "Yes, but only because two minutes is a long time to hold something", "No — since the box never moves, zero scientific work is done", "No, because holding a box doesn't involve any force at all"], ans:3,
+  why:"Scientific work needs force AND movement — since the box stays still, zero work is done, regardless of how much effort or force is involved.", monster:"Work-Word Sphinx", emoji:"&#128170;" },
+{ n:17, section:'C', tier:'Applied', srcTest:'M4', body:"A bracelet has three small magnetic charms, D, E, and F, linked together in a row. Charm D's left end is labelled S. The D–E link ATTRACTS. The E–F link REPELS. What is charm F's end that touches E?",
+  options:["S, because the attracting D–E link means E's touching end simply copies D's far pole exactly as it is", "There's genuinely no way to tell for certain without actually seeing the real bracelet in person", "N, because tracing each link shows E's far end is N, and the repelling E–F link means F's touching end must also be N", "F's end could honestly be either pole — you'd need to trace three links, not two, to be sure"], ans:3,
+  why:"D's left is S, so D's right (touching E) is N. D–E attracts, meaning opposite poles touch, so E's touching-D end is S — making E's far end (touching F) N. E–F repels, meaning matching poles touch, so F's touching end must also be N.", monster:"Charm-Chain Enigma", emoji:"&#128142;" },
+{ n:18, section:'C', tier:'Applied', srcTest:'M4', body:"A textbook says: \"Sieving, filtering, and magnets can ALWAYS separate any two substances mixed together, no matter what they are.\" Evaluate this claim using what you know from this term.",
+  options:["True — these three methods together can always separate absolutely any possible combination of substances there is", "False, but only because magnets are technically banned from ever being used in real separation methods at all", "False — sieving and filtering can't separate a dissolved solution, and magnets only pull magnetic materials like iron and steel", "True, though only after the mixture has been left to sit undisturbed for a full week beforehand"], ans:3,
+  why:"\"Always...no matter what\" rules out every exception — but a solution needs evaporation, not sieving or filtering, and magnets only pull magnetic materials like iron and steel, not everything.", monster:"Always-Works Trickster", emoji:"&#129517;" },
+{ n:19, section:'C', tier:'Applied', srcTest:'MOCK', body:"A table shows the peak date of the Perseid meteor shower over five different years: 2020 &ndash; 12 August. 2021 &ndash; 13 August. 2022 &ndash; 12 August. 2023 &ndash; 13 August. 2024 &ndash; 12 August. The peak date barely changes each year, always falling in the same few days of August. What does this pattern suggest the meteor shower's timing depends on?",
+  options:["Random chance, with no real pattern at all","How many satellites are in orbit that year","Earth's yearly orbital position, which repeats","The Moon's phase on that specific day"], ans:3,
+  why:"Meteor showers happen when Earth's orbit passes through a trail of dust left behind by a comet. Because Earth returns to roughly the SAME position in its orbit at the SAME time every year, it passes through that same dust trail around the same date each year — which is why the peak date barely changes.", monster:"Meteor-Date Oracle", emoji:"&#127756;" },
+{ n:20, section:'C', tier:'Applied', srcTest:'MOCK', body:"Read these four statements about electrical safety at home: A: Metal objects like forks should never be poked into a wall socket, because metal conducts electricity. B: A wire with its plastic coating peeled off and the bare metal showing is just as safe to touch as one with the coating intact. C: You should turn off and unplug an appliance before trying to fix it yourself. D: Water conducts electricity, so hands should be completely dry before touching any switch or plug. Which of these statements are CORRECT?",
+  options:["A and B only","B and C only","A, B, and D only","A, C, and D only"], ans:4,
+  why:"A is correct (metal is a conductor — dangerous in a socket). B is FALSE — bare exposed wire is far MORE dangerous to touch than coated wire, since the plastic coating is an insulator that normally protects you. C is correct (always unplug before attempting any fix). D is correct (water is a conductor, so wet hands + electricity is dangerous). That makes A, C, and D the correct statements.", monster:"Safety-Statement Sphinx", emoji:"&#9889;" }
+];
+/* ================= END unchanged content ================= */
+
+const SRC_LABEL = { M1:'Milestone 1', M2:'Milestone 2', M3:'Milestone 3', M4:'Milestone 4', MOCK:'ASMOPSS Mock Test' };
+
+function shuffle(arr){
+  const a = arr.slice();
+  for (let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
+  return a;
+}
+
+// Shuffle question order, and shuffle each question's own options (remapping the answer index)
+let deck = shuffle(Q).map(q => {
+  const optIdx = shuffle(q.options.map((_,i)=>i));
+  const options = optIdx.map(i => q.options[i]);
+  const ans = optIdx.indexOf(q.ans-1) + 1;
+  return {...q, options, ans};
+});
+const TOTAL = Q.length;
+const GOLD_BAR = Math.round(TOTAL * 0.9);
+
+let pos = 0, score = 0, coins = 0, streak = 0, maxStreak = 0, hearts = 3;
+const sectionTally = { A:{c:0,t:0}, B:{c:0,t:0}, C:{c:0,t:0} };
+const SECTION_LABEL = { A:'Basic', B:'Intermediate', C:'Applied' };
+
+function startGame(){
+  document.getElementById('screen-intro').classList.remove('active');
+  document.getElementById('screen-game').classList.add('active');
+  buildPath();
+  renderQuestion();
+}
+
+function buildPath(){
+  const path = document.getElementById('path');
+  const icon = {A:'&#127793;',B:'&#127760;',C:'&#128302;'};
+  path.innerHTML = deck.map((q,i) => `<div class="node ${q.section}" id="node-${i}"><span class="nico">${i===deck.length-1?'&#128081;':icon[q.section]}</span>${i+1}</div>`).join('');
+}
+
+/* ---------- juicy feedback helpers ---------- */
+function spawnSparks(el){
+  const rect = el.getBoundingClientRect();
+  const glyphs = ['&#10024;','&#11088;','&#128165;','&#127775;'];
+  for (let i=0;i<10;i++){
+    const s = document.createElement('span');
+    s.className = 'spark';
+    s.innerHTML = glyphs[Math.floor(Math.random()*glyphs.length)];
+    const angle = Math.random()*Math.PI*2, dist = 40+Math.random()*55;
+    s.style.setProperty('--dx', Math.cos(angle)*dist+'px');
+    s.style.setProperty('--dy', Math.sin(angle)*dist+'px');
+    s.style.position = 'fixed';
+    s.style.left = (rect.left+rect.width/2)+'px';
+    s.style.top = (rect.top+rect.height/2)+'px';
+    document.body.appendChild(s);
+    setTimeout(()=>s.remove(),750);
+  }
+}
+function floatCoin(gain){
+  const rect = document.getElementById('coins').getBoundingClientRect();
+  const f = document.createElement('span');
+  f.className = 'float-coin';
+  f.textContent = '+'+gain;
+  f.style.position = 'fixed';
+  f.style.left = rect.left+'px';
+  f.style.top = rect.top+'px';
+  document.body.appendChild(f);
+  setTimeout(()=>f.remove(),850);
+}
+let toastTimer;
+function showToast(msg, heal){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.toggle('heal', !!heal);
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>t.classList.remove('show'), 2000);
+}
+function launchConfetti(n){
+  const layer = document.getElementById('confetti-layer');
+  const colors = ['#FFD700','#FFA500','#43e97b','#5fa8ff','#c77dff','#ff5c6c'];
+  for (let i=0;i<n;i++){
+    const p = document.createElement('div');
+    p.className = 'confetti-piece';
+    const size = 6+Math.random()*6;
+    p.style.width = size+'px';
+    p.style.height = (size*0.4)+'px';
+    p.style.left = Math.random()*100+'%';
+    p.style.background = colors[Math.floor(Math.random()*colors.length)];
+    p.style.animationDuration = (2.2+Math.random()*1.6)+'s';
+    p.style.animationDelay = (Math.random()*0.6)+'s';
+    layer.appendChild(p);
+    setTimeout(()=>p.remove(), 4300);
+  }
+}
+function countUp(elId, target){
+  const el = document.getElementById(elId);
+  let cur = 0;
+  const step = Math.max(1, Math.round(target/22));
+  const t = setInterval(()=>{
+    cur = Math.min(target, cur+step);
+    el.textContent = cur;
+    if (cur >= target) clearInterval(t);
+  }, 30);
+}
+
+function renderQuestion(){
+  const q = deck[pos];
+  const isBoss = pos === deck.length-1;
+  const theme = isBoss ? 'boss' : 'world';
+  document.getElementById('theme-glow').className = theme;
+  document.getElementById('monster-aura').className = 'monster-aura ' + theme;
+  document.getElementById(`node-${pos}`).classList.add('current');
+  document.getElementById('boss-tag').style.display = isBoss ? 'block' : 'none';
+  document.getElementById('battle-card').classList.toggle('boss', isBoss);
+  document.getElementById('q-tier').textContent = q.tier;
+  document.getElementById('q-tier').className = 'tierlbl ' + q.tier;
+  document.getElementById('q-src').textContent = q.srcTest ? ('from ' + SRC_LABEL[q.srcTest]) : '';
+  document.getElementById('monster-emoji').innerHTML = q.emoji;
+  document.getElementById('monster-emoji').className = 'monster-emoji';
+  document.getElementById('monster-name').textContent = (isBoss ? 'BOSS: ' : '') + q.monster;
+  document.getElementById('monster-hp-fill').style.width = '100%';
+  document.getElementById('q-body').textContent = q.body;
+  document.getElementById('fx').className = 'fx';
+  document.getElementById('why').className = 'why';
+  document.getElementById('next-btn').style.display = 'none';
+  document.getElementById('q-opts').innerHTML = q.options.map((opt,i) =>
+    `<button class="opt" onclick="answer(${i+1})">${String.fromCharCode(65+i)}. ${opt}</button>`).join('');
+  updateStats();
+}
+
+function updateStats(){
+  document.getElementById('coins').textContent = coins;
+  const sb = document.getElementById('streak-badge');
+  if (streak >= 2){ sb.classList.remove('hide'); sb.textContent = `🔥 ${streak} streak`; }
+  else { sb.classList.add('hide'); }
+}
+
+function answer(idx){
+  const q = deck[pos];
+  const correct = idx === q.ans;
+  sectionTally[q.section].t++;
+  document.querySelectorAll('#q-opts .opt').forEach((b,i) => {
+    b.disabled = true;
+    if (i+1 === q.ans) b.classList.add('correct');
+    if (i+1 === idx && !correct) b.classList.add('wrong');
+  });
+
+  const fx = document.getElementById('fx');
+  const emo = document.getElementById('monster-emoji');
+  if (correct){
+    score++; sectionTally[q.section].c++;
+    streak++; maxStreak = Math.max(maxStreak, streak);
+    const gain = 10 + Math.min(streak-1,5)*4;
+    coins += gain;
+    document.getElementById('monster-hp-fill').style.width = '0%';
+    emo.classList.add('defeat');
+    spawnSparks(emo);
+    floatCoin(gain);
+    fx.textContent = `✨ Defeated! +${gain} coins`;
+    fx.className = 'fx show ok';
+    document.getElementById(`node-${pos}`).classList.add('done-ok');
+
+    if (streak > 0 && streak % 3 === 0 && hearts < 3){
+      const el = document.getElementById('heart-'+hearts);
+      el.classList.remove('lost'); el.classList.add('heal');
+      setTimeout(()=>el.classList.remove('heal'), 500);
+      hearts++;
+      showToast('💚 3 in a row — a shield heals back!', true);
+    }
+  } else {
+    streak = 0;
+    emo.classList.add('hit');
+    document.getElementById(`node-${pos}`).classList.add('done-bad');
+    if (hearts > 0){
+      hearts--;
+      const el = document.getElementById('heart-'+hearts);
+      el.classList.add('crack');
+      setTimeout(()=>{ el.classList.remove('crack'); el.classList.add('lost'); }, 420);
+      fx.textContent = `💥 It got you — read the tip below`;
+      fx.className = 'fx show bad';
+    } else {
+      // already at 0 hearts: the shield breaks for real — costs coins, but grants a second wind
+      coins = Math.max(0, coins - 15);
+      hearts = 1;
+      for (let i=0;i<3;i++){ const el=document.getElementById('heart-'+i); el.classList.remove('lost'); if (i>0) el.classList.add('lost'); }
+      document.getElementById('shield-flash').classList.add('show');
+      setTimeout(()=>document.getElementById('shield-flash').classList.remove('show'), 350);
+      showToast('🛡️ Shield broken! -15 coins... but you get a second wind (1 ❤️ back)');
+      fx.textContent = `💥 Shield broken! Second wind granted`;
+      fx.className = 'fx show bad';
+    }
+  }
+  document.getElementById(`node-${pos}`).classList.remove('current');
+  document.getElementById('why').innerHTML = `💡 <b>Why:</b> ${q.why}`;
+  document.getElementById('why').classList.add('show');
+  document.getElementById('next-btn').style.display = 'inline-block';
+  document.getElementById('next-btn').textContent = (pos === deck.length-1) ? 'See Results →' : 'Next →';
+  updateStats();
+}
+
+function nextQuestion(){
+  pos++;
+  if (pos >= deck.length){ showEnd(); return; }
+  renderQuestion();
+}
+
+function showEnd(){
+  document.getElementById('screen-game').classList.remove('active');
+  document.getElementById('screen-end').classList.add('active');
+  document.getElementById('theme-glow').className = 'boss';
+  const pct = Math.round(score/TOTAL*100);
+  const pass = score >= PASS_BAR;
+  document.getElementById('rank-emoji').textContent = score >= GOLD_BAR ? '🥇' : (pass ? '🥈' : '🥉');
+  document.getElementById('rank-lbl').textContent = score >= GOLD_BAR ? 'Gold Explorer!' : (pass ? 'Silver Explorer!' : 'Trial Survived');
+  document.getElementById('end-msg').textContent = pass
+    ? `Great job — that's a PASS! Real reasoning questions pulled straight from the Milestone and Mock tests.`
+    : `Good effort! Worth a rematch once you've reviewed the tips.`;
+  document.getElementById('end-score').textContent = `${score}/${TOTAL} (${pct}%)`;
+  countUp('end-coins', coins);
+  countUp('end-streak', maxStreak);
+  document.getElementById('sec-breakdown').innerHTML =
+    ['A','B','C'].map(s => `<div class="sec-chip">${SECTION_LABEL[s]}: ${sectionTally[s].c}/${sectionTally[s].t}</div>`).join('');
+  if (pass) launchConfetti(80); else launchConfetti(30);
+  window._lastResults = {
+    student:"Player", unit:UNIT_NUM, unitTitle:UNIT_TITLE, mode:"GameMode",
+    dateTaken:new Date().toISOString().slice(0,10), score, outOf:TOTAL, pct, passBar:PASS_BAR, passed:pass,
+    coins, maxStreak, sections:['A','B','C'].map(s=>({name:s,score:sectionTally[s].c,outOf:sectionTally[s].t}))
+  };
+}
+
+async function saveResults(){
+  const filename = `CIT_Gatehouse_GameMode_Results_${window._lastResults.dateTaken}.json`;
+  const json = JSON.stringify(window._lastResults, null, 2);
+  const statusEl = document.getElementById('save-status');
+
+  if (GITHUB_CONFIG.enabled && GITHUB_CONFIG.owner && GITHUB_CONFIG.repo && GITHUB_CONFIG.token){
+    statusEl.textContent = '⏳ Saving to GitHub...';
+    try {
+      await pushToGitHub(filename, json);
+      statusEl.textContent = `✅ Saved to GitHub — ${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/results/${filename}`;
+      return;
+    } catch(e){
+      statusEl.textContent = `⚠️ GitHub save failed (${e.message}) — downloading a local copy instead.`;
+      // fall through to local download so a result is never lost
+    }
+  }
+
+  const blob = new Blob([json], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  document.body.appendChild(a); a.click(); a.remove();
+  if (!GITHUB_CONFIG.enabled) statusEl.textContent = `Downloaded ${filename} (GitHub save not set up yet — separate from the official record — this is a compiled cross-unit trial).`;
+}
+</script>
+</body>
+</html>
