@@ -88,6 +88,9 @@
   @keyframes pop{0%{transform:scale(.6)}60%{transform:scale(1.15)}100%{transform:scale(1)}}
   .why{display:none;text-align:left;margin-top:14px;padding:12px 14px;border-radius:10px;background:var(--chip);border-left:4px solid var(--gold);font-size:.85rem;color:#f0ddb8}
   .why.show{display:block}
+  .lesson-more{display:none;text-align:left;margin-top:10px;padding:12px 14px;border-radius:10px;background:#0e2622;border-left:4px solid var(--steel);font-size:.85rem;color:#bfe8de;line-height:1.55}
+  .lesson-more.show{display:block}
+  .lesson-more b{color:#5fd9c4}
   #next-btn{display:none;margin-top:16px}
 
   /* ---------- END SCREEN ---------- */
@@ -217,6 +220,7 @@
       <div class="opts" id="q-opts"></div>
       <div class="fx" id="fx"></div>
       <div class="why" id="why"></div>
+      <div class="lesson-more" id="lesson-more"></div>
       <button class="btn gold" id="next-btn" onclick="nextQuestion()">Next &#8594;</button>
     </div>
   </div>
@@ -288,51 +292,66 @@ async function pushToGitHub(filename, jsonText){
 const Q = [
 { n:1, section:'A', tier:'Basic', srcUnit:8, body:"A student wants to test whether LIGHT affects photosynthesis rate, so she changes the light level AND swaps to a different type of plant AND waters it more, all at the same time. Why is this NOT a fair test?",
   options:["Multiple things changed at once, so you can't tell which change (light, plant type, or water) caused any difference observed","Fair tests must always use different types of plants","Light never affects photosynthesis, so the test is pointless either way","Changing three things at once always gives faster, more reliable results"], ans:1,
-  why:"A fair test changes only ONE variable at a time — changing light, plant type, and water together makes it impossible to isolate which factor caused any result.", monster:"Triple-Change Chimera", emoji:"&#128118;" },
+  why:"A fair test changes only ONE variable at a time — changing light, plant type, and water together makes it impossible to isolate which factor caused any result.", monster:"Triple-Change Chimera", emoji:"&#128118;",
+  lessonMore:"Light, water, and carbon dioxide are the three ingredients a plant needs to make food — and whichever one is scarcest limits the whole process, even if the other two are plentiful. That's why scientists lock down everything except ONE ingredient at a time: two identical plants, same water/soil/temperature, only the light level different. Mix three changes together like this student did, and there's no way to tell which ingredient (if any) actually made the difference." },
 { n:2, section:'A', tier:'Basic', srcUnit:4, body:"A student wants to test whether MOISTURE affects mould growth. They compare a damp slice of bread kept in a warm cupboard with a dry slice of bread kept in the fridge. Why is this NOT a fair test?",
   options:["Bread can never mould in the fridge","Two things changed at once (moisture AND temperature), so you can't tell which one caused any difference","Fridges are more expensive than cupboards","The slices were probably not the same size"], ans:2,
-  why:"A fair test changes only ONE thing. Here, both moisture and temperature changed together, so any difference in mould couldn't be blamed on moisture alone.", monster:"Twin-Variable Trickster", emoji:"&#127925;" },
+  why:"A fair test changes only ONE thing. Here, both moisture and temperature changed together, so any difference in mould couldn't be blamed on moisture alone.", monster:"Twin-Variable Trickster", emoji:"&#127925;",
+  lessonMore:"Mould needs three things to grow: food, moisture, and warmth. To test moisture alone, you'd compare two bags that are IDENTICAL except for moisture — like a warm-damp bag against a warm-dry bag. Comparing a damp-warm slice with a dry-fridge slice mixes two ingredients at once, so there's no way to tell whether moisture, temperature, or both caused the difference in mould." },
 { n:3, section:'A', tier:'Basic', srcUnit:6, body:"To test whether a paperclip, a plastic ruler, or a rubber band conducts electricity, a student uses a fresh battery for the paperclip but an old, weak battery for the other two. Why is this NOT a fair test?",
   options:["The battery changed along with the object being tested, so a weak battery could make a real conductor seem like it doesn't conduct","Paperclips can never be tested for conducting","Plastic always wins conductivity tests","A rubber band and a plastic ruler are the same material"], ans:1,
-  why:"A fair test changes only ONE thing (the object). Changing the battery too means you can't tell whether any difference was caused by the object or by the weaker battery.", monster:"Battery Swap Phantom", emoji:"&#128267;" },
+  why:"A fair test changes only ONE thing (the object). Changing the battery too means you can't tell whether any difference was caused by the object or by the weaker battery.", monster:"Battery Swap Phantom", emoji:"&#128267;",
+  lessonMore:"Metals like copper, iron and steel are strong electrical conductors; plastic, rubber, glass and wood are insulators that block the flow. A weak battery pushes less current through EVERY object, conductor or not — so if you swap batteries partway through, even a true conductor like the paperclip could look like it barely lights the bulb, making you misjudge the material entirely." },
 { n:4, section:'A', tier:'Basic', srcUnit:10, body:"A student wants to find out which surface has more friction, but pushes the car with much more force on one surface and uses a different-sized car for the other. Why is this NOT a fair test?",
   options:["Two variables changed together — how hard it was pushed and which car was used — so there's no way to know which one caused any difference seen","A fair test should always try to test as many surfaces as possible at once","Friction has no real effect on how far a car rolls, so the test doesn't matter either way","Testing several changes together always gives the most reliable results"], ans:1,
-  why:"A fair test changes only ONE variable — changing both the push force and the car makes it impossible to isolate which factor caused any result.", monster:"Push-Force Faker", emoji:"&#128663;" },
+  why:"A fair test changes only ONE variable — changing both the push force and the car makes it impossible to isolate which factor caused any result.", monster:"Push-Force Faker", emoji:"&#128663;",
+  lessonMore:"Rougher surfaces create MORE friction — the force opposing motion — so a fair friction test keeps the ramp height, starting push, and the car itself identical, changing only the surface at the bottom. This student changed both the push force and the car, so any difference in how far it rolled could come from either one. (Bonus trap: the surface where a car travels FARTHEST actually has the LEAST friction, not the most.)" },
 
 { n:5, section:'B', tier:'Intermediate', srcUnit:6, body:"A student wants to find out if WIRE MATERIAL (copper vs steel) affects how well electricity flows, but also uses a thicker piece of copper wire than steel wire in the test. Why is this NOT a fair test?",
   options:["Wire thickness changed along with material, so any difference could be caused by the thickness, not the material","Copper is always better than steel no matter what","Steel wires cannot be tested","Thickness never affects anything in a circuit"], ans:1,
-  why:"Two things changed at once (material AND thickness), so you can't be sure which one actually caused any difference — the same 'change only ONE thing' fair-test rule.", monster:"Wire Mixup Wraith", emoji:"&#128268;" },
+  why:"Two things changed at once (material AND thickness), so you can't be sure which one actually caused any difference — the same 'change only ONE thing' fair-test rule.", monster:"Wire Mixup Wraith", emoji:"&#128268;",
+  lessonMore:"Copper and steel are both metals, so both conduct electricity — but that's a separate question from thickness. Thickness is about how much metal current has to pass through, not what the metal actually is. Testing material and thickness together means any difference in the result could come from either one, so there's no way to credit copper vs steel alone." },
 { n:6, section:'B', tier:'Intermediate', srcUnit:7, body:"To test whether changing the Moon's ORBITAL POSITION changes which phase is seen, a student changes both the ball's position AND the lamp's brightness at the same time in a model. Why is this NOT a fair test of the position idea?",
   options:["Both the position and the brightness changed at once, so you can't tell whether any change in the model was caused by the new position or the new brightness","Brightness never affects how a model looks","Position doesn't matter in this kind of model","Lamps cannot be used in science models"], ans:1,
-  why:"A fair test changes only ONE thing at a time. Changing both position and brightness together means any difference observed can't be blamed on position alone.", monster:"Moonlight Mimic", emoji:"&#127769;" },
+  why:"A fair test changes only ONE thing at a time. Changing both position and brightness together means any difference observed can't be blamed on position alone.", monster:"Moonlight Mimic", emoji:"&#127769;",
+  lessonMore:"In a Moon-phase model, a ball represents the Moon, a lamp the Sun, and your head Earth — moving the ball around your head is what changes which phase you see, because it changes how much of its permanently-lit half faces you. The lamp's brightness isn't part of what causes real phases, so changing it too just muddies what moving the ball was supposed to show." },
 { n:7, section:'B', tier:'Intermediate', srcUnit:8, body:"A student sets up two identical plants to test whether water affects photosynthesis: both get the same bright light and same soil, but Plant A is watered daily and Plant B is watered only once a week. Which is the best description of this setup?",
   options:["It is unfair, because light was not also changed","It is a fair test — only water differs, so any result can be reasonably linked to water","It is unfair, because you should always change every variable to get a clear answer","It cannot be a fair test unless the plants are different species"], ans:2,
-  why:"Only water was changed while light and soil stayed identical, which is exactly what a fair test requires.", monster:"Clean Test Sentinel", emoji:"&#9989;" },
+  why:"Only water was changed while light and soil stayed identical, which is exactly what a fair test requires.", monster:"Clean Test Sentinel", emoji:"&#9989;",
+  lessonMore:"This mirrors a classic fair-test setup almost exactly — light and soil are locked identical between the two plants, so any real difference in growth can be fairly credited to water, the one true variable. Water is one of three ingredients (with light and carbon dioxide) that drive photosynthesis, so isolating it cleanly like this is exactly how you'd find out if it's the scarce, limiting one." },
 { n:8, section:'B', tier:'Intermediate', srcUnit:8, body:"In a controlled experiment testing light's effect on photosynthesis, one plant is kept under a lamp that is never switched on. What is the PURPOSE of this un-lit plant in the experiment?",
   options:["It has no purpose and should be removed","It acts as a control, showing what happens with no added light so the lit plants can be fairly compared against it","It is there to save electricity","It represents the fastest possible photosynthesis rate"], ans:2,
-  why:"An un-lit control lets the experimenter compare the lit plants against a true baseline, isolating the effect of the added light.", monster:"Control Group Guardian", emoji:"&#128737;&#65039;" },
+  why:"An un-lit control lets the experimenter compare the lit plants against a true baseline, isolating the effect of the added light.", monster:"Control Group Guardian", emoji:"&#128737;&#65039;",
+  lessonMore:"Light is one of the three ingredients (with water and carbon dioxide) that drives photosynthesis, and whichever one is scarcest limits the whole process. A plant kept with zero added light shows the true baseline of what happens with none of that ingredient at all — every lit plant's result can then be measured as the boost above that baseline, instead of just guessing what 'no light' would have looked like." },
 { n:9, section:'B', tier:'Intermediate', srcUnit:10, body:"A student sets up two identical ramps and toy cars to test whether SURFACE affects rolling distance: both ramps are the same height and both cars are released the same way, but one rolls onto tile and the other onto carpet. Which is the best description of this setup?",
   options:["It is unfair, because the ramp height should also have been changed","It is a fair test — only the surface differs, so any result can be reasonably linked to the surface","It is unfair, because you should always change every variable to get a clear answer","It cannot be a fair test unless the cars are different sizes"], ans:2,
-  why:"Only the surface was changed while ramp height and release method stayed identical, which is exactly what a fair test requires.", monster:"Surface Sleuth", emoji:"&#128270;" },
+  why:"Only the surface was changed while ramp height and release method stayed identical, which is exactly what a fair test requires.", monster:"Surface Sleuth", emoji:"&#128270;",
+  lessonMore:"This is a textbook friction test: change only the surface at the bottom, while the ramp height, release point, and the car itself all stay identical. Rougher surfaces like carpet create more friction and stop a car sooner; smoother surfaces like tile let it roll farther — so with only the surface different, any change in distance can be fairly credited to friction." },
 { n:10, section:'B', tier:'Intermediate', srcUnit:11, body:"To fairly test how exercise affects breathing rate, a student counts their own breaths per minute before exercising, then counts again right after running for 5 minutes. What makes this a FAIR test?",
   options:["The same person is measured both times, changing only whether they've just run","A different person is measured for the before and after readings","Breathing rate is compared against eating habits at the same time","A different length of time is used before versus after"], ans:1,
-  why:"A fair test changes only ONE thing (having just exercised or not) while keeping everything else — the same person, same counting method — identical.", monster:"Pulse Detective", emoji:"&#10084;&#65039;" },
+  why:"A fair test changes only ONE thing (having just exercised or not) while keeping everything else — the same person, same counting method — identical.", monster:"Pulse Detective", emoji:"&#10084;&#65039;",
+  lessonMore:"You breathe faster after running because your body needs to bring in more oxygen and clear out more carbon dioxide faster during exercise — that's gas exchange working overtime. Measuring the SAME person before and after keeps their lungs, fitness level, and counting method identical, so having just run is the only real difference driving the breathing-rate change." },
 
 { n:11, section:'C', tier:'Applied', srcUnit:21, body:"A student wants to design a FAIR TEST to find out whether shape affects how fast paper falls through air. Which method is fairest?",
   options:["Drop a flat sheet of paper from a low shelf, and a scrunched-up ball of the same paper from a much higher roof","Drop a flat sheet of one type of paper, and a scrunched-up ball of a different, much heavier type of paper","Drop a flat sheet and a scrunched ball of the SAME paper, from the SAME height, changing only the shape","Drop both pieces of paper at completely different times of day, in two entirely different rooms of the house"], ans:3,
-  why:"A fair test changes only ONE thing (the shape) while keeping the paper, height, and release method exactly the same.", monster:"Fair-Fold Origami Spirit", emoji:"&#128196;" },
+  why:"A fair test changes only ONE thing (the shape) while keeping the paper, height, and release method exactly the same.", monster:"Fair-Fold Origami Spirit", emoji:"&#128196;",
+  lessonMore:"A flat sheet and a scrunched ball of the SAME paper have identical mass, but very different surface area facing the air. The scrunched ball has far less surface area, so air resistance barely slows it down — that's why it falls faster, even though nothing about its weight changed. Keeping the paper and height identical, and changing only the shape, isolates surface area as the one true cause." },
 { n:12, section:'C', tier:'Applied', srcUnit:26, body:"Two students want to find out which of two toy cars is faster down a ramp. Car A is heavier than Car B. What should they do to make this a FAIR test?",
   options:["Let both cars start from the same height and be measured the same way, changing nothing except which car is used","Race them down ramps of very different heights instead, since that would better match real-world driving conditions","Add extra weight to Car B until it matches Car A's weight exactly, which would cancel out the speed test entirely","It's impossible to test this fairly at all, since the two cars are naturally built with different weights"], ans:1,
-  why:"A fair test only changes ONE thing (which car is used) while keeping everything else — the ramp height and how it's measured — exactly the same.", monster:"Ramp Racer Golem", emoji:"&#127950;" },
+  why:"A fair test only changes ONE thing (which car is used) while keeping everything else — the ramp height and how it's measured — exactly the same.", monster:"Ramp Racer Golem", emoji:"&#127950;",
+  lessonMore:"Speed = distance ÷ time — always calculate it, don't judge by weight or looks. A cheetah covering 30m in 2s (15 m/s) beats a greyhound covering 40m in 4s (10 m/s), even though the greyhound ran farther, because it took way longer to do it. Same trap here: a heavier car isn't automatically slower or faster — only a same-height, same-method run tells you for sure." },
 { n:13, section:'C', tier:'Applied', srcUnit:26, body:"A student tests two paper airplanes to see which flies faster across a room. Plane A is thrown by Student 1, and Plane B is thrown by Student 2 (a much stronger thrower), both flying the same measured distance. Plane B's time is much shorter. Can the student conclude Plane B's DESIGN is faster?",
   options:["Yes, since Plane B's flying time was shorter, its design must automatically be the better and faster one","Yes, but only because both planes happen to be paper airplanes built in exactly the same basic way","No, because paper airplanes can never be timed accurately under any circumstances, regardless of who throws them","No, because different throwers may have used different force — more than one thing changed, so this wasn't a fair test"], ans:4,
-  why:"Since two things changed at once (the plane AND the thrower's strength), it's impossible to fairly credit the design alone for the shorter time — this isn't a fair test.", monster:"Thrower's Bias Phantom", emoji:"&#128168;" },
+  why:"Since two things changed at once (the plane AND the thrower's strength), it's impossible to fairly credit the design alone for the shorter time — this isn't a fair test.", monster:"Thrower's Bias Phantom", emoji:"&#128168;",
+  lessonMore:"Speed comparisons only mean something when the conditions match — here, throw force is a hidden second variable, just like ramp height was for the toy cars. A stronger throw can make ANY plane look faster regardless of its design, so timing two planes thrown by different people can't isolate which design actually flies better." },
 { n:14, section:'C', tier:'Applied', srcUnit:31, body:"A student wants to find out which type of biscuit breaks down fastest in the stomach. She places one biscuit type in each of four cups of acid, using the SAME amount and temperature of acid each time, and checks every 10 minutes. What has she kept the SAME to make this a fair test?",
   options:["The type of biscuit placed in each cup","The time interval she checks each cup","The acid's amount and temperature","Nothing at all was kept the same"], ans:3,
-  why:"A fair test changes only ONE thing (the biscuit type) while keeping everything else — like the acid's amount and temperature — identical.", monster:"Acid Cup Sentinel", emoji:"&#129381;" },
+  why:"A fair test changes only ONE thing (the biscuit type) while keeping everything else — like the acid's amount and temperature — identical.", monster:"Acid Cup Sentinel", emoji:"&#129381;",
+  lessonMore:"Your stomach breaks food down partly by churning it (mechanical) and partly with strong digestive juices (chemical) — the acid here is doing real digestive work, just like your stomach would. Keeping the acid's amount and temperature identical across all four cups means the only thing left to explain any difference in breakdown speed is the biscuit type itself." },
 { n:15, section:'C', tier:'Applied', srcUnit:32, body:"A student wraps four identical ice cubes in four different materials (wool, foil, plastic wrap, and newspaper) and places all four in the same sunny spot at the same time, then times how long each takes to fully melt. What has she kept the SAME to make this a fair test?",
   options:["The wrapping material used on each of the four cubes","Cube size, location, and start time — only the wrapping changes","The final melting time recorded for every single cube","Nothing at all — every part of the setup was different"], ans:2,
-  why:"A fair test changes only ONE thing (the wrapping material here) while keeping everything else — the ice cube size, location, and starting time — exactly the same.", monster:"Insulation Inspector", emoji:"&#129296;" },
+  why:"A fair test changes only ONE thing (the wrapping material here) while keeping everything else — the ice cube size, location, and starting time — exactly the same.", monster:"Insulation Inspector", emoji:"&#129296;",
+  lessonMore:"Good heat insulators (like wool, or anything that traps air) slow down how fast heat reaches the ice, while good conductors let heat through quickly — that's exactly why oven mitts are thick and padded, to trap insulating air. Wrapping identical ice cubes in different materials, but starting them at the same size, location, and time, isolates the wrapping material as the one true reason one cube melts faster." },
 ];
 /* ================= END unchanged content ================= */
 
@@ -454,6 +473,7 @@ function renderQuestion(){
   document.getElementById('q-body').textContent = q.body;
   document.getElementById('fx').className = 'fx';
   document.getElementById('why').className = 'why';
+  document.getElementById('lesson-more').className = 'lesson-more';
   document.getElementById('next-btn').style.display = 'none';
   document.getElementById('q-opts').innerHTML = q.options.map((opt,i) =>
     `<button class="opt" onclick="answer(${i+1})">${String.fromCharCode(65+i)}. ${opt}</button>`).join('');
@@ -525,6 +545,10 @@ function answer(idx){
   document.getElementById(`node-${pos}`).classList.remove('current');
   document.getElementById('why').innerHTML = `💡 <b>Why:</b> ${q.why}`;
   document.getElementById('why').classList.add('show');
+  if (q.lessonMore){
+    document.getElementById('lesson-more').innerHTML = `🧠⚡ <b>Brain Boost:</b> ${q.lessonMore}`;
+    document.getElementById('lesson-more').classList.add('show');
+  }
   document.getElementById('next-btn').style.display = 'inline-block';
   document.getElementById('next-btn').textContent = (pos === deck.length-1) ? 'See Results →' : 'Next →';
   updateStats();

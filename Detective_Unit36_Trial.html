@@ -87,6 +87,9 @@
   @keyframes pop{0%{transform:scale(.6)}60%{transform:scale(1.15)}100%{transform:scale(1)}}
   .why{display:none;text-align:left;margin-top:14px;padding:12px 14px;border-radius:10px;background:var(--chip);border-left:4px solid var(--gold);font-size:.85rem;color:#f0ddb8}
   .why.show{display:block}
+  .lesson-more{display:none;text-align:left;margin-top:10px;padding:12px 14px;border-radius:10px;background:#0e2622;border-left:4px solid var(--steel);font-size:.85rem;color:#bfe8de;line-height:1.55}
+  .lesson-more.show{display:block}
+  .lesson-more b{color:#5fd9c4}
   #next-btn{display:none;margin-top:16px}
 
   /* ---------- END SCREEN ---------- */
@@ -215,6 +218,7 @@
       <div class="opts" id="q-opts"></div>
       <div class="fx" id="fx"></div>
       <div class="why" id="why"></div>
+      <div class="lesson-more" id="lesson-more"></div>
       <button class="btn gold" id="next-btn" onclick="nextQuestion()">Next &#8594;</button>
     </div>
   </div>
@@ -286,66 +290,86 @@ async function pushToGitHub(filename, jsonText){
 const Q = [
 { n:1, section:'A', tier:'Basic', body:"In a multi-group fair test, what is the CONTROL group used for?",
   options:["It is the normal, untouched group every other group is compared against","It is the group that always receives the strongest treatment","It is the group whose result gets measured twice for accuracy","It is the group that gets left out of the final results"], ans:1,
-  why:"The control is left completely normal so every other group can be compared back to it, one at a time.", monster:"Control Group Guardian", emoji:"&#128737;&#65039;" },
+  why:"The control is left completely normal so every other group can be compared back to it, one at a time.", monster:"Control Group Guardian", emoji:"&#128737;&#65039;",
+  lessonMore:"Use this quick test on any multi-group set-up: ask \"has anything at all been changed for this group?\" No changes at all? That's your control. Exactly one thing changed? That group tests that one thing. This works no matter the topic — soup bowls, seed trays, circuits, all of it." },
 { n:2, section:'A', tier:'Basic', body:"If you had to pick the ONE item below that lets electricity flow through it, which would you choose?",
   options:["A wooden ruler","A copper coin","A ceramic bead","A rubber glove"], ans:2,
-  why:"Copper is a metal, so it conducts electricity. Wood, ceramic, and rubber are all non-metal insulators.", monster:"Conductor Sprite", emoji:"&#129689;" },
+  why:"Copper is a metal, so it conducts electricity. Wood, ceramic, and rubber are all non-metal insulators.", monster:"Conductor Sprite", emoji:"&#129689;",
+  lessonMore:"There's only one question to ask for ANY object: is it metal? Iron, steel, copper, aluminium, silver, brass, gold — all metals, all conductors, zero exceptions. Rubber, plastic, glass, wood, ceramic — none of that is metal, so all insulators. No list to memorise, just check for metal." },
 { n:3, section:'A', tier:'Basic', body:"In a table of repeated data, a TREND is best described as:",
   options:["A single result that looks completely different from the rest","A mistake accidentally made while measuring just one single reading","A pattern that shows up reliably across most of the data","A result that only ever happens once and gets ignored"], ans:3,
-  why:"A trend is a pattern that repeats again and again across the data, not a one-off reading.", monster:"Trend Tracker", emoji:"&#128200;" },
+  why:"A trend is a pattern that repeats again and again across the data, not a one-off reading.", monster:"Trend Tracker", emoji:"&#128200;",
+  lessonMore:"A real trend stays reliable across many repeats — like a meteor shower peaking on the 12th or 13th of August every single year, because it's tied to Earth's position in its yearly orbit. One-off blips don't count; only patterns that hold up again and again earn the name \"trend.\"" },
 { n:4, section:'A', tier:'Basic', body:"A scientist notices one single data point breaks an otherwise steady pattern. What is this called?",
   options:["A control group","A dependent variable","A fair test","An anomaly"], ans:4,
-  why:"A single result that doesn't fit the overall pattern is called an anomaly — it should be checked, not trusted right away.", monster:"Anomaly Wisp", emoji:"&#10067;" },
+  why:"A single result that doesn't fit the overall pattern is called an anomaly — it should be checked, not trusted right away.", monster:"Anomaly Wisp", emoji:"&#10067;",
+  lessonMore:"When you spot an anomaly, the correct move is never to delete it, ignore it, or rewrite your hypothesis around it — check the equipment and procedure, then repeat that one trial to find out if it was a mistake or a real result." },
 
 { n:5, section:'B', tier:'Intermediate', body:"Four bowls of the same soup are left out: Bowl 1 (control — covered, room temperature). Bowl 2 (uncovered, room temperature). Bowl 3 (covered, kept in the fridge). Bowl 4 (covered, stirred with a dirty spoon). What does comparing Bowl 2 to Bowl 1 test?",
   options:["Whether being uncovered affects the soup","Whether the temperature affects the soup","Whether the dirty spoon affects the soup","Whether the size of the bowl matters"], ans:1,
-  why:"Being uncovered is the ONE difference between Bowl 2 and the control, Bowl 1.", monster:"Soup Bowl Golem", emoji:"&#127858;" },
-{ n:6, section:'B', tier:'Intermediate', body:"In the same soup experiment (previous question), what does comparing Bowl 3 to Bowl 1 test?",
+  why:"Being uncovered is the ONE difference between Bowl 2 and the control, Bowl 1.", monster:"Soup Bowl Golem", emoji:"&#127858;",
+  lessonMore:"This is the clue-table method: one row per group, then ask what's the ONE thing different from the control in each row. Compare every group back to the control, one at a time — never try to compare all the groups to each other at once, that's exactly how mix-ups happen." },
+{ n:6, section:'B', tier:'Intermediate', body:"Four bowls of the same soup are left out: Bowl 1 (control — covered, room temperature). Bowl 2 (uncovered, room temperature). Bowl 3 (covered, kept in the fridge). Bowl 4 (covered, stirred with a dirty spoon). What does comparing Bowl 3 to Bowl 1 test?",
   options:["Whether being uncovered affects the soup","Whether the temperature affects the soup","Whether the dirty spoon affects the soup","Whether the type of soup matters"], ans:2,
-  why:"Temperature is the ONE difference between Bowl 3 and the control, Bowl 1.", monster:"Fridge Bowl Wraith", emoji:"&#129483;" },
+  why:"Temperature is the ONE difference between Bowl 3 and the control, Bowl 1.", monster:"Fridge Bowl Wraith", emoji:"&#129483;",
+  lessonMore:"Same clue-table method, different row: Bowl 3's only difference from the control is temperature, so that one comparison isolates temperature cleanly — even with Bowl 4's dirty spoon sitting right there in the same experiment testing something else entirely." },
 { n:7, section:'B', tier:'Intermediate', body:"A clinic records a patient's temperature every hour for 5 hours: 37.0°C, 37.1°C, 37.0°C, 39.4°C, 37.1°C. How should the 39.4°C reading be treated?",
   options:["As proof the patient now has a permanent fever","As clear evidence the thermometer is broken forever","As an anomaly, worth checking again before trusting it","As the new normal reading from now on"], ans:3,
-  why:"One reading that jumps far from an otherwise steady pattern is an anomaly — it needs rechecking, not immediate belief.", monster:"Fever Spike Phantom", emoji:"&#127777;&#65039;" },
+  why:"One reading that jumps far from an otherwise steady pattern is an anomaly — it needs rechecking, not immediate belief.", monster:"Fever Spike Phantom", emoji:"&#127777;&#65039;",
+  lessonMore:"A single reading that jumps far from a steady pattern is the classic anomaly warning sign. The response is always the same: check the equipment for that point and repeat it — never assume it's the new normal, and never assume the equipment is now permanently broken either." },
 { n:8, section:'B', tier:'Intermediate', body:"A student connects an object in a simple circuit with a battery and bulb. The bulb does NOT light up. What can she conclude about the object?",
   options:["The object is definitely a magnet","The object must be made of metal","The circuit itself must be broken","The object is an electrical insulator"], ans:4,
-  why:"If the bulb doesn't light, electricity isn't flowing through the object — meaning it's an insulator, not a conductor.", monster:"Dim Bulb Specter", emoji:"&#128161;" },
+  why:"If the bulb doesn't light, electricity isn't flowing through the object — meaning it's an insulator, not a conductor.", monster:"Dim Bulb Specter", emoji:"&#128161;",
+  lessonMore:"Flip the metal-test around: if electricity clearly isn't flowing, the object failed the conductor test, so it must be an insulator. The rule runs both directions — metal always conducts, everything that isn't metal always blocks it, no in-between cases." },
 { n:9, section:'B', tier:'Intermediate', body:"A fish is found living where Factor X (water depth) is HIGH and Factor Y (sunlight reaching it) is LOW. Which environment does this best match?",
   options:["The deep, dark part of the ocean","A shallow, brightly sunlit rock pool","A small, warm, sunny garden pond","A shallow, cool, shaded forest stream"], ans:1,
-  why:"High water depth + low sunlight matches the deep, dark ocean — sunlight can't reach that far down.", monster:"Deep-Sea Clue Fish", emoji:"&#128031;" },
+  why:"High water depth + low sunlight matches the deep, dark ocean — sunlight can't reach that far down.", monster:"Deep-Sea Clue Fish", emoji:"&#128031;",
+  lessonMore:"This is two-clue thinking: list every clue separately and match each one to its own factor instead of blending them into one vague impression. High depth points to darkness; low sunlight confirms it — two small answers combined give you the full picture." },
 { n:10, section:'B', tier:'Intermediate', body:"A student changes BOTH the amount of water AND the amount of sunlight for one test plant, compared to the control plant. What is the problem with this group?",
   options:["Nothing — making more changes always gives better results","Two things changed together, so the real cause is unclear","The plant should have been changed to a different species","There is no problem, since both changes help the plant grow"], ans:2,
-  why:"When two things change at once compared to the control, you can no longer tell which change caused the result — the test isn't fair on its own.", monster:"Double-Change Chimera", emoji:"&#128118;" },
+  why:"When two things change at once compared to the control, you can no longer tell which change caused the result — the test isn't fair on its own.", monster:"Double-Change Chimera", emoji:"&#128118;",
+  lessonMore:"This is the big warning sign to watch for: whenever a group has TWO or more things changed compared to the control at once, flag it immediately. You genuinely can't tell which change caused the result, so that group can't be used as fair evidence on its own." },
 
 { n:11, section:'C', tier:'Applied', body:"Four identical trays of cress seeds are set up: Tray A (control — normal soil, water, warmth, light). Tray B (normal, but no water). Tray C (normal, but kept in a dark cupboard). Tray D (normal, but kept in a fridge at 4°C). Which tray's comparison to Tray A tests whether LIGHT is needed for germination?",
   options:["Tray B only","Tray D only","Tray C only","None of them"], ans:3,
-  why:"Tray C is the only tray where light is the ONE thing changed compared to the control, Tray A.", monster:"Cress Tray Sentinel", emoji:"&#127793;" },
-{ n:12, section:'C', tier:'Applied', body:"In the same cress experiment (previous question), which tray's comparison to Tray A tests whether WARMTH is needed for germination?",
+  why:"Tray C is the only tray where light is the ONE thing changed compared to the control, Tray A.", monster:"Cress Tray Sentinel", emoji:"&#127793;",
+  lessonMore:"Run the clue-table check on Tray C: only light differs from the control, Tray A, so that comparison isolates light and nothing else. Interesting real result too — seeds don't actually need light to germinate, only water and warmth do." },
+{ n:12, section:'C', tier:'Applied', body:"Four identical trays of cress seeds are set up: Tray A (control — normal soil, water, warmth, light). Tray B (normal, but no water). Tray C (normal, but kept in a dark cupboard). Tray D (normal, but kept in a fridge at 4°C). Which tray's comparison to Tray A tests whether WARMTH is needed for germination?",
   options:["Tray B only","Tray C only","Tray A itself","Tray D only"], ans:4,
-  why:"Tray D is the only tray where temperature (warmth) is the ONE thing changed compared to the control, Tray A.", monster:"Chilled Seed Wraith", emoji:"&#10052;&#65039;" },
+  why:"Tray D is the only tray where temperature (warmth) is the ONE thing changed compared to the control, Tray A.", monster:"Chilled Seed Wraith", emoji:"&#10052;&#65039;",
+  lessonMore:"Tray D isolates warmth the same way Tray C isolated light — one clean difference from the control. Of the two, warmth really is essential for germination (like water), while light isn't — which is exactly why comparing each tray to the control one at a time matters so much." },
 { n:13, section:'C', tier:'Applied', body:"A reaction-speed experiment shows results rising steadily as temperature increases — except for one single result that is far lower than the pattern would predict. What is the BEST next step?",
   options:["Check the equipment for that point, then repeat the trial","Delete that odd result so the graph looks smoother","Report only the main trend and ignore the odd result","Change the original hypothesis to match the odd result"], ans:1,
-  why:"An anomaly should be investigated and re-tested, never deleted, ignored, or used to rewrite the hypothesis.", monster:"Odd Point Specter", emoji:"&#128269;" },
+  why:"An anomaly should be investigated and re-tested, never deleted, ignored, or used to rewrite the hypothesis.", monster:"Odd Point Specter", emoji:"&#128269;",
+  lessonMore:"This exact scenario — a steady rising trend with one point breaking it — is the textbook anomaly case. Check the equipment and procedure for that specific point, then repeat that one trial. Deleting it, ignoring it, or bending your hypothesis to fit it are all the wrong moves." },
 { n:14, section:'C', tier:'Applied', body:"A bird species is found nesting where Factor X (average yearly temperature) is very LOW and Factor Y (ground cover) is mostly ICE and SNOW. Which habitat does this best match?",
   options:["A tropical rainforest","A polar/arctic region","A hot, dry desert","A temperate grassland"], ans:2,
-  why:"Very low temperature + ice and snow ground cover matches a polar/arctic region, not any of the warmer habitats.", monster:"Frostbound Sentinel", emoji:"&#10052;&#65039;" },
+  why:"Very low temperature + ice and snow ground cover matches a polar/arctic region, not any of the warmer habitats.", monster:"Frostbound Sentinel", emoji:"&#10052;&#65039;",
+  lessonMore:"Same two-clue method as the classic desert example: very low temperature is one clue, ice-and-snow ground cover is a second, separate clue. Match each to its own factor rather than guessing from a single vague impression, and the two clues together point straight to polar/arctic." },
 { n:15, section:'C', tier:'Applied', body:"An electrical wire's metal core is wrapped in a coloured plastic coating. What does this tell us about the plastic coating?",
   options:["It must also be a conductor, like the metal core","It has no real purpose other than looking neat","It is an insulator, stopping electricity from escaping the wire","It is actually a weaker type of metal"], ans:3,
-  why:"Plastic is not metal, so it's an insulator — wires are coated in it on purpose, to stop electricity escaping and to keep people safe from shocks.", monster:"Coated Wire Phantom", emoji:"&#128268;" },
+  why:"Plastic is not metal, so it's an insulator — wires are coated in it on purpose, to stop electricity escaping and to keep people safe from shocks.", monster:"Coated Wire Phantom", emoji:"&#128268;",
+  lessonMore:"Ask the one question: is the coating metal? No — it's plastic — so it's an insulator, full stop, regardless of what it's wrapped around. That's exactly why wires are built this way: a conducting metal core to carry electricity, wrapped in an insulating layer to keep it from escaping." },
 { n:16, section:'C', tier:'Applied', body:"A songbird species arrives at the exact same nesting ground within the same few days every single year for six years running. What does this pattern most likely depend on?",
   options:["Random chance, with no real cause behind it","The Moon's phase on the day it arrives","How many eggs the bird laid the year before","The bird's position in its yearly migration cycle"], ans:4,
-  why:"A pattern that repeats reliably on a yearly cycle points to something tied to the yearly seasons, such as day length or temperature triggering migration — not the Moon's roughly 29-day cycle or random chance.", monster:"Migration Pattern Keeper", emoji:"&#128038;" },
+  why:"A pattern that repeats reliably on a yearly cycle points to something tied to the yearly seasons, such as day length or temperature triggering migration — not the Moon's roughly 29-day cycle or random chance.", monster:"Migration Pattern Keeper", emoji:"&#128038;",
+  lessonMore:"This is trend-reading again: a pattern reliable every year points to something tied to Earth's yearly orbit, like day length or temperature — not to Earth's 24-hour spin (way too fast) and not the Moon's roughly 29-day cycle (wrong length to line up with one fixed date a year)." },
 { n:17, section:'C', tier:'Applied', body:"A baker wants to know if warm water makes bread dough rise faster. She mixes Dough A with warm water and covers the bowl with a cloth. She mixes Dough B with cold water and leaves its bowl uncovered. After 2 hours, Dough A has risen much more, and she concludes warm water makes dough rise faster. Is this conclusion trustworthy?",
   options:["No — covering also changed, so warm water can't be blamed alone","Yes, this is completely trustworthy, since Dough A clearly rose more","No, because dough never actually responds to water temperature at all","Yes, but only because Dough A started off slightly bigger already"], ans:1,
-  why:"Covering the bowl (a second variable) changed alongside the water temperature, so the test isn't fair — we can't tell whether the water, the covering, or both caused the extra rise.", monster:"Dough Rise Trickster", emoji:"&#129360;" },
+  why:"Covering the bowl (a second variable) changed alongside the water temperature, so the test isn't fair — we can't tell whether the water, the covering, or both caused the extra rise.", monster:"Dough Rise Trickster", emoji:"&#129360;",
+  lessonMore:"Spot the warning sign: covering the bowl changed alongside the water temperature, so two things differ from the fair comparison at once. That means the extra rise can't be pinned on warm water alone — the covering might be doing some or all of the work." },
 { n:18, section:'C', tier:'Applied', body:"A table shows a toy car's distance travelled every 2 seconds: 0m, 4m, 8m, 12m, 16m. A student claims the car is speeding up over time. Is this claim correct?",
   options:["Yes, the car is clearly speeding up each interval","No — the gain is steady at 4m, not increasing","No, the car is actually slowing down each interval","The table doesn't give enough information to tell for sure"], ans:2,
-  why:"Checking every interval: +4m, +4m, +4m, +4m — an equal gain each time means constant speed, not speeding up. Always check every interval, not just the overall start-and-end distance.", monster:"Steady Speed Golem", emoji:"&#128663;" },
+  why:"Checking every interval: +4m, +4m, +4m, +4m — an equal gain each time means constant speed, not speeding up. Always check every interval, not just the overall start-and-end distance.", monster:"Steady Speed Golem", emoji:"&#128663;",
+  lessonMore:"Never judge a table just by its first and last numbers — check every single interval. Here it's +4m every single gap, which is a steady, unchanging pattern (constant speed), not an increasing one. A real trend shows up across the whole table, not just the endpoints." },
 { n:19, section:'C', tier:'Applied', body:"Four glasses of milk are left out: Glass 1 (control — lid on, normal room). Glass 2 (lid on, placed in direct sunlight). Glass 3 (lid OFF, normal room). Glass 4 (lid on, placed in a cold fridge). What does comparing Glass 3 to Glass 1 test?",
   options:["Whether the sunlight and warmth affect the milk","Whether the fridge's cold temperature affects the milk","Whether leaving the lid off affects the milk","Whether the type of milk being used matters"], ans:3,
-  why:"Leaving the lid off is the ONE difference between Glass 3 and the control, Glass 1 — everything else stayed the same.", monster:"Milk Glass Wraith", emoji:"&#129371;" },
+  why:"Leaving the lid off is the ONE difference between Glass 3 and the control, Glass 1 — everything else stayed the same.", monster:"Milk Glass Wraith", emoji:"&#129371;",
+  lessonMore:"Same clue-table logic one more time: Glass 3's only difference from the control, Glass 1, is the missing lid — so that comparison isolates exposure to air, cleanly separated from Glass 2's temperature test and Glass 4's cold-fridge test running alongside it." },
 { n:20, section:'C', tier:'Applied', body:"A student is halfway through a multi-group experiment question with two minutes left in the exam. Which strategy will most reliably get the right answer, even under time pressure?",
   options:["Guess based on which option sounds the most detailed","Skip to whichever answer was correct on a similar question","Pick the same letter for every remaining question to save time","Compare each group to the control, one at a time"], ans:4,
-  why:"Even under time pressure, comparing each group to the control one at a time is the fastest RELIABLE method — shortcuts based on how an option sounds are exactly what causes mistakes.", monster:"The Investigation Master", emoji:"&#128269;" },
+  why:"Even under time pressure, comparing each group to the control one at a time is the fastest RELIABLE method — shortcuts based on how an option sounds are exactly what causes mistakes.", monster:"The Investigation Master", emoji:"&#128269;",
+  lessonMore:"This is the whole toolkit in one line: build the clue table in your head, find the control, then go row by row comparing each group back to it. It works for soup bowls, cress trays, milk glasses, or anything else ASMOPSS throws at you — one difference at a time, every time." },
 ];
 /* ================= END unchanged content ================= */
 
@@ -466,6 +490,7 @@ function renderQuestion(){
   document.getElementById('q-body').textContent = q.body;
   document.getElementById('fx').className = 'fx';
   document.getElementById('why').className = 'why';
+  document.getElementById('lesson-more').className = 'lesson-more';
   document.getElementById('next-btn').style.display = 'none';
   document.getElementById('q-opts').innerHTML = q.options.map((opt,i) =>
     `<button class="opt" onclick="answer(${i+1})">${String.fromCharCode(65+i)}. ${opt}</button>`).join('');
@@ -537,6 +562,10 @@ function answer(idx){
   document.getElementById(`node-${pos}`).classList.remove('current');
   document.getElementById('why').innerHTML = `💡 <b>Why:</b> ${q.why}`;
   document.getElementById('why').classList.add('show');
+  if (q.lessonMore){
+    document.getElementById('lesson-more').innerHTML = `🧠⚡ <b>Brain Boost:</b> ${q.lessonMore}`;
+    document.getElementById('lesson-more').classList.add('show');
+  }
   document.getElementById('next-btn').style.display = 'inline-block';
   document.getElementById('next-btn').textContent = (pos === deck.length-1) ? 'See Results →' : 'Next →';
   updateStats();
