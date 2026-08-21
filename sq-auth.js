@@ -350,11 +350,8 @@
         <p class="sub">Manage your account details.</p>
 
         <div class="sq-field">
-          <label>Email</label>
-          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;background:#1c1642;border:1.5px solid #332a5c;border-radius:9px;padding:9px 11px;font-size:.85rem">
-            <span>${state.user ? state.user.email : ''}</span>
-            <span style="font-size:.68rem;font-weight:800;color:#c9b3d9;background:#00000030;padding:3px 9px;border-radius:20px;flex-shrink:0">Signed up with ${providerLabel}</span>
-          </div>
+          <label>Signed up with ${providerLabel}</label>
+          <div style="background:#1c1642;border:1.5px solid #332a5c;border-radius:9px;padding:9px 11px;font-size:.85rem;word-break:break-all">${state.user ? state.user.email : ''}</div>
         </div>
         <div class="sq-field">
           <label>Display Name</label>
