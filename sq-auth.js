@@ -141,7 +141,11 @@
       `;
       document.getElementById('sq-menu-progress').onclick = () => { menu.classList.remove('open'); location.href = 'My_Progress.html'; };
       document.getElementById('sq-menu-settings').onclick = () => { menu.classList.remove('open'); openProfileSettings(); };
-      document.getElementById('sq-menu-signout').onclick = async () => { menu.classList.remove('open'); await sb.auth.signOut(); };
+      document.getElementById('sq-menu-signout').onclick = async () => {
+        menu.classList.remove('open');
+        await sb.auth.signOut();
+        location.href = location.pathname.includes('/') ? location.pathname.replace(/[^/]+$/, 'index.html') : 'index.html';
+      };
     } else {
       btn.innerHTML = `<span id="sq-acct-avatar">&#128100;</span><span>Sign In</span>`;
       btn.onclick = () => openAuth('signin');
