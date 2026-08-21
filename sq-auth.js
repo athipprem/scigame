@@ -73,12 +73,12 @@
   .sq-divider::before,.sq-divider::after{content:'';flex:1;height:1px;background:#332a5c}
   .sq-btn-google{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;border:1.5px solid #332a5c;border-radius:12px;padding:10px;font-weight:700;font-size:.85rem;cursor:pointer;background:#fff3e6;color:#241533}
   .sq-btn-google:hover{filter:brightness(.96)}
-  #sq-gate{display:none;position:fixed;inset:0;z-index:9998;background:#080818ee;backdrop-filter:blur(6px);align-items:center;justify-content:center;padding:16px}
-  #sq-gate.open{display:flex}
-  .sq-gate-card{background:#120e2c;border:1.5px solid #FFD70055;border-radius:20px;padding:32px 26px;max-width:360px;width:100%;text-align:center;color:#fff3e6;font-family:'Segoe UI',Arial,sans-serif;box-shadow:0 14px 40px #000a}
-  .sq-gate-card .emoji{font-size:2.6rem;margin-bottom:10px}
-  .sq-gate-card h2{margin:0 0 8px;font-size:1.15rem;background:linear-gradient(135deg,#FFD700,#FFA500);-webkit-background-clip:text;background-clip:text;color:transparent}
-  .sq-gate-card p{color:#c9b3d9;font-size:.85rem;line-height:1.5;margin:0 0 18px}
+  #sq-guest-banner{text-align:center;font-weight:800;font-size:.8rem;color:#FFD700;background:#FFD70014;border:1px solid #FFD70044;border-radius:12px;padding:9px 14px;margin:16px 0 4px}
+  .sq-lock-badge{position:absolute;top:10px;right:10px;width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#3a2a00,#1a1030);border:1.5px solid #FFD700aa;display:flex;align-items:center;justify-content:center;font-size:1rem;box-shadow:0 3px 10px #0007;z-index:2}
+  a.trial-btn.sq-locked{pointer-events:none;filter:grayscale(1);opacity:.4;cursor:not-allowed}
+  button.sq-locked-btn{background:#4a4a4a!important;color:#999!important;cursor:not-allowed!important;opacity:.75}
+  #sq-trial-lock-note{font-size:.78rem;color:#c9b3d9;text-align:center;margin-top:8px}
+  #sq-trial-lock-note a{color:#FFD700;font-weight:700;text-decoration:underline;cursor:pointer}
   `;
   document.head.appendChild(style);
 
@@ -94,10 +94,6 @@
   const modalBg = document.createElement('div');
   modalBg.id = 'sq-modal-bg';
   document.body.appendChild(modalBg);
-
-  const gateEl = document.createElement('div');
-  gateEl.id = 'sq-gate';
-  document.body.appendChild(gateEl);
 
   function closeModal(){ modalBg.classList.remove('open'); modalBg.innerHTML = ''; }
   modalBg.addEventListener('click', e => { if (e.target === modalBg) closeModal(); });
@@ -260,28 +256,79 @@
     }).join('');
   }
 
-  /* ---------------- guest-mode gate (only the first trial per realm is free) ---------------- */
-  function renderGate(trialKey){
-    if (FREE_TRIALS.has(trialKey)){ gateEl.classList.remove('open'); return; }
-    if (!state.ready) return; // don't flash the gate before we know the real auth state
-    if (state.user){ gateEl.classList.remove('open'); return; }
-    gateEl.innerHTML = `
-      <div class="sq-gate-card">
-        <div class="emoji">&#128274;</div>
-        <h2>This trial needs an account</h2>
-        <p>Your first trial in each realm is free to try. Sign in (or make a free account) to unlock every trial and save your progress.</p>
-        <button class="sq-btn" id="sq-gate-signin">Sign In / Sign Up</button>
-        <button class="sq-btn sq-btn-ghost" id="sq-gate-back">&#8592; Back to Map</button>
-      </div>
-    `;
-    gateEl.classList.add('open');
-    document.getElementById('sq-gate-signin').onclick = () => openAuth('signin');
-    document.getElementById('sq-gate-back').onclick = () => history.back();
+  /* ---------------- guest-mode gating on realm map pages ---------------- */
+  function renderGuestGating(){
+    const trialsEl = document.getElementById('trials');
+    if (!trialsEl) return; // not a map page
+
+    let banner = document.getElementById('sq-guest-banner');
+    if (!state.user){
+      if (!banner){
+        banner = document.createElement('div');
+        banner.id = 'sq-guest-banner';
+        banner.textContent = 'Guest Mode — Sign in to unlock all trials.';
+        trialsEl.parentNode.insertBefore(banner, trialsEl);
+      }
+    } else if (banner){
+      banner.remove();
+    }
+
+    trialsEl.querySelectorAll('.trial-card').forEach(card => {
+      const link = card.querySelector('a.trial-btn');
+      if (!link) return;
+      const trialKey = (link.getAttribute('href') || '').replace(/\.html$/, '');
+      const existingBadge = card.querySelector('.sq-lock-badge');
+      if (existingBadge) existingBadge.remove();
+
+      const shouldLock = !state.user && !FREE_TRIALS.has(trialKey);
+      if (shouldLock){
+        const badge = document.createElement('div');
+        badge.className = 'sq-lock-badge';
+        badge.innerHTML = '&#128274;';
+        card.appendChild(badge);
+        link.classList.add('sq-locked');
+      } else {
+        link.classList.remove('sq-locked');
+      }
+    });
   }
 
-  function gateTrialPage(trialKey){
-    renderGate(trialKey);
-    listeners.push(() => renderGate(trialKey));
+  /* ---------------- hide manual "Save Results" in guest mode ---------------- */
+  function updateSaveResultsButton(){
+    const btn = document.querySelector('[onclick="saveResults()"]');
+    if (btn) btn.style.display = state.user ? '' : 'none';
+  }
+
+  /* ---------------- block starting a locked trial reached directly by URL ---------------- */
+  function lockTrialStartButton(){
+    const btn = document.querySelector('button[onclick="startGame()"]');
+    if (!btn) return; // not a trial page
+
+    const trialKey = location.pathname.split('/').pop().replace(/\.html$/, '');
+    const shouldLock = !state.user && !FREE_TRIALS.has(trialKey);
+    let note = document.getElementById('sq-trial-lock-note');
+
+    if (shouldLock){
+      btn.disabled = true;
+      btn.classList.add('sq-locked-btn');
+      if (!note){
+        note = document.createElement('div');
+        note.id = 'sq-trial-lock-note';
+        note.innerHTML = '&#128274; This trial needs an account — <a id="sq-trial-lock-signin">Sign In</a>';
+        btn.insertAdjacentElement('afterend', note);
+        document.getElementById('sq-trial-lock-signin').onclick = () => openAuth('signin');
+      }
+    } else {
+      btn.disabled = false;
+      btn.classList.remove('sq-locked-btn');
+      if (note) note.remove();
+    }
+  }
+
+  function renderReactive(){
+    renderGuestGating();
+    updateSaveResultsButton();
+    lockTrialStartButton();
   }
 
   /* ---------------- pending-attempt flush (if a trial ended while logged out) ---------------- */
@@ -321,10 +368,11 @@
     recordAttempt,
     openAuth,
     openProgress,
-    gateTrialPage,
     onChange: (fn) => listeners.push(fn),
     get user(){ return state.user; }
   };
+
+  listeners.push(renderReactive);
 
   /* ---------------- boot ---------------- */
   async function boot(){
