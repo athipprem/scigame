@@ -172,7 +172,13 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function renderSkillBars(skillPct, attemptedSet){
-    const rows = SKILL_ORDER.map(s => {
+    // alphabetical by skill name — except Applied Reasoning, which always stays last
+    // since it's the hardest tier by design
+    const rankable = SKILL_ORDER.filter(s => s !== 'citadel');
+    const displayOrder = rankable.slice().sort((a,b) => SKILL_LABEL[a].localeCompare(SKILL_LABEL[b]))
+      .concat(SKILL_ORDER.includes('citadel') ? ['citadel'] : []);
+
+    const rows = displayOrder.map(s => {
       const played = attemptedSet.has(s);
       const pct = played ? Math.round(skillPct[s]) : 0;
       const color = played ? zoneColor(pct) : '#2a3a5c';
