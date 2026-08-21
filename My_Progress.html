@@ -172,7 +172,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     // target ring (dashed)
     const targetPts = SKILL_ORDER.map((s,i) => pt(i, R*(GOLD_TARGET/100)).slice(0,2).join(',')).join(' ');
-    svg += `<polygon points="${targetPts}" fill="none" stroke="#FFD700" stroke-width="1.5" stroke-dasharray="4,4"/>`;
+    svg += `<polygon points="${targetPts}" fill="none" stroke="#43e97b" stroke-width="1.5" stroke-dasharray="4,4"/>`;
     // current
     const curPts = SKILL_ORDER.map((s,i) => pt(i, R*(Math.min(skillPct[s]||0,100)/100)).slice(0,2).join(',')).join(' ');
     svg += `<polygon points="${curPts}" fill="#FFD70033" stroke="#FFD700" stroke-width="2"/>`;
@@ -204,11 +204,33 @@ document.addEventListener('DOMContentLoaded', () => {
       </div>`;
     }).join('');
     document.getElementById('skill-bars').innerHTML = rows;
-    const playedCount = SKILL_ORDER.filter(s => attemptedSet.has(s)).length;
-    const curSum = SKILL_ORDER.reduce((a,s) => a + (attemptedSet.has(s) ? Math.round(skillPct[s]) : 0), 0);
-    const targetSum = GOLD_TARGET * SKILL_ORDER.length;
-    document.getElementById('skill-sum-note').textContent =
-      `Current sum ${curSum} / target sum ${targetSum} (flat ${GOLD_TARGET}% per skill) &mdash; ${playedCount}/6 realms played so far.`.replace('&mdash;','—');
+    document.getElementById('skill-sum-note').innerHTML = analysisNote(skillPct, attemptedSet);
+  }
+
+  // adapts to whatever state the data is in: nothing played yet, map still filling in,
+  // fully played with room to grow, or fully played and fully gold
+  function analysisNote(skillPct, attemptedSet){
+    const played = SKILL_ORDER.filter(s => attemptedSet.has(s));
+    const playedCount = played.length;
+    if (playedCount === 0){
+      return `Play your first trial to start building your skill map!`;
+    }
+    const strongest = played.reduce((a,b) => skillPct[b] > skillPct[a] ? b : a);
+    const strongBit = `&#127942; Strongest: <strong style="color:var(--ink)">${SKILL_LABEL[strongest]}</strong> (${Math.round(skillPct[strongest])}%)`;
+
+    if (playedCount < 6){
+      const remaining = 6 - playedCount;
+      return `${strongBit} &middot; Play ${remaining} more realm${remaining>1?'s':''} to complete your skill map.`;
+    }
+
+    const goldCount = played.filter(s => skillPct[s] >= GOLD_TARGET).length;
+    if (goldCount === 6){
+      return `&#127881; Full Gold across all 6 skills &mdash; outstanding!`;
+    }
+
+    const weakest = played.reduce((a,b) => skillPct[b] < skillPct[a] ? b : a);
+    const goldBit = goldCount > 0 ? ` &middot; ${goldCount}/6 at Gold` : '';
+    return `${strongBit} &middot; &#127919; Focus next: <strong style="color:var(--ink)">${SKILL_LABEL[weakest]}</strong> (${Math.round(skillPct[weakest])}%)${goldBit}`;
   }
 
   function renderTiers(tierTally){
