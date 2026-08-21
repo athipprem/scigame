@@ -25,6 +25,21 @@
 
   const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+  const EYE_ICON = `<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M1 8s2.5-5 7-5 7 5 7 5-2.5 5-7 5-7-5-7-5Z"/><circle cx="8" cy="8" r="2.2"/></svg>`;
+  const EYE_OFF_ICON = `<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M1 8s2.5-5 7-5 7 5 7 5-2.5 5-7 5-7-5-7-5Z"/><circle cx="8" cy="8" r="2.2"/><line x1="1" y1="1" x2="15" y2="15"/></svg>`;
+
+  function wireEyeToggle(eyeId, inputId){
+    const eyeBtn = document.getElementById(eyeId);
+    const input = document.getElementById(inputId);
+    if (!eyeBtn || !input) return;
+    eyeBtn.onclick = () => {
+      const showing = input.type === 'text';
+      input.type = showing ? 'password' : 'text';
+      eyeBtn.innerHTML = showing ? EYE_ICON : EYE_OFF_ICON;
+      eyeBtn.setAttribute('aria-label', showing ? 'Show password' : 'Hide password');
+    };
+  }
+
   const state = { user:null, displayName:null, ready:false };
   const listeners = [];
 
@@ -51,6 +66,10 @@
   .sq-field input{width:100%;box-sizing:border-box;background:#1c1642;border:1.5px solid #332a5c;border-radius:9px;padding:9px 11px;color:#fff3e6;font-size:.9rem}
   .sq-field input:focus{outline:none;border-color:#FFD700}
   .sq-hint{font-size:.7rem;color:#c9b3d9;margin-top:5px;line-height:1.4}
+  .sq-pwd-wrap{position:relative}
+  .sq-pwd-wrap input{padding-right:38px}
+  .sq-eye{position:absolute;right:8px;top:50%;transform:translateY(-50%);background:none;border:none;color:#c9b3d9;cursor:pointer;padding:6px;display:flex;align-items:center;justify-content:center;border-radius:6px}
+  .sq-eye:hover{color:#FFD700}
   .sq-btn{display:block;width:100%;border:none;border-radius:12px;padding:11px;font-weight:800;font-size:.88rem;cursor:pointer;background:linear-gradient(135deg,#FFD700,#FFA500);color:#3a2a00;margin-top:6px}
   .sq-btn:disabled{opacity:.6;cursor:default}
   .sq-btn-ghost{background:none;border:1.5px solid #332a5c;color:#c9b3d9;margin-top:8px}
@@ -112,9 +131,11 @@
       btn.onclick = () => menu.classList.toggle('open');
       menu.innerHTML = `
         <button id="sq-menu-progress">&#128202; My Progress</button>
+        <button id="sq-menu-settings">&#9881;&#65039; Profile Settings</button>
         <button id="sq-menu-signout">&#128682; Sign Out</button>
       `;
       document.getElementById('sq-menu-progress').onclick = () => { menu.classList.remove('open'); openProgress(); };
+      document.getElementById('sq-menu-settings').onclick = () => { menu.classList.remove('open'); openProfileSettings(); };
       document.getElementById('sq-menu-signout').onclick = async () => { menu.classList.remove('open'); await sb.auth.signOut(); };
     } else {
       btn.innerHTML = `<span id="sq-acct-avatar">&#128100;</span><span>Sign In</span>`;
@@ -137,18 +158,24 @@
         <button class="sq-close" id="sq-auth-close">&times;</button>
         <h2 id="sq-auth-title">${mode === 'signin' ? 'Welcome back!' : 'Create your account'}</h2>
         <p class="sub">${mode === 'signin' ? 'Sign in to save and track your quiz results.' : 'Sign up to start saving your progress across all 6 realms.'}</p>
-        <div class="sq-field" id="sq-field-name" style="display:${mode==='signup'?'block':'none'}">
-          <label>Display Name</label>
-          <input type="text" id="sq-name" placeholder="What should we call you?" maxlength="30">
-        </div>
         <div class="sq-field">
           <label>Email</label>
           <input type="email" id="sq-email" placeholder="you@example.com">
         </div>
         <div class="sq-field">
           <label>Password</label>
-          <input type="password" id="sq-password" placeholder="${mode === 'signup' ? 'Create a password' : 'Enter your password'}" autocomplete="${mode === 'signup' ? 'new-password' : 'current-password'}">
+          <div class="sq-pwd-wrap">
+            <input type="password" id="sq-password" placeholder="${mode === 'signup' ? 'Create a password' : 'Enter your password'}" autocomplete="${mode === 'signup' ? 'new-password' : 'current-password'}">
+            <button type="button" class="sq-eye" id="sq-eye-password" aria-label="Show password">${EYE_ICON}</button>
+          </div>
           ${mode === 'signup' ? `<div class="sq-hint">Must be 8+ characters with uppercase, lowercase, a number, and a symbol (e.g. !@#$%).</div>` : ''}
+        </div>
+        <div class="sq-field" id="sq-field-confirm" style="display:${mode==='signup'?'block':'none'}">
+          <label>Confirm Password</label>
+          <div class="sq-pwd-wrap">
+            <input type="password" id="sq-password-confirm" placeholder="Re-enter your password" autocomplete="new-password">
+            <button type="button" class="sq-eye" id="sq-eye-confirm" aria-label="Show password">${EYE_ICON}</button>
+          </div>
         </div>
         <button class="sq-btn" id="sq-auth-submit">${mode === 'signin' ? 'Sign In' : 'Sign Up'}</button>
         <div class="sq-status" id="sq-auth-status"></div>
@@ -165,6 +192,8 @@
     modalBg.classList.add('open');
     document.getElementById('sq-auth-close').onclick = closeModal;
     document.getElementById('sq-switch').onclick = () => openAuth(mode === 'signin' ? 'signup' : 'signin');
+    wireEyeToggle('sq-eye-password', 'sq-password');
+    if (mode === 'signup') wireEyeToggle('sq-eye-confirm', 'sq-password-confirm');
     document.getElementById('sq-auth-google').onclick = async () => {
       const statusEl = document.getElementById('sq-auth-status');
       statusEl.className = 'sq-status';
@@ -183,10 +212,14 @@
       const btn = document.getElementById('sq-auth-submit');
       statusEl.className = 'sq-status';
       if (!email || !password){ statusEl.textContent = 'Please fill in email and password.'; statusEl.className = 'sq-status err'; return; }
+      if (mode === 'signup'){
+        const confirm = document.getElementById('sq-password-confirm').value;
+        if (password !== confirm){ statusEl.textContent = "Passwords don't match — check both fields."; statusEl.className = 'sq-status err'; return; }
+      }
       btn.disabled = true; statusEl.textContent = 'Working...';
       try {
         if (mode === 'signup'){
-          const name = document.getElementById('sq-name').value.trim() || 'Player';
+          const name = email.charAt(0).toUpperCase();
           const { data, error } = await sb.auth.signUp({ email, password, options:{ data:{ display_name:name } } });
           if (error) throw error;
           if (data.session){
@@ -254,6 +287,42 @@
         <div class="sq-realm-info"><div class="sq-realm-name">${meta.name}</div><div class="sq-realm-stat">${attempts} attempt${attempts>1?'s':''} &middot; last ${last.score}/${last.total}</div></div>
         <div class="sq-realm-best">${best}%</div></div>`;
     }).join('');
+  }
+
+  /* ---------------- profile settings modal ---------------- */
+  function openProfileSettings(){
+    const currentName = state.displayName || (state.user ? state.user.email.split('@')[0] : '');
+    modalBg.innerHTML = `
+      <div class="sq-modal">
+        <button class="sq-close" id="sq-settings-close">&times;</button>
+        <h2>Profile Settings</h2>
+        <p class="sub">Change what other people (and your progress view) call you.</p>
+        <div class="sq-field">
+          <label>Display Name</label>
+          <input type="text" id="sq-settings-name" value="${currentName.replace(/"/g,'&quot;')}" placeholder="What should we call you?" maxlength="30">
+        </div>
+        <button class="sq-btn" id="sq-settings-save">Save</button>
+        <div class="sq-status" id="sq-settings-status"></div>
+      </div>
+    `;
+    modalBg.classList.add('open');
+    document.getElementById('sq-settings-close').onclick = closeModal;
+    document.getElementById('sq-settings-save').onclick = async () => {
+      const newName = document.getElementById('sq-settings-name').value.trim();
+      const statusEl = document.getElementById('sq-settings-status');
+      const btn = document.getElementById('sq-settings-save');
+      if (!newName){ statusEl.textContent = 'Display name cannot be empty.'; statusEl.className = 'sq-status err'; return; }
+      btn.disabled = true; statusEl.textContent = 'Saving...'; statusEl.className = 'sq-status';
+      const { error } = await sb.auth.updateUser({ data: { display_name: newName } });
+      if (error){
+        statusEl.textContent = error.message; statusEl.className = 'sq-status err'; btn.disabled = false;
+      } else {
+        state.displayName = newName;
+        renderWidget();
+        statusEl.textContent = 'Saved!'; statusEl.className = 'sq-status ok';
+        setTimeout(closeModal, 500);
+      }
+    };
   }
 
   /* ---------------- guest-mode gating on realm map pages ---------------- */
