@@ -341,12 +341,21 @@
   /* ---------------- my profile modal (name, password, delete account) ---------------- */
   function openProfileSettings(){
     const currentName = state.displayName || (state.user ? state.user.email.split('@')[0] : '');
+    const provider = (state.user && state.user.app_metadata && state.user.app_metadata.provider) || 'email';
+    const providerLabel = provider === 'google' ? 'Google' : 'Email';
     modalBg.innerHTML = `
       <div class="sq-modal">
         <button class="sq-close" id="sq-settings-close">&times;</button>
         <h2>My Profile</h2>
         <p class="sub">Manage your account details.</p>
 
+        <div class="sq-field">
+          <label>Email</label>
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;background:#1c1642;border:1.5px solid #332a5c;border-radius:9px;padding:9px 11px;font-size:.85rem">
+            <span>${state.user ? state.user.email : ''}</span>
+            <span style="font-size:.68rem;font-weight:800;color:#c9b3d9;background:#00000030;padding:3px 9px;border-radius:20px;flex-shrink:0">Signed up with ${providerLabel}</span>
+          </div>
+        </div>
         <div class="sq-field">
           <label>Display Name</label>
           <input type="text" id="sq-settings-name" value="${currentName.replace(/"/g,'&quot;')}" placeholder="What should we call you?" maxlength="30">
@@ -383,7 +392,10 @@
         <div class="sq-section-title">Danger Zone</div>
         <button class="sq-btn sq-btn-danger" id="sq-del-open">Delete My Account</button>
         <div class="sq-danger-box" id="sq-del-box" style="display:none">
-          <p>This permanently deletes your account, display name, and every saved trial result. This can't be undone. Enter your password to confirm.</p>
+          <label style="display:flex;align-items:flex-start;gap:8px;font-size:.78rem;color:#e6c9c9;line-height:1.5;cursor:pointer;margin-bottom:12px">
+            <input type="checkbox" id="sq-del-ack" style="margin-top:2px;flex-shrink:0">
+            <span>I understand that this will permanently delete my account, display name, and all saved trial results. This action cannot be undone. Enter your password to confirm.</span>
+          </label>
           <div class="sq-field">
             <label>Password</label>
             <div class="sq-pwd-wrap">
@@ -448,10 +460,12 @@
     };
 
     document.getElementById('sq-del-confirm').onclick = async () => {
+      const ack = document.getElementById('sq-del-ack').checked;
       const pwd = document.getElementById('sq-del-pwd').value;
       const statusEl = document.getElementById('sq-del-status');
       const btn = document.getElementById('sq-del-confirm');
       statusEl.className = 'sq-status';
+      if (!ack){ alert('Please tick the box to confirm you understand this deletes your account permanently.'); return; }
       if (!pwd){ statusEl.textContent = 'Enter your password to confirm.'; statusEl.className = 'sq-status err'; return; }
       btn.disabled = true; statusEl.textContent = 'Verifying password...';
       const email = state.user.email;
