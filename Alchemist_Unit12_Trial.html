@@ -87,6 +87,9 @@
   @keyframes pop{0%{transform:scale(.6)}60%{transform:scale(1.15)}100%{transform:scale(1)}}
   .why{display:none;text-align:left;margin-top:14px;padding:12px 14px;border-radius:10px;background:var(--chip);border-left:4px solid var(--gold);font-size:.85rem;color:#f0ddb8}
   .why.show{display:block}
+  .lesson-more{display:none;text-align:left;margin-top:10px;padding:12px 14px;border-radius:10px;background:#0e2622;border-left:4px solid var(--steel);font-size:.85rem;color:#bfe8de;line-height:1.55}
+  .lesson-more.show{display:block}
+  .lesson-more b{color:#5fd9c4}
   #next-btn{display:none;margin-top:16px}
 
   /* ---------- END SCREEN ---------- */
@@ -215,6 +218,7 @@
       <div class="opts" id="q-opts"></div>
       <div class="fx" id="fx"></div>
       <div class="why" id="why"></div>
+      <div class="lesson-more" id="lesson-more"></div>
       <button class="btn gold" id="next-btn" onclick="nextQuestion()">Next &#8594;</button>
     </div>
   </div>
@@ -286,66 +290,66 @@ async function pushToGitHub(filename, jsonText){
 const Q = [
 { n:1, section:'A', tier:'Basic', body:"Materials that come from a living plant (like wood, cotton, or rubber) belong to which origin group?",
   options:["Ground and mineral materials","Plant materials","Man-made materials","Animal materials"], ans:2,
-  why:"Wood, cotton, and rubber are all produced directly by living plants, so they belong to the plant materials group.", monster:"Sprout Origin Sprite", emoji:"&#127793;" },
+  why:"Wood, cotton, and rubber are all produced directly by living plants, so they belong to the plant materials group.", lessonMore:"The quickest way to check any material's origin is to ask the plant question first: did a living plant make this directly, as sap, fibres, or wood? If the answer is yes, you can stop right there without needing to check the animal, ground, or man-made questions at all.", monster:"Sprout Origin Sprite", emoji:"&#127793;" },
 { n:2, section:'A', tier:'Basic', body:"Which of these materials is the BEST example of a HARD material — one that keeps its shape under normal pressing?",
   options:["A cotton scarf","A foam sponge","A rubber band","A steel spoon"], ans:4,
-  why:"A steel spoon keeps its exact shape when pressed — that's what makes it hard, unlike the soft, squashable options.", monster:"Iron Spoon Golem", emoji:"&#129718;" },
+  why:"A steel spoon keeps its exact shape when pressed — that's what makes it hard, unlike the soft, squashable options.", lessonMore:"Hard and soft is a completely different property from flexible and rigid — something can be hard and still bend a lot (like a metal wire) or hard and snap instead of bending (like glass). Testing hardness only tells you how much a material resists being pressed or squashed, nothing about whether it can bend.", monster:"Iron Spoon Golem", emoji:"&#129718;" },
 { n:3, section:'A', tier:'Basic', body:"Wool, leather, and silk are all examples of which origin group?",
   options:["Animal materials","Plant materials","Man-made materials","Ground and mineral materials"], ans:1,
-  why:"Wool (sheep), leather (animal hide), and silk (silkworm cocoons) are all produced by animals.", monster:"Fleece Beast", emoji:"&#128017;" },
+  why:"Wool (sheep), leather (animal hide), and silk (silkworm cocoons) are all produced by animals.", lessonMore:"Wool and cotton can feel surprisingly similar to touch, but similar-feeling materials can come from completely different origins — one from a sheep, the other from a plant. The safest way to sort any material is to ask what it actually came from, never to guess from how it looks or feels.", monster:"Fleece Beast", emoji:"&#128017;" },
 { n:4, section:'A', tier:'Basic', body:"Which of these materials would stretch and spring back without breaking if you pulled it gently?",
   options:["A dry twig","A ceramic plate","A stretchy elastic band","A glass marble"], ans:3,
-  why:"A stretchy elastic band bends and springs back without snapping — that's exactly what flexible means, unlike the three rigid options.", monster:"Stretch Imp", emoji:"&#127917;" },
+  why:"A stretchy elastic band bends and springs back without snapping — that's exactly what flexible means, unlike the three rigid options.", lessonMore:"Flexible and rigid measures bending, while hard and soft measures squashing — they're two separate properties that don't automatically match up. Rubber, for example, is soft-ish AND very flexible, while glass is hard AND rigid, snapping instead of bending.", monster:"Stretch Imp", emoji:"&#127917;" },
 
 { n:5, section:'B', tier:'Intermediate', body:"Bricks are made by baking clay that has been dug straight from the ground. What origin group do bricks belong to?",
   options:["Plant materials","Ground and mineral materials","Animal materials","Man-made materials"], ans:2,
-  why:"Clay is dug from the ground, so bricks made from baked clay belong to the ground and mineral materials group.", monster:"Clay Golem", emoji:"&#129714;" },
+  why:"Clay is dug from the ground, so bricks made from baked clay belong to the ground and mineral materials group.", lessonMore:"Ground and mineral materials like clay, sand, and ore already exist in nature — people just dig them up and shape or process them, the way clay gets dug up and baked into bricks. That's different from man-made materials, which people build from scratch using chemicals, often starting with oil.", monster:"Clay Golem", emoji:"&#129714;" },
 { n:6, section:'B', tier:'Intermediate', body:"Plastic bottles and nylon rope are both made through a chemical manufacturing process, not taken directly from a plant, animal, or the ground. What origin group are they?",
   options:["Ground and mineral materials","Plant materials","Animal materials","Man-made materials"], ans:4,
-  why:"Plastic and nylon are chemically manufactured by people, which makes them man-made materials.", monster:"Synthetic Specter", emoji:"&#129514;" },
+  why:"Plastic and nylon are chemically manufactured by people, which makes them man-made materials.", lessonMore:"Plant, animal, and ground materials all already exist somewhere in nature before people collect and shape them. Man-made materials are the odd one out — people chemically build them from scratch, often starting with oil or other chemicals, rather than gathering something nature already made.", monster:"Synthetic Specter", emoji:"&#129514;" },
 { n:7, section:'B', tier:'Intermediate', body:"A material is attracted to a magnet, but it does not attract other objects on its own. What can we correctly say about this material?",
   options:["It could be a magnetic material, like steel, without being a magnet","It must be a real magnet, capable of attracting other objects","It is definitely a non-magnetic material with no magnetic properties","It is definitely made from a completely non-magnetic type of plastic"], ans:1,
-  why:"Being attracted to a magnet only shows a material is magnetic, like steel — it doesn't mean the material is itself a magnet.", monster:"Magnet Mimic", emoji:"&#128280;" },
+  why:"Being attracted to a magnet only shows a material is magnetic, like steel — it doesn't mean the material is itself a magnet.", lessonMore:"A magnetic material like steel gets pulled toward a magnet, but it can't then go on to pull other objects toward itself the way a real magnet can. Mixing up 'is attracted to a magnet' with 'is a magnet' is one of the easiest magnetism mistakes to make, so it's worth double-checking every time.", monster:"Magnet Mimic", emoji:"&#128280;" },
 { n:8, section:'B', tier:'Intermediate', body:"A block of foam is tested and found to be much lighter, size-for-size, than both water and cooking oil. Based on this, what would you expect if the foam were placed into either liquid?",
   options:["It would sink in both liquids","It would float in water but sink in oil","It would float in both liquids","It would dissolve completely in both liquids"], ans:3,
-  why:"Being lighter, size-for-size, than BOTH liquids means the foam should float in both water and cooking oil.", monster:"Foam Sprite", emoji:"&#129489;&#8205;&#127908;" },
+  why:"Being lighter, size-for-size, than BOTH liquids means the foam should float in both water and cooking oil.", lessonMore:"Whether something floats or sinks depends on how heavy it is for its size compared to the liquid, and that comparison can actually change between liquids — a chunk of beeswax floats in water but sinks in cooking oil, showing it sits in between the two in heaviness-for-size. Something lighter for its size than every liquid it's dropped in, like this foam, will float no matter which liquid you test it in.", monster:"Foam Sprite", emoji:"&#129489;&#8205;&#127908;" },
 { n:9, section:'B', tier:'Intermediate', body:"Which pair of materials are BOTH classified as animal materials?",
   options:["Cotton and wood","Wool and silk","Rubber and leather","Plastic and nylon"], ans:2,
-  why:"Wool comes from sheep and silk comes from silkworms — both are animal materials.", monster:"Silk Weaver", emoji:"&#128375;&#65039;" },
+  why:"Wool comes from sheep and silk comes from silkworms — both are animal materials.", lessonMore:"Silk in particular fools people because it looks woven like a plant fabric such as cotton, but the thread itself is spun by silkworms from their cocoons, making it an animal material. Judging origin by appearance is the classic trap — always ask what actually produced the material instead.", monster:"Silk Weaver", emoji:"&#128375;&#65039;" },
 { n:10, section:'B', tier:'Intermediate', body:"A material keeps its exact shape under pressure and snaps rather than curving when force is applied. Which everyday material best fits both of these properties?",
   options:["A rubber band","A woolen scarf","A glass jar","A cotton t-shirt"], ans:3,
-  why:"A glass jar is hard and snaps rather than bending — it fits both the hard and not-flexible properties.", monster:"Glass Snapper", emoji:"&#129381;" },
+  why:"A glass jar is hard and snaps rather than bending — it fits both the hard and not-flexible properties.", lessonMore:"Hard/soft and flexible/rigid are two separate properties, not the same idea in different words — glass is a perfect example of being hard AND rigid at once, since it keeps its shape under pressure but snaps rather than curving when force is applied.", monster:"Glass Snapper", emoji:"&#129381;" },
 
 { n:11, section:'C', tier:'Applied', body:"A shopping bag is advertised as 'made from a natural plant fibre.' You later learn it's actually woven from threads spun by silkworms from their cocoons. What's the BEST correction to make?",
   options:["This is wrong — silk comes from an animal (silkworms), not a plant","No correction needed — silk is a plant fibre","This is wrong — silk is actually a man-made material","This is wrong — silk comes from the ground, like sand"], ans:1,
-  why:"Silk thread is spun by silkworms, a living animal, so silk is an animal material, not a plant material.", monster:"Cocoon Trickster", emoji:"&#128027;" },
+  why:"Silk thread is spun by silkworms, a living animal, so silk is an animal material, not a plant material.", lessonMore:"Working through the origin questions in order shows this clearly: did a plant make it directly? No. Did an animal make it — fur, hide, silk, or feathers? Yes — so you stop there, because silk is spun by silkworms, and that answer alone settles it as an animal material.", monster:"Cocoon Trickster", emoji:"&#128027;" },
 { n:12, section:'C', tier:'Applied', body:"A student sorts 'rubber' into the 'man-made materials' group because it feels stretchy and synthetic. Is this correct?",
   options:["Yes, stretchy man-made materials are always sorted this way","No — rubber is actually an animal material, taken from animal hide","No — rubber comes from rubber-tree sap, which makes it a plant material","Yes, because rubber cannot ever be found anywhere in nature"], ans:3,
-  why:"Rubber comes from the milky sap (latex) of rubber trees, so despite feeling synthetic, it's actually a plant material.", monster:"Sap Golem", emoji:"&#127795;" },
+  why:"Rubber comes from the milky sap (latex) of rubber trees, so despite feeling synthetic, it's actually a plant material.", lessonMore:"Going through the origin questions in order, rubber gets a YES on the very first one — did a living plant produce this directly, as sap, fibres, or wood? Since rubber comes from tree sap (latex), you never even need to ask the later animal, ground, or man-made questions.", monster:"Sap Golem", emoji:"&#127795;" },
 { n:13, section:'C', tier:'Applied', body:"Four new materials are tested and given these results: Glass — hard, sinks in oil. A hard resin block — hard, floats on oil. Cardboard — soft, does not bend easily. A silicone strip — soft, bends easily. Using ONLY hardness and oil-floating/sinking, which material is hard AND floats on oil?",
   options:["Cardboard","A hard resin block","A silicone strip","Glass"], ans:2,
-  why:"The hard resin block is described as hard, and it floats on oil — matching both parts of the question.", monster:"Resin Sentinel", emoji:"&#129717;" },
+  why:"The hard resin block is described as hard, and it floats on oil — matching both parts of the question.", lessonMore:"The classification flowchart works one branch at a time: first sort hard vs soft, then ask a different second question depending on which branch you landed on — hard materials get the sinks/floats-in-oil question, while soft materials get the flexible/not-flexible question instead. No material ever needs both second questions.", monster:"Resin Sentinel", emoji:"&#129717;" },
 { n:14, section:'C', tier:'Applied', body:"A student is given an unlabelled sample. They find it's hard, does NOT bend, and FLOATS when dropped into a tub of cooking oil. Using ONLY these three clues, which material below best matches?",
   options:["A steel hinge","A rubber eraser","A woolen glove","A plastic ruler"], ans:4,
-  why:"A plastic ruler is hard, doesn't bend easily, and plastic can float on oil — matching all three clues.", monster:"Ruler Phantom", emoji:"&#128207;" },
+  why:"A plastic ruler is hard, doesn't bend easily, and plastic can float on oil — matching all three clues.", lessonMore:"This matches the flowchart's hard branch exactly: hard materials get asked whether they sink or float in oil, and plastic can float on oil the same way metal typically sinks in it — a useful clue for identifying unlabelled hard samples by how they behave in oil.", monster:"Ruler Phantom", emoji:"&#128207;" },
 { n:15, section:'C', tier:'Applied', body:"A student wants to fairly test whether metal or plastic sinks faster in water. Which set-up is FAIR?",
   options:["Drop same-sized metal and plastic blocks from the same height into the same water","Drop a large metal block and a small plastic bead from the same height into the same water","Drop a metal block into water and a plastic block into oil","Drop the metal block first, then empty the water before testing the plastic"], ans:1,
-  why:"A fair test changes only ONE thing (the material) while keeping size, drop height, and liquid identical for both.", monster:"Fair-Test Sentinel", emoji:"&#9878;&#65039;" },
+  why:"A fair test changes only ONE thing (the material) while keeping size, drop height, and liquid identical for both.", lessonMore:"When comparing how materials behave — like whether something floats or sinks — only the material itself should change between tests; size, drop height, and the liquid used all need to stay the same for the comparison to mean anything. That's exactly why floating examples like cork, a paperclip, and beeswax are always compared using similar-sized samples in the same liquid rather than mixing conditions.", monster:"Fair-Test Sentinel", emoji:"&#9878;&#65039;" },
 { n:16, section:'C', tier:'Applied', body:"A recycling centre sorts waste into bins by ORIGIN: Plant, Animal, Ground/Mineral, and Man-made. A worn-out wool jumper is placed in the bin for Plant materials. What's wrong with this?",
   options:["Nothing at all is wrong — wool actually comes from cotton plants","Wool should really go in the Man-made bin, since it's manufactured in factories","Wool should go in the Animal bin — it comes from sheep, not a plant","Wool should instead go in the Ground/Mineral bin, since it's mined from rock"], ans:3,
-  why:"Wool is sheared from a sheep's coat — sheep are animals, so wool is an animal material, not a plant material.", monster:"Wool Wraith", emoji:"&#129497;" },
+  why:"Wool is sheared from a sheep's coat — sheep are animals, so wool is an animal material, not a plant material.", lessonMore:"Sorting by origin isn't just a classroom exercise — real recycling centres separate waste partly by origin and material type so it can actually be reused properly, and putting an animal material like wool in the wrong bin would defeat that purpose. Farmers raising sheep for wool are part of a whole industry built around that one animal origin.", monster:"Wool Wraith", emoji:"&#129497;" },
 { n:17, section:'C', tier:'Applied', body:"A steel paperclip is placed near a strong magnet and gets pulled toward it. A classmate says 'the paperclip must be a magnet.' What's the BEST correction?",
   options:["No correction needed — anything attracted to a magnet is itself a magnet","The paperclip is a magnetic material (like steel), but that alone doesn't make it a magnet","The paperclip cannot possibly be magnetic at all, given that it's made of steel","Only materials that are specially man-made can ever be attracted to magnets at all"], ans:2,
-  why:"Being attracted to a magnet only shows the paperclip is a magnetic material — it can't attract other objects on its own the way a real magnet can, so it isn't a magnet itself.", monster:"Paperclip Phantom", emoji:"&#128203;" },
+  why:"Being attracted to a magnet only shows the paperclip is a magnetic material — it can't attract other objects on its own the way a real magnet can, so it isn't a magnet itself.", lessonMore:"This is the exact 'attracted to X vs is X' mix-up worth watching for: a magnetic material such as steel behaves the way magnetic materials do when pulled toward a magnet, but that alone never turns it into a magnet capable of attracting other objects on its own.", monster:"Paperclip Phantom", emoji:"&#128203;" },
 { n:18, section:'C', tier:'Applied', body:"Two identical-looking white fibres are tested: Fibre X came from a cotton plant's seed pod. Fibre Y was spun by a silkworm. Which correctly matches each fibre to its origin group?",
   options:["X: Animal, Y: Plant","Both X and Y: Plant","Both X and Y: Man-made","X: Plant, Y: Animal"], ans:4,
-  why:"Fibre X comes from a cotton plant (plant material); Fibre Y is spun by a silkworm, an animal (animal material).", monster:"Fibre Twin", emoji:"&#129525;" },
+  why:"Fibre X comes from a cotton plant (plant material); Fibre Y is spun by a silkworm, an animal (animal material).", lessonMore:"Running each fibre through the origin questions in order settles it fast: Fibre X came from a cotton plant's seed pod, so it gets a YES on the very first plant question. Fibre Y needs a NO on that question but a YES on the very next one, since a silkworm — an animal — spun it.", monster:"Fibre Twin", emoji:"&#129525;" },
 { n:19, section:'C', tier:'Applied', body:"You're told a mystery sample resists being squashed, stays rigid instead of curving under force, and drops straight to the bottom of a tub of cooking oil. What is the mystery sample most likely to be?",
   options:["A ceramic tile","A silicone oven mitt","A cork placemat","A canvas tote bag"], ans:1,
-  why:"A ceramic tile is hard, doesn't bend, and ceramic is heavy enough for its size to sink in oil — matching all three clues.", monster:"Ceramic Golem", emoji:"&#127961;&#65039;" },
+  why:"A ceramic tile is hard, doesn't bend, and ceramic is heavy enough for its size to sink in oil — matching all three clues.", lessonMore:"Being hard automatically sends you down the flowchart's sinks/floats-in-oil branch rather than the flexible/not-flexible branch that soft materials get — and a heavy, hard material like ceramic sinking in oil is exactly the kind of result that branch is built to sort.", monster:"Ceramic Golem", emoji:"&#127961;&#65039;" },
 { n:20, section:'C', tier:'Applied', body:"A bag is labelled 'genuine leather.' A shopper assumes this must be a Ground/Mineral material because leather feels tough like rock. What is the correct origin, and why?",
   options:["Ground/Mineral — because tough materials are always mined","Plant — leather comes from tree bark","Animal — leather is made from animal hide/skin","Man-made — leather is manufactured from plastic"], ans:3,
-  why:"Leather is made from animal hide (skin), which makes it an animal material — toughness alone doesn't mean something is mined from the ground.", monster:"The Origin Keeper", emoji:"&#127890;" },
+  why:"Leather is made from animal hide (skin), which makes it an animal material — toughness alone doesn't mean something is mined from the ground.", lessonMore:"Toughness alone doesn't tell you an origin — ground and mineral materials like sand, clay, and ore are dug or mined from the earth mostly unchanged, while leather is made from an animal's hide (skin), so it belongs with wool and silk in the animal group despite feeling tough like rock.", monster:"The Origin Keeper", emoji:"&#127890;" },
 ];
 /* ================= END unchanged content ================= */
 
@@ -466,6 +470,7 @@ function renderQuestion(){
   document.getElementById('q-body').textContent = q.body;
   document.getElementById('fx').className = 'fx';
   document.getElementById('why').className = 'why';
+  document.getElementById('lesson-more').className = 'lesson-more';
   document.getElementById('next-btn').style.display = 'none';
   document.getElementById('q-opts').innerHTML = q.options.map((opt,i) =>
     `<button class="opt" onclick="answer(${i+1})">${String.fromCharCode(65+i)}. ${opt}</button>`).join('');
@@ -537,6 +542,10 @@ function answer(idx){
   document.getElementById(`node-${pos}`).classList.remove('current');
   document.getElementById('why').innerHTML = `💡 <b>Why:</b> ${q.why}`;
   document.getElementById('why').classList.add('show');
+  if (q.lessonMore){
+    document.getElementById('lesson-more').innerHTML = `🧠⚡ <b>Brain Boost:</b> ${q.lessonMore}`;
+    document.getElementById('lesson-more').classList.add('show');
+  }
   document.getElementById('next-btn').style.display = 'inline-block';
   document.getElementById('next-btn').textContent = (pos === deck.length-1) ? 'See Results →' : 'Next →';
   updateStats();

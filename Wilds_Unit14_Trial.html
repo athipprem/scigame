@@ -4,18 +4,18 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
-<title>Puzzle Citadel — The Apex Trials</title>
+<title>Living Wilds — The Cell Trials (Unit 14)</title>
 <style>
   :root{
     --gold:#FFD700; --gold-d:#DAA520; --amber:#FFA500;
     --steel:#00695c; --steel-d:#004d40; --steel-l:#e0f2f1;
-    --bg:#1a1030; --bg2:#3a1f42; --panel:#241533; --chip:#2e1a3f; --line:#4a2c52;
-    --ink:#fff3e6; --grey:#c9b3d9;
+    --bg:#0a1f13; --bg2:#153a22; --panel:#0f2a1a; --chip:#173a24; --line:#2c5c3a;
+    --ink:#eafbf0; --grey:#a9d9b8;
     --ok:#43e97b; --bad:#ff5c6c;
     --a:#00e5c9; --b:#5fa8ff; --c:#c77dff;
-    /* --world = this trial's identity color, matching Puzzle Citadel on the World Map.
-       Applied Reasoning / Puzzle Citadel = coral-orange, shared across citadel trials. */
-    --world:#ff8a65;
+    /* --world = this trial's identity color, matching Living Wilds on the World Map.
+       Biology / Living Wilds = forest green, shared across all Living Wilds trials. */
+    --world:#43e97b;
   }
   *{box-sizing:border-box}
   body{margin:0;font-family:'Segoe UI',Arial,sans-serif;background:radial-gradient(circle at 50% 0%,var(--bg2),var(--bg));color:var(--ink);min-height:100vh;padding-bottom:30px}
@@ -68,7 +68,6 @@
   .tierlbl.Basic{background:#00e5c933;color:var(--a)}
   .tierlbl.Intermediate{background:#5fa8ff33;color:var(--b)}
   .tierlbl.Applied{background:#c77dff33;color:var(--c)}
-  .srclbl{display:inline-block;font-size:.62rem;font-weight:700;letter-spacing:.3px;padding:2px 9px;border-radius:20px;margin-bottom:8px;margin-left:6px;background:var(--chip);border:1px solid var(--line);color:var(--grey)}
   .monster-emoji{font-size:3.4rem;margin:4px 0 2px;display:inline-block;transition:transform .25s}
   .monster-emoji.hit{animation:shake .35s}
   @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-10px) rotate(-6deg)}75%{transform:translateX(10px) rotate(6deg)}}
@@ -117,8 +116,8 @@
     background-repeat:repeat;background-size:280px 280px;animation:drift 70s linear infinite}
   @keyframes drift{from{background-position:0 0}to{background-position:-560px 280px}}
   #theme-glow{position:fixed;inset:0;z-index:-1;opacity:.55;transition:background 1s ease;pointer-events:none}
-  #theme-glow.world{background:radial-gradient(600px 400px at 50% 20%,#ff8a6530,transparent 70%)}
-  #theme-glow.boss{background:radial-gradient(680px 460px at 50% 20%,#ff8a6525,transparent 55%),radial-gradient(650px 450px at 50% 20%,#ffd70045,transparent 70%)}
+  #theme-glow.world{background:radial-gradient(600px 400px at 50% 20%,#00e5c930,transparent 70%)}
+  #theme-glow.boss{background:radial-gradient(680px 460px at 50% 20%,#00e5c925,transparent 55%),radial-gradient(650px 450px at 50% 20%,#ffd70045,transparent 70%)}
   #confetti-layer{position:fixed;inset:0;pointer-events:none;z-index:50;overflow:hidden}
   .confetti-piece{position:absolute;top:-20px;border-radius:2px;animation:confettiFall linear forwards}
   @keyframes confettiFall{to{transform:translateY(110vh) rotate(540deg);opacity:.2}}
@@ -177,28 +176,28 @@
 
   <!-- INTRO -->
   <div class="screen active" id="screen-intro">
-    <div class="world-badge">&#129513; Puzzle Citadel <span>&middot; Applied Reasoning world</span></div>
-    <div class="intro-emoji">&#128081;&#129513;</div>
-    <h1>The Apex Trials</h1>
-    <div class="sub">The Citadel's summit — ASMOPSS's hardest room, saved for very last.</div>
+    <div class="world-badge">&#127807; Living Wilds <span>&middot; Biology world</span></div>
+    <div class="intro-emoji">&#129440;&#128300;</div>
+    <h1>The Cell Trials</h1>
+    <div class="sub">Cells, cell parts, and unicellular vs multicellular organisms — zoom in and battle your way through.</div>
     <div class="zone-card">
-      <div><b>Zone:</b> Compiled Trial &mdash; real Section B &amp; C reasoning questions pulled from the 4 Milestone tests + the ASMOPSS 2026 Mock Test</div>
+      <div><b>Zone:</b> Unit 14 &mdash; Cells</div>
       <ul>
         <li>20 monsters guard this trial &mdash; defeat each by picking the right answer</li>
-        <li>Every question is real, verbatim content from a real Milestone or Mock test — each tagged with its real source test</li>
+        <li>Same questions &amp; explanations as your real Unit 14 test &mdash; just shuffled, so it plays differently every time</li>
         <li>Wrong pick? You'll see why, then keep going &mdash; no game over, this is about learning</li>
         <li>Build a streak for bonus coins &middot; the final monster is a BOSS fight</li>
       </ul>
     </div>
     <button class="btn gold" onclick="startGame()">&#9876;&#65039; Begin the Trial</button><br>
-    <a class="w-map-link pill" href="Citadel_Map.html">&#8592; Back to Puzzle Citadel</a>
+    <a class="w-map-link pill" href="Wilds_Map.html">&#8592; Back to Living Wilds</a>
   </div>
 
   <!-- GAME -->
   <div class="screen" id="screen-game">
     <div id="world-topbar">
-      <div class="world-badge small">&#129513; Puzzle Citadel</div>
-      <a class="w-map-link" href="Citadel_Map.html">&#8592; Back</a>
+      <div class="world-badge small">&#127807; Living Wilds</div>
+      <a class="w-map-link" href="Wilds_Map.html">&#8592; Back</a>
     </div>
     <div id="path"></div>
     <div id="stats">
@@ -209,7 +208,6 @@
     <div class="battle" id="battle-card">
       <div class="boss-tag" id="boss-tag" style="display:none">&#128128; BOSS</div>
       <span class="tierlbl" id="q-tier"></span>
-      <span class="srclbl" id="q-src"></span>
       <div class="monster-wrap">
         <div class="monster-aura world" id="monster-aura"></div>
         <div class="monster-emoji" id="monster-emoji">&#128126;</div>
@@ -238,7 +236,7 @@
     <div class="sec-breakdown" id="sec-breakdown"></div>
     <button class="btn gold" onclick="location.reload()">&#128260; Play Again (reshuffled)</button><br>
     <button class="btn ghost" onclick="saveResults()">&#128190; Save Results (practice copy)</button><br>
-    <a class="btn ghost" href="Citadel_Map.html">&#8592; Back to Puzzle Citadel</a>
+    <a class="btn ghost" href="Wilds_Map.html">&#8592; Back to Living Wilds</a>
     <div id="save-status"></div>
     <div class="note">Copyright &copy; 2026 Luikishi. All rights reserved. Have fun !</div>
   </div>
@@ -246,9 +244,9 @@
 </div>
 
 <script>
-/* ================= SAME CONTENT AS Unit_12_Test — unchanged questions/answers/explanations ================= */
-const UNIT_NUM = 0;
-const UNIT_TITLE = "Applied Reasoning: Apex Trials (Compiled)";
+/* ================= SAME CONTENT AS Unit_14_Test — unchanged questions/answers/explanations ================= */
+const UNIT_NUM = 14;
+const UNIT_TITLE = "Biology: Cells";
 const PASS_BAR = 16;
 
 /* ================= GITHUB SAVE (optional) =================
@@ -290,88 +288,108 @@ async function pushToGitHub(filename, jsonText){
 }
 
 const Q = [
-{ n:1, section:'B', tier:'Intermediate', srcTest:'M1', body:"Two metal rods — one bare, one coated in plastic — both have one end placed in a cup of hot water. Which end will feel warm FIRST at the far end?",
-  options:["Neither end will ever feel warm", "The plastic-coated rod, since plastic holds heat well", "The bare metal rod, since metals conduct heat well", "Both will warm up at exactly the same rate"], ans:3,
-  why:"Metals like copper are good heat conductors; plastic is an insulator and conducts heat poorly.",
-  lessonMore:"Conduction works by passing heat directly through a touching solid, particle to particle — that's exactly why a metal spoon left in hot soup gets warm at the handle too, even though the handle never touched the soup. This same idea is why saucepan handles are made of wood or plastic instead of metal: since those materials are poor conductors, they stop the heat reaching your hand as fast.", monster:"Heat-Race Golem", emoji:"&#128293;" },
-{ n:2, section:'B', tier:'Intermediate', srcTest:'M2', body:"A tide chart shows the water was at its highest point at noon today. Sailors want to know when the water level will next be at its LOWEST point. About how many hours should they expect to wait?",
-  options:["About 3 hours","About 12 hours","About 6 hours","About 24 hours"], ans:3,
-  why:"Low tide falls roughly halfway between two high tides, about 6 hours after a high tide.",
-  lessonMore:"Tides happen because the Moon's gravity pulls ocean water into a bulge — one bulge forms on the side of Earth facing the Moon, and a second bulge forms on the exact opposite side too, since that far side is pulled slightly less and gets left behind. As Earth spins once a day, every coastline passes through both bulges, giving most places roughly two high tides and two low tides each day, spaced about six hours apart.", monster:"Tide-Clock Sentinel", emoji:"&#127754;" },
-{ n:3, section:'B', tier:'Intermediate', srcTest:'M3', body:"At the school fair, three friends drag a wagon: two drag it EAST with 14N and 9N, one drags it WEST with 8N. What is the net force on the wagon, and which way does it move?",
-  options:["31N, east (all added)", "15N, due east", "8N, west", "23N, east"], ans:2,
-  why:"Group by direction first: EAST = 14+9 = 23N. WEST = 8N. Then subtract: 23 − 8 = 15N, moving east.",
-  lessonMore:"With three or more forces, the trick is to treat it like a tug-of-war: sort every force into two piles by direction, add up each pile separately, then compare the two totals — the bigger pile always wins and decides which way things move. This exact method still works no matter how many forces get added, as long as you sort them into piles first instead of trying to combine them all at once in your head.", monster:"Tug-Line Trickster", emoji:"&#128127;" },
-{ n:4, section:'B', tier:'Intermediate', srcTest:'M4', body:"A golf ball, a flat, spread-out sheet of paper, and a tightly crumpled ball of that SAME sheet of paper are dropped together from the same height. Rank them from FIRST to LAST to land.",
-  options:["Flat sheet, then crumpled paper, then golf ball", "Golf ball, then crumpled paper, then flat sheet of paper", "The paper always beats the golf ball, whatever its shape", "Crumpled paper, then golf ball, then flat sheet"], ans:2,
-  why:"The dense, compact golf ball catches the least air resistance and lands first; the crumpled paper is compact too, just lighter, so it lands second; the flat, spread-out sheet catches the most air resistance and lands last.",
-  lessonMore:"It isn't really about 'heavy vs light' — the real factor is how much surface area an object presents to the air compared to its weight. The same sheet of paper, flat versus scrunched into a tight ball, falls at very different speeds even though its mass never changes at all — scrunching it shrinks its surface area a lot, so air resistance grabs onto it much less.", monster:"Fall-Order Sphinx", emoji:"&#127894;" },
-{ n:5, section:'B', tier:'Intermediate', srcTest:'MOCK', body:"Four balls, all with the same volume (100cm³), have different masses: Ball P = 70g, Ball Q = 130g, Ball R = 95g, Ball S = 110g. Water has a density of 1g/cm³ (so 100cm³ of water has a mass of 100g). Which balls will FLOAT in water?",
-  options:["Only Ball P will float","Ball P and Ball R will float","Ball Q and Ball S will float","All four balls will float"], ans:2,
-  why:"An object floats if its density is LESS than water's (mass under 100g for this 100cm&sup3; volume). Ball P (70g) and Ball R (95g) are both under 100g, so they float. Ball Q (130g) and Ball S (110g) are both over 100g, so they sink.",
-  lessonMore:"This kind of question is really a mass-ranking trick in disguise — since all four balls share the same volume, comparing their density is exactly the same as comparing their masses directly, no extra maths needed. Floating and sinking is always a comparison to the specific liquid too: the exact same ball could sink in water but float in a denser liquid, or float in water but sink in a liquid that's less dense.", monster:"Float-or-Sink Sphinx", emoji:"&#9875;&#65039;" },
-{ n:6, section:'C', tier:'Applied', srcTest:'M1', body:"Two identical rocks are compared: one stays on Earth, the other is carried to the Moon. Which statement is TRUE about them afterward?",
-  options:["Mass stays the same in both, but the Moon rock weighs less since gravity there is weaker", "The Moon rock's mass actually shrinks once it leaves Earth's atmosphere and reaches the Moon", "Weight stays exactly identical everywhere, since gravity never changes from place to place", "The Earth rock slowly gains extra mass over time simply by sitting still on the ground"], ans:1,
-  why:"Mass (amount of matter) doesn't change with location, but weight depends on gravity's strength, which is weaker on the Moon.",
-  lessonMore:"Weight depends on how strong the local gravity is pulling on an object's mass — since the Moon's gravity is weaker than Earth's, the exact same rock weighs less there, even though not a single bit of matter has been added or removed. That's different from the surprising fact that on the SAME planet, heavy and light objects fall at the same rate — that's about gravity's effect on falling speed, not about how heavy something feels when you pick it up.", monster:"Rock-and-Moon Oracle", emoji:"&#127765;" },
-{ n:7, section:'C', tier:'Applied', srcTest:'M1', body:"A baked cake cannot be turned back into its original flour, eggs, and sugar, but melted ice can easily be turned back into ice by freezing it again. What BEST explains this difference?",
-  options:["Cakes are baked at a much lower temperature than ice requires to freeze solid", "Baking causes a chemical reaction forming new substances that simple steps can't undo", "Ice is a far rarer and more valuable substance than basic cake ingredients", "There is truly no real difference between these two kinds of processes at all"], ans:2,
-  why:"Baking is a chemical reaction that creates genuinely new substances; melting/freezing is a physical change that's easily reversed.",
-  lessonMore:"The quick checklist is simple: can you get the original substance back using an easy physical step like freezing, evaporating, or reshaping? Melted butter passes that test (cool it and it turns solid again), but baked cake and toasted bread don't — cooking is a chemical reaction that creates genuinely new substances, and no amount of cooling ever turns toast back into plain bread.", monster:"Reverse-or-Not Wraith", emoji:"&#127856;" },
-{ n:8, section:'B', tier:'Intermediate', srcTest:'M1', body:"You give a toy car one firm push on a flat wooden floor, then let go completely. It rolls a short distance before coming to rest on its own. Which force brought it to rest?",
-  options:["Gravity pulling it sideways along the floor","Magnetism from metal hidden in the floorboards","The car simply running out of its own energy supply","Friction between the car's wheels and the floor"], ans:4,
-  why:"Friction between the wheels and floor is a contact force that opposes and slows motion after the push ends.", lessonMore:"The rougher a surface is, the more friction it creates, and more friction means a moving object slows and stops sooner — smooth tile lets a car roll much farther than rough gravel does. That's the exact logic behind the classic fair-test setup for this: release the SAME car from the SAME point on smooth tile, then carpet, then rough gravel, so the only thing that changed was the surface — meaning any difference in how far it rolled before stopping can be fairly blamed on that surface's friction.", monster:"Rolling-Halt Wraith", emoji:"&#128663;" },
-{ n:9, section:'C', tier:'Applied', srcTest:'M2', body:"A child on a playground swing is pulled back and held high in the air, completely still, right before being let go. A friend claims: 'At this highest, stillest point, the swing has mostly kinetic energy, since it's about to start moving again.' What is the BEST correction?",
-  options:["The claim is wrong - at the highest, stillest point, the energy is mostly potential, not kinetic","The claim is correct, since the swing was still moving through the air just one moment before this point","The claim is wrong, but only because playground swings don't actually store or use any energy whatsoever","Kinetic and potential energy are actually just two different names for the exact same underlying quantity"], ans:1,
-  why:"At the highest, momentarily-still point of a swing, the energy is mostly potential (due to height) - kinetic energy is highest at the bottom, where it moves fastest.",
-  lessonMore:"As something falls, its stored potential energy doesn't vanish — it transforms into kinetic energy, so height lost becomes exactly speed gained. A roller coaster cart works the same way: it has its highest potential energy at the top of the tallest hill where it's barely moving, and its highest kinetic energy at the bottom of that same hill where it's moving fastest — the total amount of energy stays the same the whole time, only its form changes.", monster:"Swing-Peak Illusionist", emoji:"&#127934;" },
-{ n:10, section:'C', tier:'Applied', srcTest:'M2', body:"A beachgoer insists: 'A high tide is always followed immediately by another high tide - a low tide never fits in between the two.' What is the BEST correction?",
-  options:["The claim is correct, since tides always repeat the exact same type over and over in a row","The claim is wrong, but only because tide timing is actually completely random and impossible to predict","The claim is wrong - a low tide typically comes next, roughly halfway between the two high tides","The claim is correct, but this pattern only holds true specifically during a full moon"], ans:3,
-  why:"Tides alternate - a low tide typically falls roughly halfway (about 6 hours) between two high tides, not another high tide right away.",
-  lessonMore:"Tides alternate because of how the Moon's gravity creates TWO bulges of ocean water at once — one on the side of Earth facing the Moon, and a second one on the exact opposite side, since that far side gets pulled slightly less and 'left behind.' As Earth spins once a day, every coastline rotates through both bulges and both gaps between them, giving roughly two high tides and two low tides each day.", monster:"Tide-Gap Trickster", emoji:"&#127754;" },
-{ n:11, section:'C', tier:'Applied', srcTest:'M2', body:"A student assumes: 'Since rubber is stretchy and bendy like some plastics, it must be a man-made material.' What is the BEST correction?",
-  options:["The claim is correct, since every stretchy and bendy material is always man-made, without exception","The claim is wrong, but only because rubber is actually a type of mined rock or mineral","The claim is correct, but this is only true specifically for black-coloured rubber products","The claim is wrong - rubber actually comes from the sap of rubber trees, making it a plant material"], ans:4,
-  why:"Rubber comes from the sap of rubber trees, making it a plant material, not a man-made one, despite feeling similar to some plastics.",
-  lessonMore:"Don't judge a material's origin by how it looks or feels — always ask what it actually came from. Rubber trips people up because it feels synthetic like plastic, but a simple checklist settles it fast: did a living plant produce this directly (sap, fibres, wood)? Rubber gets a 'yes' immediately from the tree's sap, so it's a plant material before you'd even need to consider whether it came from an animal or a factory.", monster:"Rubber-Origin Wraith", emoji:"&#127890;" },
-{ n:12, section:'C', tier:'Applied', srcTest:'M3', body:"A student claims: 'A block of solid steel will always sink, no matter its shape, since steel is denser than water.' What is the BEST correction?",
-  options:["The claim is correct — no steel object can ever float, regardless of shape", "Steel actually floats naturally, and the claim has it backwards", "A hollow steel shape, like a ship's hull, can float by displacing enough water", "Density has nothing to do with whether an object floats or sinks"], ans:3,
-  why:"A hollow shape displaces much more water than a solid block of the same mass, letting an object made of denser material still float.",
-  lessonMore:"Steel really is denser than water, so a solid lump of it sinks instantly — the trick is that a ship isn't solid steel. Its hollow hull traps a huge volume of air, spreading the ship's total mass out over a much bigger overall volume, so the ship's OVERALL density (steel plus all that trapped air combined) ends up less than water's, even though the raw material it's built from is denser on its own.", monster:"Steel-Sink Phantom", emoji:"&#9875;&#65039;" },
-{ n:13, section:'C', tier:'Applied', srcTest:'M3', body:"A student says: 'The geocentric and heliocentric models are just two equally good ways of describing the solar system — neither one is more correct.' What is the BEST correction?",
-  options:["The heliocentric model is correct — Venus phases prove it orbits the Sun", "Both models are equally correct and interchangeable", "The geocentric model is actually the correct one, not the heliocentric model", "Neither model has ever been tested against real evidence"], ans:1,
-  why:"Venus showing a full range of phases (not just crescents) is only possible if it orbits the Sun — real evidence that settled the debate in favour of the heliocentric model.",
-  lessonMore:"For thousands of years, believing Earth stood still was actually a reasonable, evidence-based conclusion — the ground under your feet feels perfectly still, while the Sun and stars appear to move across the sky. Without a telescope, both models explained those everyday observations equally well, which is exactly why nobody could prove which one was correct until new evidence — from telescopes — finally settled the debate in favour of the Sun-centred model that Copernicus had proposed.", monster:"Two-Model Sphinx", emoji:"&#127768;" },
-{ n:14, section:'B', tier:'Intermediate', srcTest:'M3', body:"A radiator heats the air in a room. The air just above it warms up, becomes less dense, and rises toward the ceiling, while cooler air near the floor sinks to replace it. What is this process called?",
-  options:["Convection","Evaporation","Condensation","Dissolving"], ans:1,
-  why:"Convection is warm, less-dense fluid rising while cooler, denser fluid sinks, creating a circulating current.", lessonMore:"Convection is one of three ways heat moves — alongside conduction (heat passing through a touching solid, like a metal spoon's handle in hot soup) and radiation (invisible rays crossing empty space, like sunlight reaching Earth) — and the giveaway for convection specifically is a current: warm, less-dense fluid rising while cooler, denser fluid sinks in to replace it, over and over, until everything reaches the same temperature.", monster:"Rising-Current Phantom", emoji:"&#127744;" },
-{ n:15, section:'C', tier:'Applied', srcTest:'M4', body:"For a science fair display, a student has a tub of small plastic beads, table salt, and water all mixed together. They evaporate the whole tub FIRST, without filtering out the beads beforehand. What problem does this create?",
-  options:["No trouble at all — the order of evaporating and filtering never actually changes the final result", "Evaporation only removes the liquid — it does nothing to solid, insoluble beads, which stay stuck in the dried salt", "The heat from evaporating actually breaks the plastic beads down into nothing, so they vanish completely", "Only the water and the beads evaporate together, while the salt is somehow left floating on top"], ans:2,
-  why:"Evaporation only removes the liquid solvent — it does nothing to insoluble solid pieces like plastic beads, so skipping filtering first leaves the beads stuck in with the dried salt.",
-  lessonMore:"Evaporation only works on the liquid solvent — it turns to vapour and escapes into the air, but insoluble solid pieces like beads never turn to gas no matter how much you heat them. That's why order matters: filtering has to come FIRST to trap and remove any insoluble solid, and only THEN should you evaporate the remaining liquid to recover a dissolved solute like salt.", monster:"Bead-Tub Trickster", emoji:"&#128167;" },
-{ n:16, section:'C', tier:'Applied', srcTest:'M4', body:"A tomato plant is classified as a flowering plant, and its ripe tomatoes contain seeds inside juicy flesh. Explain the connection between the flower's job and the tomato fruit — and why a seed's stored food inside it matters for a NEW seedling, using what you know about digestion too.",
-  options:["The flower and the fruit are actually completely unrelated structures with absolutely no real connection to each other at all, not even indirectly", "Tomatoes never actually grow from real flowers at all, and their seeds contain no stored food of any kind whatsoever, ever", "The tomato's seed actually fully digests the fruit around it before germinating, quite similar to how a human stomach digests food", "The flower's ovary becomes the tomato fruit around the seeds; the seed's stored food feeds the tiny embryo until it can grow leaves and make its own food"], ans:4,
-  why:"The ovary develops into the fruit around the seeds after fertilization; the seed's stored food nourishes the new embryo the same way digested nutrients nourish a growing body, until the seedling can photosynthesize on its own.",
-  lessonMore:"A handy habit: whenever you look inside a fruit, mentally split it into 'the seeds' (these were the ovules) and 'everything else around them' (this was the ovary wall that swelled up) — that split works on almost any fruit, from an apple's core to a tomato's pulp. The seed's stored food acts like a tiny food reserve for the embryo, just as your own digestive system has to break big food down into nutrients small enough to absorb into your blood before your body can use them.", monster:"Fruit-Seed Oracle", emoji:"&#127813;" },
-{ n:17, section:'C', tier:'Applied', srcTest:'M4', body:"A student wants to test the claim: \"Cactus spines reduce water loss compared to broad leaves.\" Design the fairest way to test this with two potted plants — a cactus and a broad-leafed plant — over one week.",
-  options:["Give the cactus much less water overall than the broad-leafed plant, then compare which one wilts first", "Keep both plants in identical pots, soil, and sunlight, with the same starting water, then measure water loss over the week", "Put the cactus in full sun and the broad-leafed plant in full shade, then compare their water loss", "Measure water loss across two entirely different weeks, one for each plant, so they don't affect each other"], ans:2,
-  why:"A fair test keeps every other variable (pot, soil, sunlight, starting water) identical between the two plants, changing only their real difference — the type of leaf/spine covering — so any difference in water loss can be trusted.",
-  lessonMore:"A cactus's spines really are shrunk-down leaves — less leaf surface area means less water lost through evaporation, which is exactly the real difference this test is trying to isolate. To prove that's what causes any difference in water loss (and not something else), only the leaf/spine type should differ between the two plants — everything else has to be identical, or you can't tell which factor actually caused the result.", monster:"Cactus-Test Wraith", emoji:"&#127797;" },
-{ n:18, section:'C', tier:'Applied', srcTest:'MOCK', body:"Three bar magnets, X, Y and Z, are lined up in a row, touching end to end: X-Y-Z. X and Y ATTRACT each other. Y and Z REPEL each other. Magnet X's LEFT end (the end not touching Y) is a SOUTH (S) pole. What are the poles at BOTH ends of Magnet Z?",
-  options:["Left end N, right end S","Left end S, right end N","Both ends are N poles","Both ends are S poles"], ans:1,
-  why:"Work one join at a time. X's left is S, so X's right (touching Y) is N. X-Y ATTRACT means unlike poles touch, so Y's left (touching X) must be S — making Y's right (touching Z) N. Y-Z REPEL means LIKE poles touch, so Z's left (touching Y) must also be N — making Z's right end S.",
-  lessonMore:"Chains like this are solved one join at a time, working outward from what you're given — figure out X's poles first, then use the X–Y attract rule to pin down Y's poles, then use the Y–Z repel rule to pin down Z's. The underlying rule never changes (same poles repel, different poles attract) — you're just carefully tracking which specific pole is facing which direction at each join, one step at a time, like following a chain link by link.", monster:"Three-Magnet Enigma", emoji:"&#129418;" },
-{ n:19, section:'C', tier:'Applied', srcTest:'MOCK', body:"Ploy wants to find out if the amount of water affects how tall a sunflower grows. She grows Plant A in a sunny spot with 50ml of water per day, and Plant B in a shady spot with 100ml of water per day. After 3 weeks, Plant B is taller. Ploy concludes: 'more water makes sunflowers grow taller.' What is the main problem with Ploy's experiment?",
-  options:["Sunflowers cannot grow indoors at all","Nothing — more water clearly helped","She changed two things at once, not one","She should have measured weight, not height"], ans:3,
-  why:"A fair test can only change ONE variable at a time while keeping everything else the same. Ploy changed BOTH the water amount and the amount of sunlight between the two plants, so the height difference could be caused by either factor (or both) — she can't fairly conclude it was the water alone.",
-  lessonMore:"This is the classic warning sign from fair testing: whenever two or more things change at once between groups being compared, you can no longer tell which change actually caused the result. To fix Ploy's test, only the water amount should differ between the two plants — sunlight, pot, soil, and everything else needs to be kept identical, or the height difference could just as easily be blamed on the extra sunlight as the water.", monster:"Two-Variable Illusionist", emoji:"&#127803;" },
-{ n:20, section:'C', tier:'Applied', srcTest:'MOCK', body:"Nine identical biscuit pieces were tested in three set-ups, each with 30ml of the same digestive juice: Set-up P used large chunks and took 40 minutes to fully break down. Set-up Q used medium pieces and took 25 minutes. Set-up R used tiny crushed crumbs and took 10 minutes. What conclusion can be drawn from this experiment?",
-  options:["Smaller pieces break down faster due to more surface area","Larger pieces simply taste better than smaller ones","The type of digestive juice makes no difference here","Biscuits only break down once crushed into crumbs"], ans:1,
-  why:"Cutting food into smaller pieces increases its total surface area — more of the biscuit's surface is touching the digestive juice at once, so the chemical breakdown happens faster. This is one reason chewing your food well before swallowing helps digestion.",
-  lessonMore:"This is mechanical digestion at work — physically breaking food into smaller pieces doesn't change WHAT the food is, just its size, but that size change matters enormously. It's the same surface-area trick your small intestine uses with its millions of tiny finger-like bumps to soak up nutrients faster — more exposed surface means digestive juices can act on more of the food at once.", monster:"Crumb-Speed Golem", emoji:"&#127850;" }
+{ n:1, section:'A', tier:'Basic', body:"Which THREE parts are found in every cell, whether it's a plant cell or an animal cell?",
+  options:["Cell wall, chloroplasts, and vacuole", "Nucleus, chloroplasts, and cell wall", "Nucleus, cytoplasm, and cell membrane", "Cytoplasm, vacuole, and cell wall"], ans:3,
+  why:"Every cell — plant or animal — has a nucleus, cytoplasm, and cell membrane. Cell wall, chloroplasts, and a large vacuole are plant-only.",
+  lessonMore:"The nucleus is the cell's control centre holding its instructions, the cytoplasm is the jelly-like filling everything sits in, and the cell membrane is the thin, flexible boundary holding it all together — that's the baseline blueprint every single cell shares before you even ask whether it's a plant or an animal cell.",
+  monster:"Triad Nucleus Wraith", emoji:"&#129516;" },
+{ n:2, section:'A', tier:'Basic', body:"Which THREE parts are found ONLY in plant cells, not animal cells?",
+  options:["Cell wall, chloroplasts, and a large permanent vacuole", "Nucleus, cytoplasm, and cell membrane", "Nucleus, chloroplasts, and cell membrane", "Cell membrane, cytoplasm, and a small vacuole"], ans:1,
+  why:"Cell wall, chloroplasts, and a large permanent vacuole are the three parts found only in plant cells.",
+  lessonMore:"Those three plant-only parts aren't random extras — they're exactly what let plants do things animal cells never need to: the wall gives rigid support so a stem can stand upright without a skeleton, chloroplasts let the cell make its own food from sunlight, and the vacuole stores water to keep the whole cell firm.",
+  monster:"Wallshade Chloroplast", emoji:"&#127793;" },
+{ n:3, section:'A', tier:'Basic', body:"An organism's entire body is made up of just ONE single cell. What do we call this kind of organism?",
+  options:["Multicellular", "Non-luminous", "Translucent", "Unicellular"], ans:4,
+  why:"An organism whose whole body is one single cell is called unicellular.",
+  lessonMore:"The real test isn't about how tiny the organism is — it's whether ONE cell has to handle every single job needed to survive (eating, moving, sensing, reproducing) all by itself, with no help from any other cells. Bacteria and amoebas are the classic examples of this one-cell-does-everything body plan.",
+  monster:"Solo Cell Specter", emoji:"&#129440;" },
+{ n:4, section:'A', tier:'Basic', body:"A firefly glowing at night, a few metres from a wall, acts like a tiny point source of light. What kind of shadow edge would it most likely produce on the wall?",
+  options:["A soft, fuzzy edge, with a wide penumbra", "A sharp, crisp edge, with no penumbra", "No shadow at all, since fireflies are too dim", "A shadow that constantly changes shape"], ans:2,
+  why:"A point source like a firefly sends light from just one place, so it produces a sharp, crisp shadow edge with no penumbra.",
+  lessonMore:"A point source only casts light rays from a single spot, so every location behind the object is either fully lit or fully blocked — there's no middle ground where light partly gets through, which is exactly why there's no penumbra fringe at all, just one sharp-edged umbra. A big, close light source like a fluorescent tube would send rays from many spots at once instead, which is what creates that fuzzy penumbra fringe.",
+  monster:"Firefly Point-Source Pixie", emoji:"&#10024;" },
+{ n:5, section:'B', tier:'Intermediate', body:"A cell viewed under a microscope has a thick rigid outer wall and several green chloroplasts inside it. What kind of cell is this?",
+  options:["A plant cell", "An animal cell", "A unicellular bacterium", "A red blood cell"], ans:1,
+  why:"A thick rigid wall plus chloroplasts are the two dead giveaways for a plant cell.",
+  lessonMore:"This is exactly the one key question worth asking about any unlabelled cell: does it have a thick, rigid outer wall AND green chloroplasts inside? If both are there, it's a plant cell — if either is missing, you're looking at an animal cell, since a wall and chloroplasts are never found together anywhere except in plants.",
+  monster:"Boxcell Sentinel", emoji:"&#128274;" },
+{ n:6, section:'B', tier:'Intermediate', body:"A cell captures sunlight and uses it, together with water and carbon dioxide, to make its own food. Which part of the cell is responsible for this?",
+  options:["The nucleus", "The cell membrane", "Chloroplasts", "The large vacuole"], ans:3,
+  why:"Chloroplasts capture sunlight to make food through photosynthesis.",
+  lessonMore:"Chloroplasts hold a green pigment called chlorophyll, the thing that actually captures the sunlight — the chloroplast is just the structure that houses it. That's also why chloroplasts count as one of the plant-only parts: making your own food from sunlight, water, and carbon dioxide is a job animal cells never need to do.",
+  monster:"Chloroplast Djinn", emoji:"&#9728;&#65039;" },
+{ n:7, section:'B', tier:'Intermediate', body:"A white blood cell can change its own shape to surround and engulf invading germs. What is the main advantage of being able to change shape like this?",
+  options:["It lets the cell capture sunlight more efficiently for photosynthesis", "It lets the cell surround germs of different shapes to fight infection", "It gives the cell a rigid, permanent shape for structural support", "It helps the cell store extra water to stay firm"], ans:2,
+  why:"Being able to change shape lets a white blood cell surround germs of many different shapes and sizes — exactly why a cell's shape is built for its specific job.",
+  lessonMore:"This is the same 'shaped for the job' rule that explains a nerve cell's long, thin shape for carrying messages, or a muscle cell's ability to contract — every specialized cell's shape exists to do its one job better, and for a white blood cell hunting germs of unpredictable shapes, a flexible, changeable shape IS the specialization.",
+  monster:"Shapeshift Phagocyte", emoji:"&#128737;&#65039;" },
+{ n:8, section:'B', tier:'Intermediate', body:"A paramecium is a tiny living thing that swims, finds food, and reacts to its surroundings, using structures built entirely within its own one cell. What kind of organism is this?",
+  options:["A multicellular organism", "A plant with specialized cells", "An animal with organ systems", "A unicellular organism"], ans:4,
+  why:"A paramecium's entire body is just one cell handling every life process by itself — that's the definition of a unicellular organism.",
+  lessonMore:"Like bacteria and amoebas, a paramecium gets no help from any other cells — that single cell has to handle finding food, moving around, sensing danger, and reproducing, all packed into just one cell. The size of the organism doesn't matter here; what matters is whether one cell does every job, or many different cells share the workload.",
+  monster:"Paramecium Prowler", emoji:"&#127754;" },
+{ n:9, section:'B', tier:'Intermediate', body:"A plant cell's large central vacuole is full of water, helping the whole cell stay firm and rigid. What would you expect to happen if the vacuole lost most of its water?",
+  options:["The cell would gain a thick outer cell wall for the first time", "The cell would start producing its own chloroplasts", "The cell would become less firm and the plant might wilt", "The cell would turn into an animal cell"], ans:3,
+  why:"Without water in the vacuole, the cell loses its firmness, which is exactly why wilted plants droop.",
+  lessonMore:"The large permanent vacuole is one of the three parts found only in plant cells, and its main job is storing water to keep the cell firm and rigid. That's also why animal cells, which have no large vacuole to lose water from in the first place, don't wilt the way plants do.",
+  monster:"Wilting Vacuole Ghoul", emoji:"&#128167;" },
+{ n:10, section:'B', tier:'Intermediate', body:"Two campers want to make shadow puppets on a tent wall. One camper holds a single tiny keychain flashlight close up. The other camper uses a wide lantern with a broad glowing shade, held the same distance away. Which setup will make a SOFTER, more blurred-edge shadow?",
+  options:["The wide lantern, because it acts like a broad light source", "The tiny keychain flashlight, because point sources always create the softest shadows", "Both setups will make an identical shadow", "Neither setup will make any shadow at all"], ans:1,
+  why:"The wide lantern behaves like a broad source, sending light from many places at once — that's exactly what creates a soft, blurred-edge shadow (a penumbra).",
+  lessonMore:"A broad source sends light rays from many different spots across its width, so just outside the fully-dark umbra, light from SOME parts of the source sneaks past while light from other parts is still blocked — that partly-lit, fuzzy fringe is the penumbra. The wider or closer a light source is compared to the object, the bigger and fuzzier that penumbra fringe becomes, which is exactly why photographers pick big broad lights on purpose for softer, gentler shadows.",
+  monster:"Lantern Penumbra Wisp", emoji:"&#128294;" },
+{ n:11, section:'C', tier:'Applied', body:"A student looks at a cell under a microscope and sees a round, irregular shape with no thick outer line and no green structures inside. What kind of cell is this most likely to be?",
+  options:["A plant cell", "A unicellular bacterium with a cell wall", "A cell that is definitely dead", "An animal cell"], ans:4,
+  why:"No thick outer wall and no chloroplasts, plus a round irregular shape, points to an animal cell.",
+  lessonMore:"Animal cells look round and a bit irregular precisely because they only have a thin, flexible cell membrane holding them together — with no rigid wall forcing them into a boxy shape, there's nothing to keep the edges straight. That flexible boundary is actually useful too: it's part of what lets some animal cells, like white blood cells, change shape to do their job.",
+  monster:"Roundcell Roamer", emoji:"&#128309;" },
+{ n:12, section:'C', tier:'Applied', body:"A gardener notices that a wilted plant's cells have lost most of the water from their vacuoles. Based on this, what's the BEST explanation for why the plant droops instead of standing tall?",
+  options:["The plant's chloroplasts have stopped working completely, so it can no longer capture any sunlight for photosynthesis", "Without water in the vacuoles, the cells lose their firmness, so they can no longer hold the plant upright", "The plant's cell walls have dissolved entirely, leaving every cell with no rigid outer structure at all", "The plant has turned all of its cells into animal cells, which don't have vacuoles at all"], ans:2,
+  why:"Water loss from the vacuoles makes the cells less firm, so they can no longer hold the plant upright.",
+  lessonMore:"This scales up from a single cell to the whole plant: each individual cell relies on its vacuole staying full of water to stay firm, and when thousands of cells across the stem and leaves all lose that firmness at once, the entire plant loses its support and droops — the same water-storage job the vacuole does at the cell level shows up as wilting at the whole-plant level.",
+  monster:"Droopstalk Colossus", emoji:"&#127801;" },
+{ n:13, section:'C', tier:'Applied', body:"A doctor examines a sample and finds a single-celled organism responsible for an infection — the entire organism is just one cell handling every life process by itself. What term correctly describes this organism?",
+  options:["Unicellular", "Multicellular", "A specialized cell only", "A luminous organism"], ans:1,
+  why:"An organism whose entire body is one cell handling every process is unicellular.",
+  lessonMore:"Doctors treating an infection actually need to know this distinction, since a unicellular bacterium and a more complex multicellular parasite are treated very differently — recognizing that the germ is 'just one cell doing every job' is the first step toward figuring out the right treatment.",
+  monster:"Microbe Invader", emoji:"&#129440;&#65039;" },
+{ n:14, section:'C', tier:'Applied', body:"A biology student claims: 'Since a mushroom is not a plant or an animal, it must be unicellular, like bacteria.' Is this claim correct?",
+  options:["Yes — anything that isn't a plant or animal must be unicellular", "Yes, but only mushrooms specifically are unicellular", "No — most fungi, including mushrooms, are actually multicellular, made of many specialized cells", "No, because mushrooms have no cells at all"], ans:3,
+  why:"Most fungi, including mushrooms, are multicellular — not being a plant or animal doesn't automatically mean unicellular.",
+  lessonMore:"This is a common trap: 'not a plant or animal' doesn't automatically mean unicellular — some fungi, like yeast, actually are unicellular, but most fungi, including mushrooms, are multicellular, built from many specialized cells working together just like plants and animals are. The unicellular-vs-multicellular question is really about whether one cell does every job or many cells share the work, not about which kingdom something belongs to.",
+  monster:"Mushroom Myth-Buster", emoji:"&#127812;" },
+{ n:15, section:'C', tier:'Applied', body:"A student compares two cells: Cell A has a rigid rectangular shape, a thick outer line, and small green ovals scattered inside. Cell B is round and irregular, with no thick outer line and no green ovals. Which statement is correct?",
+  options:["Cell A is actually an animal cell, and Cell B is actually the plant cell in this comparison", "Both Cell A and Cell B are plant cells with cell walls and chloroplasts inside", "Both Cell A and Cell B are animal cells with no cell wall at all", "Cell A is a plant cell (cell wall + chloroplasts); Cell B is an animal cell"], ans:4,
+  why:"Cell A's rigid shape, thick outer line, and green chloroplasts mark it as a plant cell; Cell B's round, irregular shape marks it as an animal cell.",
+  lessonMore:"Boxy and rectangular with a thick outer line, chloroplasts, and often a large vacuole always signals a plant cell, while round and irregular with only a thin flexible membrane always signals an animal cell — those visual cues are reliable enough that you can usually identify a cell type from a microscope diagram without any labels at all.",
+  monster:"Twin Cell Judge", emoji:"&#9878;&#65039;" },
+{ n:16, section:'C', tier:'Applied', body:"A nerve cell is long and thin, stretching a long distance through the body. A muscle cell is shaped so it can contract and shorten. What do BOTH of these examples show about specialized cells?",
+  options:["All cells in a multicellular body are actually shaped exactly the same way, with no differences at all", "Different cells are shaped differently because each one is built for its own specific job", "Only plant cells can ever be specialized for a particular job or task", "Specialized cells are only ever found inside unicellular organisms, never in multicellular ones"], ans:2,
+  why:"Both examples show that different cells are shaped differently, each one built for its own specific job.",
+  lessonMore:"This mirrors the same idea from body systems: just as your digestive, respiratory, and circulatory systems each have organs built for their own specific job, a multicellular body has many different cell shapes, each one perfectly built for its own task — a nerve cell's long, thin shape helps messages travel quickly, while a muscle cell's ability to contract is what actually creates movement.",
+  monster:"Nerve-Muscle Duo", emoji:"&#128170;" },
+{ n:17, section:'C', tier:'Applied', body:"A root hair cell in a plant is long and thin, giving it more surface area touching the soil. Based on the pattern you've seen with other specialized cells, what is this shape most likely helping the cell do?",
+  options:["Absorb more water and nutrients from the soil", "Capture more sunlight for photosynthesis", "Carry electrical messages over long distances", "Contract and shorten to create movement"], ans:1,
+  why:"A long, thin shape with more surface area helps a root hair cell absorb more water and nutrients from the soil.",
+  lessonMore:"This is the same surface-area trick used by other specialized cells: a red blood cell is flattened into a disc shape (with no nucleus taking up space) to leave more room for carrying oxygen, and a root hair cell stretches itself long and thin to maximise the surface touching the soil — different shapes, but the same underlying idea of maximising surface area for the cell's specific job.",
+  monster:"Root Hair Absorber", emoji:"&#127793;&#65039;" },
+{ n:18, section:'C', tier:'Applied', body:"A student says: 'A single amoeba cell can only do ONE job, because it's just one cell.' Is this correct?",
+  options:["Yes — a single cell can never do more than one job at any single time at all", "Yes, and that's exactly why amoebas are multicellular", "No — a unicellular organism's one cell must actually handle EVERY job needed to survive, all by itself", "No, because amoebas actually have no cells at all"], ans:3,
+  why:"A unicellular organism's single cell must handle every job needed to survive, not just one.",
+  lessonMore:"It's tempting to think 'one cell' means 'one job,' but it's actually the opposite — because a unicellular organism has no other cells to share the work with, its single cell has to do everything: eating, moving, sensing, and reproducing all at once. That's very different from a multicellular organism, where trillions of cells each specialize in just one job and share the workload.",
+  monster:"Amoeba Overachiever", emoji:"&#127744;" },
+{ n:19, section:'C', tier:'Applied', body:"Using the same 'shaped for the job' pattern from specialized cells, predict: a cell lining the inside of your gut is covered in tiny finger-like bumps to soak up nutrients from digested food. What is this an example of?",
+  options:["A unicellular organism that happens to be living inside the human gut", "A plant cell with a rigid cell wall and several green chloroplasts inside", "A cell with no particular shape or purpose at all inside the body", "A specialized cell shape, built to maximise the surface area for absorbing nutrients"], ans:4,
+  why:"The finger-like bumps maximise surface area, exactly like other specialized cells shaped for their specific job.",
+  lessonMore:"This is the exact same 'more surface area for absorption' trick that a root hair cell uses to soak up water from soil — both cells are covered in tiny finger-like or hair-like extensions specifically because a bumpier, more wrinkled surface has far more area in the same space than a smooth one, and more surface area touching the food or soil means more absorbing can happen at once.",
+  monster:"Villi Golem", emoji:"&#127869;&#65039;" },
+{ n:20, section:'C', tier:'Applied', body:"A scientist examines an organism and finds trillions of different cell types — some long and thin, some disc-shaped, some contracting — all working together to keep it alive. What kind of organism is this, and how do you know?",
+  options:["Unicellular — the huge number of cells proves it must be a single-celled organism", "Multicellular — many different, specialized cells are sharing the jobs, not just one cell doing everything", "Non-luminous — since none of the cells make their own light", "A unicellular organism with extra specialized parts"], ans:2,
+  why:"Many different, specialized cell types sharing the jobs is exactly what makes an organism multicellular.",
+  lessonMore:"The test for multicellular was never about the raw number of cells — it's about whether those cells are all doing different, specialized jobs as a team. Trillions of identical copies of the same cell wouldn't prove much on their own; it's the fact that some are long and thin, some are disc-shaped, and some can contract, all working together, that's the real signature of a multicellular organism.",
+  monster:"Trillion-Cell Titan", emoji:"&#128081;" },
 ];
 /* ================= END unchanged content ================= */
-
-const SRC_LABEL = { M1:'Milestone 1', M2:'Milestone 2', M3:'Milestone 3', M4:'Milestone 4', MOCK:'ASMOPSS Mock Test' };
 
 function shuffle(arr){
   const a = arr.slice();
@@ -483,7 +501,6 @@ function renderQuestion(){
   document.getElementById('battle-card').classList.toggle('boss', isBoss);
   document.getElementById('q-tier').textContent = q.tier;
   document.getElementById('q-tier').className = 'tierlbl ' + q.tier;
-  document.getElementById('q-src').textContent = q.srcTest ? ('from ' + SRC_LABEL[q.srcTest]) : '';
   document.getElementById('monster-emoji').innerHTML = q.emoji;
   document.getElementById('monster-emoji').className = 'monster-emoji';
   document.getElementById('monster-name').textContent = (isBoss ? 'BOSS: ' : '') + q.monster;
@@ -587,7 +604,7 @@ function showEnd(){
   document.getElementById('rank-emoji').textContent = score >= GOLD_BAR ? '🥇' : (pass ? '🥈' : '🥉');
   document.getElementById('rank-lbl').textContent = score >= GOLD_BAR ? 'Gold Explorer!' : (pass ? 'Silver Explorer!' : 'Trial Survived');
   document.getElementById('end-msg').textContent = pass
-    ? `Great job — that's a PASS! Real reasoning questions pulled straight from the Milestone and Mock tests.`
+    ? `Great job — that's a PASS! Same content as your real Unit 14 test.`
     : `Good effort! Worth a rematch once you've reviewed the tips.`;
   document.getElementById('end-score').textContent = `${score}/${TOTAL} (${pct}%)`;
   countUp('end-coins', coins);
@@ -603,7 +620,7 @@ function showEnd(){
 }
 
 async function saveResults(){
-  const filename = `CIT_Apex_GameMode_Results_${window._lastResults.dateTaken}.json`;
+  const filename = `U14_GameMode_Results_${window._lastResults.dateTaken}.json`;
   const json = JSON.stringify(window._lastResults, null, 2);
   const statusEl = document.getElementById('save-status');
 
@@ -624,7 +641,7 @@ async function saveResults(){
   a.href = URL.createObjectURL(blob);
   a.download = filename;
   document.body.appendChild(a); a.click(); a.remove();
-  if (!GITHUB_CONFIG.enabled) statusEl.textContent = `Downloaded ${filename} (GitHub save not set up yet — separate from the official record — this is a compiled cross-unit trial).`;
+  if (!GITHUB_CONFIG.enabled) statusEl.textContent = `Downloaded ${filename} (GitHub save not set up yet — separate from the official Unit 14 record).`;
 }
 </script>
 </body>

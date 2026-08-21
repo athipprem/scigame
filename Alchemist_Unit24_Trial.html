@@ -87,6 +87,9 @@
   @keyframes pop{0%{transform:scale(.6)}60%{transform:scale(1.15)}100%{transform:scale(1)}}
   .why{display:none;text-align:left;margin-top:14px;padding:12px 14px;border-radius:10px;background:var(--chip);border-left:4px solid var(--gold);font-size:.85rem;color:#f0ddb8}
   .why.show{display:block}
+  .lesson-more{display:none;text-align:left;margin-top:10px;padding:12px 14px;border-radius:10px;background:#0e2622;border-left:4px solid var(--steel);font-size:.85rem;color:#bfe8de;line-height:1.55}
+  .lesson-more.show{display:block}
+  .lesson-more b{color:#5fd9c4}
   #next-btn{display:none;margin-top:16px}
 
   /* ---------- END SCREEN ---------- */
@@ -215,6 +218,7 @@
       <div class="opts" id="q-opts"></div>
       <div class="fx" id="fx"></div>
       <div class="why" id="why"></div>
+      <div class="lesson-more" id="lesson-more"></div>
       <button class="btn gold" id="next-btn" onclick="nextQuestion()">Next &#8594;</button>
     </div>
   </div>
@@ -286,66 +290,86 @@ async function pushToGitHub(filename, jsonText){
 const Q = [
 { n:1, section:'A', tier:'Basic', body:"What is the correct name for the property that measures how tightly packed an object's mass is within its volume?",
   options:["Density","Weight","Buoyancy","Volume"], ans:1,
-  why:"Density is how tightly packed an object's mass is within its volume.", monster:"Density Wisp", emoji:"&#9878;&#65039;" },
+  why:"Density is how tightly packed an object's mass is within its volume.", monster:"Density Wisp", emoji:"&#9878;&#65039;",
+  lessonMore:"Density isn't just a label — it comes from an exact formula, Mass ÷ Volume, measured in grams per cubic centimetre (g/cm³), which tells you how many grams of stuff are squeezed into every cm³ of space. Because it's an exact number, scientists can identify a material — gold, aluminium, wood — just by weighing a sample and measuring its size." },
 { n:2, section:'A', tier:'Basic', body:"What is the name for a substance expanding — taking up more space — when it is heated?",
   options:["Evaporation","Thermal expansion","Condensation","Chemical reaction"], ans:2,
-  why:"Thermal expansion is when heat makes a substance's particles spread out and take up more space.", monster:"Heat Expander Imp", emoji:"&#128293;" },
+  why:"Thermal expansion is when heat makes a substance's particles spread out and take up more space.", monster:"Heat Expander Imp", emoji:"&#128293;",
+  lessonMore:"The particles don't get bigger or multiply — heat just makes them move faster and shove each other further apart, so the same amount of matter fills a bigger space. That's why engineers leave small gaps in railway tracks and bridges: on hot days the metal genuinely grows longer, and without a gap it would buckle." },
 { n:3, section:'A', tier:'Basic', body:"In the density formula, mass is divided by which other value?",
   options:["Weight","Temperature","Volume","Density"], ans:3,
-  why:"The density formula is Mass divided by Volume.", monster:"Formula Golem", emoji:"&#128207;" },
+  why:"The density formula is Mass divided by Volume.", monster:"Formula Golem", emoji:"&#128207;",
+  lessonMore:"Order matters: mass always goes on top, volume always goes on the bottom. Swap them by accident — dividing volume by mass instead — and you'll get a completely wrong density, even if you used the correct numbers." },
 { n:4, section:'A', tier:'Basic', body:"What is the name for a current formed when warmer, less dense fluid rises and cooler, denser fluid sinks to take its place?",
   options:["Static current","Induction current","Friction current","Convection current"], ans:4,
-  why:"This rising-and-sinking swap between warm and cool fluid is called a convection current.", monster:"Convection Spirit", emoji:"&#127786;&#65039;" },
+  why:"This rising-and-sinking swap between warm and cool fluid is called a convection current.", monster:"Convection Spirit", emoji:"&#127786;&#65039;",
+  lessonMore:"Picture a pot of water heating on a stove: the water at the bottom warms first, becomes less dense, and rises, while cooler denser water sinks to replace it — that constant swap is the convection current. It's the same swapping motion that carries warm air through a room and moves heat around in weather systems." },
 
 { n:5, section:'B', tier:'Intermediate', body:"A small toy car has a mass of 60g and takes up 20cm³ of space. Work out its density.",
   options:["3 g/cm³","80 g/cm³","1200 g/cm³","0.3 g/cm³"], ans:1,
-  why:"Density = Mass ÷ Volume = 60 ÷ 20 = 3 g/cm³.", monster:"Toy Car Golem", emoji:"&#128663;" },
+  why:"Density = Mass ÷ Volume = 60 ÷ 20 = 3 g/cm³.", monster:"Toy Car Golem", emoji:"&#128663;",
+  lessonMore:"The reliable order for any density problem: write the formula, plug in the mass and volume, divide, then attach the units g/cm³. Doing the steps in that exact sequence — formula, numbers, divide, label — is what stops mix-ups on trickier problems." },
 { n:6, section:'B', tier:'Intermediate', body:"A small crystal weighs 96g and takes up 12cm³ of space. Work out its density.",
   options:["108 g/cm³","8 g/cm³","1152 g/cm³","84 g/cm³"], ans:2,
-  why:"Density = Mass ÷ Volume = 96 ÷ 12 = 8 g/cm³.", monster:"Crystal Calculator", emoji:"&#128142;" },
+  why:"Density = Mass ÷ Volume = 96 ÷ 12 = 8 g/cm³.", monster:"Crystal Calculator", emoji:"&#128142;",
+  lessonMore:"Once you've calculated a density number, it works like a fingerprint you can compare against known values — this is exactly how a jeweller or archaeologist checks whether a shiny sample really is what it claims to be, without cutting into it. Getting comfortable dividing mass by volume quickly is what makes that kind of identification possible." },
 { n:7, section:'B', tier:'Intermediate', body:"A brass ornament weighs 250g and takes up 25cm³ of space. A ceramic ornament weighs 180g and takes up 20cm³ of space. Which ornament is denser?",
   options:["The ceramic ornament, because it has the smaller mass of the two","The brass ornament, because it has the bigger mass of the two","The brass ornament, because its calculated density number turns out higher","Both are equally dense, since only one property differs between them"], ans:3,
-  why:"The brass ornament's density is 250÷25=10 g/cm³, the ceramic ornament's is 180÷20=9 g/cm³ — the brass ornament has the higher density number.", monster:"Ornament Twin", emoji:"&#127968;" },
+  why:"The brass ornament's density is 250÷25=10 g/cm³, the ceramic ornament's is 180÷20=9 g/cm³ — the brass ornament has the higher density number.", monster:"Ornament Twin", emoji:"&#127968;",
+  lessonMore:"This is exactly the case where the same-size or same-mass shortcuts break down — the two ornaments share neither the same mass nor the same volume, so there's nothing to shortcut. Whenever both properties differ, calculating both densities and comparing the resulting numbers is the only method that always works." },
 { n:8, section:'B', tier:'Intermediate', body:"On a hot summer day, engineers notice railway tracks have grown slightly longer than they were on a cold winter day. What is the BEST explanation?",
   options:["Railway tracks actually shrink slightly when heated, not expand at all","The tracks were measured incorrectly during the cold winter months","The metal absorbed extra mass directly from the sun's heat energy","The metal expanded because heat made its particles spread further apart"], ans:4,
-  why:"Heat makes the metal's particles spread further apart, so the track expands and grows slightly longer.", monster:"Rail Expander", emoji:"&#128649;" },
+  why:"Heat makes the metal's particles spread further apart, so the track expands and grows slightly longer.", monster:"Rail Expander", emoji:"&#128649;",
+  lessonMore:"This same particle-spreading effect happens in solids, liquids, and gases — even solid metal expands, just less dramatically than a liquid or gas would, because heating never adds mass, it only pushes the existing particles further apart. That's also why a sealed container completely full of liquid can crack or blow its lid on a hot day — the expanding liquid has nowhere else to go." },
 { n:9, section:'B', tier:'Intermediate', body:"A fish tank has warmer water near the surface and cooler water near the bottom. Based on what you know about heat and density, why does the warm water stay near the top?",
   options:["Warm water is less dense than cool water, so it rises and stays near the surface","Warm water is actually heavier than cool water, so it always sinks to the bottom","Cool water always evaporates much faster than warm water does in any tank","Temperature actually has no effect at all on how water layers arrange themselves"], ans:1,
-  why:"Warm water is less dense than cool water, so it rises and stays near the surface, just like the float/sink rule from Unit 15.", monster:"Warm Water Sprite", emoji:"&#127777;&#65039;" },
+  why:"Warm water is less dense than cool water, so it rises and stays near the surface, just like the float/sink rule from Unit 15.", monster:"Warm Water Sprite", emoji:"&#127777;&#65039;",
+  lessonMore:"Nothing is added to the warm water to make it rise — its mass stays exactly the same, but heat spreads its particles into a bigger volume, so Mass ÷ Volume gives a smaller density number. Being less dense than the cooler water below is what makes it float upward through it, exactly like a cork floating up through water." },
 { n:10, section:'B', tier:'Intermediate', body:"A solid lump of steel sinks in water, but a large steel cargo ship floats. What is the BEST explanation?",
   options:["Ships are not actually made of solid steel at all, despite how they look from the outside","The ship's hollow shape spreads its mass over a much bigger volume, making its overall density less than water's","Steel itself somehow becomes less dense than water once it is shaped into a ship's hull","Water pushes much harder against hollow shapes than it does against solid ones, for no particular scientific reason"], ans:2,
-  why:"A ship's hollow shape spreads its mass over a much bigger overall volume, so its overall density ends up less than water's, even though solid steel itself is denser than water.", monster:"Steel Hull Golem", emoji:"&#128674;" },
+  why:"A ship's hollow shape spreads its mass over a much bigger overall volume, so its overall density ends up less than water's, even though solid steel itself is denser than water.", monster:"Steel Hull Golem", emoji:"&#128674;",
+  lessonMore:"Steel doesn't secretly become less dense when shaped into a hull — the ship's OVERALL density is what matters, and that's the total mass (steel plus engines plus cargo) divided by the total volume, which includes all that hollow, air-filled space inside. Spreading the same mass over a much bigger total volume drags that overall density number below water's." },
 
 { n:11, section:'C', tier:'Applied', body:"A sample of iron ore weighs 360g and takes up 40cm³ of space. A sample of granite weighs 175g and takes up 25cm³ of space. Which sample is denser?",
   options:["The granite sample, because it has the smaller volume of the two","The iron ore sample, because it has the greater mass of the two","The iron ore sample, because its calculated density number turns out higher","Both samples must have equal density, since only one property differs"], ans:3,
-  why:"The iron ore sample's density is 360÷40=9 g/cm³, the granite sample's is 175÷25=7 g/cm³ — the iron ore sample's calculated density is higher.", monster:"Ore Weigher", emoji:"&#9935;&#65039;" },
+  why:"The iron ore sample's density is 360÷40=9 g/cm³, the granite sample's is 175÷25=7 g/cm³ — the iron ore sample's calculated density is higher.", monster:"Ore Weigher", emoji:"&#9935;&#65039;",
+  lessonMore:"Notice neither sample shares a size or a mass with the other — that's the signal to skip any shortcut entirely and calculate both densities with the formula. Once you have two density numbers, comparing them directly is always valid, no matter how different the two samples look or weigh." },
 { n:12, section:'C', tier:'Applied', body:"A student tests whether the colour of a saucepan lid affects how quickly water boils. She boils water with a black lid, then again with a silver lid, keeping the stove setting, water amount, and pan exactly the same both times. Both times, the water takes almost exactly the same time to boil. What is the BEST conclusion?",
   options:["The experiment failed, since a fair test always has to show a difference between the two trials","The silver lid is secretly a little bit faster at heating, but the tiny difference was just too small to measure","Boiling water experiments like this one can never really be tested fairly at all","This was a fair test, and it shows that lid colour genuinely makes little or no difference to boiling time here"], ans:4,
-  why:"Only the lid colour changed and everything else was kept the same, so this was a fair test — and 'no difference' is itself a real, useful result.", monster:"Lid Color Sentinel", emoji:"&#127859;" },
+  why:"Only the lid colour changed and everything else was kept the same, so this was a fair test — and 'no difference' is itself a real, useful result.", monster:"Lid Color Sentinel", emoji:"&#127859;",
+  lessonMore:"It's tempting to think 'nothing happened, so the test must be broken' — but a fair test that changes only ONE thing and still gets the same result either way has actually answered the question: that one thing genuinely doesn't matter here. Proving there's no difference is still proving something real, not a failed experiment." },
 { n:13, section:'C', tier:'Applied', body:"A jar completely full of water is sealed tightly, then left outside on a very hot day. The water inside heats up. Based on what you know about thermal expansion, what is most likely to happen?",
   options:["The water will expand and press against the jar, possibly cracking it or forcing the lid off","The water will actually shrink slightly, leaving empty space near the top of the jar","The water's total mass will noticeably increase simply as it gets hotter","Nothing at all will happen, since sealed containers are completely unaffected by any temperature change"], ans:1,
-  why:"Heating makes the water expand, and with the jar sealed and already full, that expansion presses against the jar with nowhere else to go.", monster:"Jar Pressure Wraith", emoji:"&#127993;" },
+  why:"Heating makes the water expand, and with the jar sealed and already full, that expansion presses against the jar with nowhere else to go.", monster:"Jar Pressure Wraith", emoji:"&#127993;",
+  lessonMore:"Because the jar was already completely full, there's no empty air pocket to absorb the expanding water — heat doesn't add mass, but it forces the same water to take up more room, and with the lid sealed that extra volume has to push somewhere. It's the same physical squeeze that makes engineers leave expansion gaps in railway tracks and bridges." },
 { n:14, section:'C', tier:'Applied', body:"A radiator is placed near the floor of a room instead of near the ceiling. Based on what you know about warm air and density, why is this the better position for heating the whole room?",
   options:["Radiators placed near the floor always end up using noticeably less household electricity than ones near the ceiling","The warmed air near the floor becomes less dense and rises, carrying heat upward through the room by convection","Warm air is actually denser than cool air, so it needs to start low down in order to sink properly","Position makes no real difference at all to how effectively a room ends up heating up"], ans:2,
-  why:"Warmed air near the floor becomes less dense and rises, spreading heat through the whole room by convection.", monster:"Radiator Spirit", emoji:"&#128293;" },
+  why:"Warmed air near the floor becomes less dense and rises, spreading heat through the whole room by convection.", monster:"Radiator Spirit", emoji:"&#128293;",
+  lessonMore:"Warmed air loses density because heating keeps its mass the same but expands its volume — that drop in density is exactly what drags it upward through the room. It's the same rising motion that carries warm air through weather systems and helps forecasters predict clouds and storms." },
 { n:15, section:'C', tier:'Applied', body:"Two blocks of wood have the exact same volume, but Block C has more mass than Block D. Which method should you use to find out which one is denser?",
   options:["Compare their masses only, since volume can be ignored entirely for density in this case","It is impossible to tell without using additional laboratory weighing equipment","Since both blocks share the same volume, just compare their masses to find which is denser","Calculate both densities using the formula, since the shortcut never applies here"], ans:3,
-  why:"Since both blocks share the same volume, the Unit 15 same-size shortcut applies: the one with more mass is denser.", monster:"Wood Block Twin", emoji:"&#129717;" },
+  why:"Since both blocks share the same volume, the Unit 15 same-size shortcut applies: the one with more mass is denser.", monster:"Wood Block Twin", emoji:"&#129717;",
+  lessonMore:"Check the decision tree first: when two objects share the SAME volume (or the same mass), the shortcut instantly tells you the denser one — no formula needed. Save the full Mass ÷ Volume calculation for cases where BOTH properties are different between the two objects." },
 { n:16, section:'C', tier:'Applied', body:"A student heats a sealed balloon full of air over a candle, without popping it. The mass of air inside stays exactly the same, but the balloon expands. What happens to the density of the air inside, and why?",
   options:["It increases, because heating always adds extra mass to a substance","It stays exactly the same, since mass alone determines density","It becomes impossible to know without also measuring temperature directly","It decreases, because the same mass is now spread across a bigger volume"], ans:4,
-  why:"The mass stays the same but the volume increases, so density = mass ÷ volume goes down.", monster:"Balloon Expander", emoji:"&#127880;" },
+  why:"The mass stays the same but the volume increases, so density = mass ÷ volume goes down.", monster:"Balloon Expander", emoji:"&#127880;",
+  lessonMore:"Nothing new is added to the balloon — its mass is locked in — so the expanding volume is entirely responsible for the lower density. This works the same way for any substance: hot air is less dense than cold air, hot water is less dense than cold water, and even hot metal is very slightly less dense than the same metal cold." },
 { n:17, section:'C', tier:'Applied', body:"A steel ship gets a large hole in its hull and fills with water, but stays just barely afloat because it still has a few sealed air compartments left. If ALL of those air compartments flooded too, what would most likely happen, and why?",
   options:["The ship would sink, because without trapped air its overall density would end up higher than water's","The ship would still float just fine, because steel itself supposedly never sinks in water at all","The ship would actually float even better than before, because water always makes objects feel lighter","It's completely impossible to predict what would happen in this particular situation"], ans:1,
-  why:"Without any trapped air, the ship's overall density (now mostly solid, water-filled steel) rises above water's density, so it sinks.", monster:"Flooding Golem", emoji:"&#127754;" },
+  why:"Without any trapped air, the ship's overall density (now mostly solid, water-filled steel) rises above water's density, so it sinks.", monster:"Flooding Golem", emoji:"&#127754;",
+  lessonMore:"With the air compartments flooded, the ship's total volume is now almost entirely steel and water, with no lightweight air spreading the mass out — so its overall mass ÷ volume climbs back above water's. This is the reverse of what let it float in the first place: air trapped inside spreading the same mass over a bigger volume." },
 { n:18, section:'C', tier:'Applied', body:"A scientist has two beakers of the same oil at different temperatures and wants to know which one will rise if both are poured into the same container together. What should she check first?",
   options:["Whether the two beakers are exactly the same size, since size is what actually determines rising","Whether one beaker's oil is warmer than the other, since warmer oil is less dense and would rise","Whether the oil is currently a solid, a liquid, or a gas, since that is unrelated to rising","It's impossible to know unless she also knows each beaker's exact mass measured in grams"], ans:2,
-  why:"For the same substance at two temperatures, the warmer one is less dense and rises — that's the key thing to check.", monster:"Oil Riser Wisp", emoji:"&#129371;" },
+  why:"For the same substance at two temperatures, the warmer one is less dense and rises — that's the key thing to check.", monster:"Oil Riser Wisp", emoji:"&#129371;",
+  lessonMore:"The rising-through-cooler rule only works when comparing the SAME substance at two temperatures — checking which beaker is warmer is really just spotting which one has been pushed to a lower density by heat. If the two beakers held different substances entirely, temperature alone wouldn't be enough to predict which one rises." },
 { n:19, section:'C', tier:'Applied', body:"A jeweller weighs a gold-coloured ring and finds it has a mass of 38.6g. She submerges it in water and finds it displaces exactly 2cm³ of water — that's its volume. Pure gold has a density of about 19.3 g/cm³. Is this ring likely to be genuine gold?",
   options:["No, since the ring's mass is far too small to be real gold","Yes, but only because the ring looks gold-coloured on the outside","Yes, since 38.6 ÷ 2 = 19.3 g/cm³, which matches gold's known density","No, since density can never be used to identify real metals"], ans:3,
-  why:"Calculating the ring's density (38.6 ÷ 2 = 19.3 g/cm³) matches pure gold's known density, so it is likely genuine.", monster:"Gold Ring Oracle", emoji:"&#128142;" },
+  why:"Calculating the ring's density (38.6 ÷ 2 = 19.3 g/cm³) matches pure gold's known density, so it is likely genuine.", monster:"Gold Ring Oracle", emoji:"&#128142;",
+  lessonMore:"This is exactly why the exact formula, not a shortcut, matters for identification: comparing a calculated density against a known reference density is a real technique archaeologists use to check whether an old coin is genuine gold or a cheaper metal painted to look like it, without ever cutting the object open." },
 { n:20, section:'C', tier:'Applied', body:"A metal ball is heated until it slightly expands, and its mass stays exactly the same. The warm ball is then dropped into a container of cool water. Which TWO effects happen, in order?",
   options:["First the ball's density increases due to the heating process, then it definitely floats in the water no matter what","First the ball gains extra mass simply from being heated, then it definitely sinks in the water no matter what","Neither the ball's density nor whether it floats or sinks is affected by heating in any way at all","First the ball's density drops due to heating, then whether it floats or sinks depends on comparing that new density with water's"], ans:4,
-  why:"Heating first lowers the ball's density (same mass, bigger volume); whether it then floats or sinks still depends on comparing its new density to water's.", monster:"The Thermal Alchemist", emoji:"&#128293;" },
+  why:"Heating first lowers the ball's density (same mass, bigger volume); whether it then floats or sinks still depends on comparing its new density to water's.", monster:"The Thermal Alchemist", emoji:"&#128293;",
+  lessonMore:"This question chains together both big ideas: heating changes volume (not mass), which changes the calculated density number, and THEN that new density number is what decides floating or sinking by comparison with water's density — not the heating itself. Skipping straight from 'it got heated' to 'it floats' misses the actual comparison step in the middle." },
 ];
 /* ================= END unchanged content ================= */
 
@@ -466,6 +490,7 @@ function renderQuestion(){
   document.getElementById('q-body').textContent = q.body;
   document.getElementById('fx').className = 'fx';
   document.getElementById('why').className = 'why';
+  document.getElementById('lesson-more').className = 'lesson-more';
   document.getElementById('next-btn').style.display = 'none';
   document.getElementById('q-opts').innerHTML = q.options.map((opt,i) =>
     `<button class="opt" onclick="answer(${i+1})">${String.fromCharCode(65+i)}. ${opt}</button>`).join('');
@@ -537,6 +562,10 @@ function answer(idx){
   document.getElementById(`node-${pos}`).classList.remove('current');
   document.getElementById('why').innerHTML = `💡 <b>Why:</b> ${q.why}`;
   document.getElementById('why').classList.add('show');
+  if (q.lessonMore){
+    document.getElementById('lesson-more').innerHTML = `🧠⚡ <b>Brain Boost:</b> ${q.lessonMore}`;
+    document.getElementById('lesson-more').classList.add('show');
+  }
   document.getElementById('next-btn').style.display = 'inline-block';
   document.getElementById('next-btn').textContent = (pos === deck.length-1) ? 'See Results →' : 'Next →';
   updateStats();

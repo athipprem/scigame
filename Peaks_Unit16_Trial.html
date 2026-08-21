@@ -4,18 +4,18 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
-<title>Puzzle Citadel — The Apex Trials</title>
+<title>Physics Quest — The Echo Trials (Unit 16)</title>
 <style>
   :root{
     --gold:#FFD700; --gold-d:#DAA520; --amber:#FFA500;
     --steel:#00695c; --steel-d:#004d40; --steel-l:#e0f2f1;
-    --bg:#1a1030; --bg2:#3a1f42; --panel:#241533; --chip:#2e1a3f; --line:#4a2c52;
-    --ink:#fff3e6; --grey:#c9b3d9;
+    --bg:#0d1420; --bg2:#1c2c40; --panel:#141f30; --chip:#1b2a3f; --line:#2e4560;
+    --ink:#e8f1fb; --grey:#9db3c9;
     --ok:#43e97b; --bad:#ff5c6c;
     --a:#00e5c9; --b:#5fa8ff; --c:#c77dff;
-    /* --world = this trial's identity color, matching Puzzle Citadel on the World Map.
-       Applied Reasoning / Puzzle Citadel = coral-orange, shared across citadel trials. */
-    --world:#ff8a65;
+    /* --world = this trial's identity color, matching Force Peaks on the World Map.
+       Physics / Force Peaks = storm blue, shared across all Force Peaks trials. */
+    --world:#5fa8ff;
   }
   *{box-sizing:border-box}
   body{margin:0;font-family:'Segoe UI',Arial,sans-serif;background:radial-gradient(circle at 50% 0%,var(--bg2),var(--bg));color:var(--ink);min-height:100vh;padding-bottom:30px}
@@ -68,7 +68,6 @@
   .tierlbl.Basic{background:#00e5c933;color:var(--a)}
   .tierlbl.Intermediate{background:#5fa8ff33;color:var(--b)}
   .tierlbl.Applied{background:#c77dff33;color:var(--c)}
-  .srclbl{display:inline-block;font-size:.62rem;font-weight:700;letter-spacing:.3px;padding:2px 9px;border-radius:20px;margin-bottom:8px;margin-left:6px;background:var(--chip);border:1px solid var(--line);color:var(--grey)}
   .monster-emoji{font-size:3.4rem;margin:4px 0 2px;display:inline-block;transition:transform .25s}
   .monster-emoji.hit{animation:shake .35s}
   @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-10px) rotate(-6deg)}75%{transform:translateX(10px) rotate(6deg)}}
@@ -117,8 +116,8 @@
     background-repeat:repeat;background-size:280px 280px;animation:drift 70s linear infinite}
   @keyframes drift{from{background-position:0 0}to{background-position:-560px 280px}}
   #theme-glow{position:fixed;inset:0;z-index:-1;opacity:.55;transition:background 1s ease;pointer-events:none}
-  #theme-glow.world{background:radial-gradient(600px 400px at 50% 20%,#ff8a6530,transparent 70%)}
-  #theme-glow.boss{background:radial-gradient(680px 460px at 50% 20%,#ff8a6525,transparent 55%),radial-gradient(650px 450px at 50% 20%,#ffd70045,transparent 70%)}
+  #theme-glow.world{background:radial-gradient(600px 400px at 50% 20%,#00e5c930,transparent 70%)}
+  #theme-glow.boss{background:radial-gradient(680px 460px at 50% 20%,#00e5c925,transparent 55%),radial-gradient(650px 450px at 50% 20%,#ffd70045,transparent 70%)}
   #confetti-layer{position:fixed;inset:0;pointer-events:none;z-index:50;overflow:hidden}
   .confetti-piece{position:absolute;top:-20px;border-radius:2px;animation:confettiFall linear forwards}
   @keyframes confettiFall{to{transform:translateY(110vh) rotate(540deg);opacity:.2}}
@@ -177,28 +176,28 @@
 
   <!-- INTRO -->
   <div class="screen active" id="screen-intro">
-    <div class="world-badge">&#129513; Puzzle Citadel <span>&middot; Applied Reasoning world</span></div>
-    <div class="intro-emoji">&#128081;&#129513;</div>
-    <h1>The Apex Trials</h1>
-    <div class="sub">The Citadel's summit — ASMOPSS's hardest room, saved for very last.</div>
+    <div class="world-badge">&#9889;&#65039; Force Peaks <span>&middot; Physics world</span></div>
+    <div class="intro-emoji">&#128266;&#127925;</div>
+    <h1>The Echo Trials</h1>
+    <div class="sub">Vibrations, pitch, volume and how sound travels — tune your ear through the mountain air.</div>
     <div class="zone-card">
-      <div><b>Zone:</b> Compiled Trial &mdash; real Section B &amp; C reasoning questions pulled from the 4 Milestone tests + the ASMOPSS 2026 Mock Test</div>
+      <div><b>Zone:</b> Unit 16 &mdash; Sound</div>
       <ul>
         <li>20 monsters guard this trial &mdash; defeat each by picking the right answer</li>
-        <li>Every question is real, verbatim content from a real Milestone or Mock test — each tagged with its real source test</li>
+        <li>Same questions &amp; explanations as your real Unit 16 test &mdash; just shuffled, so it plays differently every time</li>
         <li>Wrong pick? You'll see why, then keep going &mdash; no game over, this is about learning</li>
         <li>Build a streak for bonus coins &middot; the final monster is a BOSS fight</li>
       </ul>
     </div>
     <button class="btn gold" onclick="startGame()">&#9876;&#65039; Begin the Trial</button><br>
-    <a class="w-map-link pill" href="Citadel_Map.html">&#8592; Back to Puzzle Citadel</a>
+    <a class="w-map-link pill" href="Peaks_Map.html">&#8592; Back to Force Peaks</a>
   </div>
 
   <!-- GAME -->
   <div class="screen" id="screen-game">
     <div id="world-topbar">
-      <div class="world-badge small">&#129513; Puzzle Citadel</div>
-      <a class="w-map-link" href="Citadel_Map.html">&#8592; Back</a>
+      <div class="world-badge small">&#9889;&#65039; Force Peaks</div>
+      <a class="w-map-link" href="Peaks_Map.html">&#8592; Back</a>
     </div>
     <div id="path"></div>
     <div id="stats">
@@ -209,7 +208,6 @@
     <div class="battle" id="battle-card">
       <div class="boss-tag" id="boss-tag" style="display:none">&#128128; BOSS</div>
       <span class="tierlbl" id="q-tier"></span>
-      <span class="srclbl" id="q-src"></span>
       <div class="monster-wrap">
         <div class="monster-aura world" id="monster-aura"></div>
         <div class="monster-emoji" id="monster-emoji">&#128126;</div>
@@ -238,7 +236,7 @@
     <div class="sec-breakdown" id="sec-breakdown"></div>
     <button class="btn gold" onclick="location.reload()">&#128260; Play Again (reshuffled)</button><br>
     <button class="btn ghost" onclick="saveResults()">&#128190; Save Results (practice copy)</button><br>
-    <a class="btn ghost" href="Citadel_Map.html">&#8592; Back to Puzzle Citadel</a>
+    <a class="btn ghost" href="Peaks_Map.html">&#8592; Back to Force Peaks</a>
     <div id="save-status"></div>
     <div class="note">Copyright &copy; 2026 Luikishi. All rights reserved. Have fun !</div>
   </div>
@@ -246,9 +244,9 @@
 </div>
 
 <script>
-/* ================= SAME CONTENT AS Unit_12_Test — unchanged questions/answers/explanations ================= */
-const UNIT_NUM = 0;
-const UNIT_TITLE = "Applied Reasoning: Apex Trials (Compiled)";
+/* ================= SAME CONTENT AS Unit_16_Test — unchanged questions/answers/explanations ================= */
+const UNIT_NUM = 16;
+const UNIT_TITLE = "Physics: Sound";
 const PASS_BAR = 16;
 
 /* ================= GITHUB SAVE (optional) =================
@@ -290,88 +288,110 @@ async function pushToGitHub(filename, jsonText){
 }
 
 const Q = [
-{ n:1, section:'B', tier:'Intermediate', srcTest:'M1', body:"Two metal rods — one bare, one coated in plastic — both have one end placed in a cup of hot water. Which end will feel warm FIRST at the far end?",
-  options:["Neither end will ever feel warm", "The plastic-coated rod, since plastic holds heat well", "The bare metal rod, since metals conduct heat well", "Both will warm up at exactly the same rate"], ans:3,
-  why:"Metals like copper are good heat conductors; plastic is an insulator and conducts heat poorly.",
-  lessonMore:"Conduction works by passing heat directly through a touching solid, particle to particle — that's exactly why a metal spoon left in hot soup gets warm at the handle too, even though the handle never touched the soup. This same idea is why saucepan handles are made of wood or plastic instead of metal: since those materials are poor conductors, they stop the heat reaching your hand as fast.", monster:"Heat-Race Golem", emoji:"&#128293;" },
-{ n:2, section:'B', tier:'Intermediate', srcTest:'M2', body:"A tide chart shows the water was at its highest point at noon today. Sailors want to know when the water level will next be at its LOWEST point. About how many hours should they expect to wait?",
-  options:["About 3 hours","About 12 hours","About 6 hours","About 24 hours"], ans:3,
-  why:"Low tide falls roughly halfway between two high tides, about 6 hours after a high tide.",
-  lessonMore:"Tides happen because the Moon's gravity pulls ocean water into a bulge — one bulge forms on the side of Earth facing the Moon, and a second bulge forms on the exact opposite side too, since that far side is pulled slightly less and gets left behind. As Earth spins once a day, every coastline passes through both bulges, giving most places roughly two high tides and two low tides each day, spaced about six hours apart.", monster:"Tide-Clock Sentinel", emoji:"&#127754;" },
-{ n:3, section:'B', tier:'Intermediate', srcTest:'M3', body:"At the school fair, three friends drag a wagon: two drag it EAST with 14N and 9N, one drags it WEST with 8N. What is the net force on the wagon, and which way does it move?",
-  options:["31N, east (all added)", "15N, due east", "8N, west", "23N, east"], ans:2,
-  why:"Group by direction first: EAST = 14+9 = 23N. WEST = 8N. Then subtract: 23 − 8 = 15N, moving east.",
-  lessonMore:"With three or more forces, the trick is to treat it like a tug-of-war: sort every force into two piles by direction, add up each pile separately, then compare the two totals — the bigger pile always wins and decides which way things move. This exact method still works no matter how many forces get added, as long as you sort them into piles first instead of trying to combine them all at once in your head.", monster:"Tug-Line Trickster", emoji:"&#128127;" },
-{ n:4, section:'B', tier:'Intermediate', srcTest:'M4', body:"A golf ball, a flat, spread-out sheet of paper, and a tightly crumpled ball of that SAME sheet of paper are dropped together from the same height. Rank them from FIRST to LAST to land.",
-  options:["Flat sheet, then crumpled paper, then golf ball", "Golf ball, then crumpled paper, then flat sheet of paper", "The paper always beats the golf ball, whatever its shape", "Crumpled paper, then golf ball, then flat sheet"], ans:2,
-  why:"The dense, compact golf ball catches the least air resistance and lands first; the crumpled paper is compact too, just lighter, so it lands second; the flat, spread-out sheet catches the most air resistance and lands last.",
-  lessonMore:"It isn't really about 'heavy vs light' — the real factor is how much surface area an object presents to the air compared to its weight. The same sheet of paper, flat versus scrunched into a tight ball, falls at very different speeds even though its mass never changes at all — scrunching it shrinks its surface area a lot, so air resistance grabs onto it much less.", monster:"Fall-Order Sphinx", emoji:"&#127894;" },
-{ n:5, section:'B', tier:'Intermediate', srcTest:'MOCK', body:"Four balls, all with the same volume (100cm³), have different masses: Ball P = 70g, Ball Q = 130g, Ball R = 95g, Ball S = 110g. Water has a density of 1g/cm³ (so 100cm³ of water has a mass of 100g). Which balls will FLOAT in water?",
-  options:["Only Ball P will float","Ball P and Ball R will float","Ball Q and Ball S will float","All four balls will float"], ans:2,
-  why:"An object floats if its density is LESS than water's (mass under 100g for this 100cm&sup3; volume). Ball P (70g) and Ball R (95g) are both under 100g, so they float. Ball Q (130g) and Ball S (110g) are both over 100g, so they sink.",
-  lessonMore:"This kind of question is really a mass-ranking trick in disguise — since all four balls share the same volume, comparing their density is exactly the same as comparing their masses directly, no extra maths needed. Floating and sinking is always a comparison to the specific liquid too: the exact same ball could sink in water but float in a denser liquid, or float in water but sink in a liquid that's less dense.", monster:"Float-or-Sink Sphinx", emoji:"&#9875;&#65039;" },
-{ n:6, section:'C', tier:'Applied', srcTest:'M1', body:"Two identical rocks are compared: one stays on Earth, the other is carried to the Moon. Which statement is TRUE about them afterward?",
-  options:["Mass stays the same in both, but the Moon rock weighs less since gravity there is weaker", "The Moon rock's mass actually shrinks once it leaves Earth's atmosphere and reaches the Moon", "Weight stays exactly identical everywhere, since gravity never changes from place to place", "The Earth rock slowly gains extra mass over time simply by sitting still on the ground"], ans:1,
-  why:"Mass (amount of matter) doesn't change with location, but weight depends on gravity's strength, which is weaker on the Moon.",
-  lessonMore:"Weight depends on how strong the local gravity is pulling on an object's mass — since the Moon's gravity is weaker than Earth's, the exact same rock weighs less there, even though not a single bit of matter has been added or removed. That's different from the surprising fact that on the SAME planet, heavy and light objects fall at the same rate — that's about gravity's effect on falling speed, not about how heavy something feels when you pick it up.", monster:"Rock-and-Moon Oracle", emoji:"&#127765;" },
-{ n:7, section:'C', tier:'Applied', srcTest:'M1', body:"A baked cake cannot be turned back into its original flour, eggs, and sugar, but melted ice can easily be turned back into ice by freezing it again. What BEST explains this difference?",
-  options:["Cakes are baked at a much lower temperature than ice requires to freeze solid", "Baking causes a chemical reaction forming new substances that simple steps can't undo", "Ice is a far rarer and more valuable substance than basic cake ingredients", "There is truly no real difference between these two kinds of processes at all"], ans:2,
-  why:"Baking is a chemical reaction that creates genuinely new substances; melting/freezing is a physical change that's easily reversed.",
-  lessonMore:"The quick checklist is simple: can you get the original substance back using an easy physical step like freezing, evaporating, or reshaping? Melted butter passes that test (cool it and it turns solid again), but baked cake and toasted bread don't — cooking is a chemical reaction that creates genuinely new substances, and no amount of cooling ever turns toast back into plain bread.", monster:"Reverse-or-Not Wraith", emoji:"&#127856;" },
-{ n:8, section:'B', tier:'Intermediate', srcTest:'M1', body:"You give a toy car one firm push on a flat wooden floor, then let go completely. It rolls a short distance before coming to rest on its own. Which force brought it to rest?",
-  options:["Gravity pulling it sideways along the floor","Magnetism from metal hidden in the floorboards","The car simply running out of its own energy supply","Friction between the car's wheels and the floor"], ans:4,
-  why:"Friction between the wheels and floor is a contact force that opposes and slows motion after the push ends.", lessonMore:"The rougher a surface is, the more friction it creates, and more friction means a moving object slows and stops sooner — smooth tile lets a car roll much farther than rough gravel does. That's the exact logic behind the classic fair-test setup for this: release the SAME car from the SAME point on smooth tile, then carpet, then rough gravel, so the only thing that changed was the surface — meaning any difference in how far it rolled before stopping can be fairly blamed on that surface's friction.", monster:"Rolling-Halt Wraith", emoji:"&#128663;" },
-{ n:9, section:'C', tier:'Applied', srcTest:'M2', body:"A child on a playground swing is pulled back and held high in the air, completely still, right before being let go. A friend claims: 'At this highest, stillest point, the swing has mostly kinetic energy, since it's about to start moving again.' What is the BEST correction?",
-  options:["The claim is wrong - at the highest, stillest point, the energy is mostly potential, not kinetic","The claim is correct, since the swing was still moving through the air just one moment before this point","The claim is wrong, but only because playground swings don't actually store or use any energy whatsoever","Kinetic and potential energy are actually just two different names for the exact same underlying quantity"], ans:1,
-  why:"At the highest, momentarily-still point of a swing, the energy is mostly potential (due to height) - kinetic energy is highest at the bottom, where it moves fastest.",
-  lessonMore:"As something falls, its stored potential energy doesn't vanish — it transforms into kinetic energy, so height lost becomes exactly speed gained. A roller coaster cart works the same way: it has its highest potential energy at the top of the tallest hill where it's barely moving, and its highest kinetic energy at the bottom of that same hill where it's moving fastest — the total amount of energy stays the same the whole time, only its form changes.", monster:"Swing-Peak Illusionist", emoji:"&#127934;" },
-{ n:10, section:'C', tier:'Applied', srcTest:'M2', body:"A beachgoer insists: 'A high tide is always followed immediately by another high tide - a low tide never fits in between the two.' What is the BEST correction?",
-  options:["The claim is correct, since tides always repeat the exact same type over and over in a row","The claim is wrong, but only because tide timing is actually completely random and impossible to predict","The claim is wrong - a low tide typically comes next, roughly halfway between the two high tides","The claim is correct, but this pattern only holds true specifically during a full moon"], ans:3,
-  why:"Tides alternate - a low tide typically falls roughly halfway (about 6 hours) between two high tides, not another high tide right away.",
-  lessonMore:"Tides alternate because of how the Moon's gravity creates TWO bulges of ocean water at once — one on the side of Earth facing the Moon, and a second one on the exact opposite side, since that far side gets pulled slightly less and 'left behind.' As Earth spins once a day, every coastline rotates through both bulges and both gaps between them, giving roughly two high tides and two low tides each day.", monster:"Tide-Gap Trickster", emoji:"&#127754;" },
-{ n:11, section:'C', tier:'Applied', srcTest:'M2', body:"A student assumes: 'Since rubber is stretchy and bendy like some plastics, it must be a man-made material.' What is the BEST correction?",
-  options:["The claim is correct, since every stretchy and bendy material is always man-made, without exception","The claim is wrong, but only because rubber is actually a type of mined rock or mineral","The claim is correct, but this is only true specifically for black-coloured rubber products","The claim is wrong - rubber actually comes from the sap of rubber trees, making it a plant material"], ans:4,
-  why:"Rubber comes from the sap of rubber trees, making it a plant material, not a man-made one, despite feeling similar to some plastics.",
-  lessonMore:"Don't judge a material's origin by how it looks or feels — always ask what it actually came from. Rubber trips people up because it feels synthetic like plastic, but a simple checklist settles it fast: did a living plant produce this directly (sap, fibres, wood)? Rubber gets a 'yes' immediately from the tree's sap, so it's a plant material before you'd even need to consider whether it came from an animal or a factory.", monster:"Rubber-Origin Wraith", emoji:"&#127890;" },
-{ n:12, section:'C', tier:'Applied', srcTest:'M3', body:"A student claims: 'A block of solid steel will always sink, no matter its shape, since steel is denser than water.' What is the BEST correction?",
-  options:["The claim is correct — no steel object can ever float, regardless of shape", "Steel actually floats naturally, and the claim has it backwards", "A hollow steel shape, like a ship's hull, can float by displacing enough water", "Density has nothing to do with whether an object floats or sinks"], ans:3,
-  why:"A hollow shape displaces much more water than a solid block of the same mass, letting an object made of denser material still float.",
-  lessonMore:"Steel really is denser than water, so a solid lump of it sinks instantly — the trick is that a ship isn't solid steel. Its hollow hull traps a huge volume of air, spreading the ship's total mass out over a much bigger overall volume, so the ship's OVERALL density (steel plus all that trapped air combined) ends up less than water's, even though the raw material it's built from is denser on its own.", monster:"Steel-Sink Phantom", emoji:"&#9875;&#65039;" },
-{ n:13, section:'C', tier:'Applied', srcTest:'M3', body:"A student says: 'The geocentric and heliocentric models are just two equally good ways of describing the solar system — neither one is more correct.' What is the BEST correction?",
-  options:["The heliocentric model is correct — Venus phases prove it orbits the Sun", "Both models are equally correct and interchangeable", "The geocentric model is actually the correct one, not the heliocentric model", "Neither model has ever been tested against real evidence"], ans:1,
-  why:"Venus showing a full range of phases (not just crescents) is only possible if it orbits the Sun — real evidence that settled the debate in favour of the heliocentric model.",
-  lessonMore:"For thousands of years, believing Earth stood still was actually a reasonable, evidence-based conclusion — the ground under your feet feels perfectly still, while the Sun and stars appear to move across the sky. Without a telescope, both models explained those everyday observations equally well, which is exactly why nobody could prove which one was correct until new evidence — from telescopes — finally settled the debate in favour of the Sun-centred model that Copernicus had proposed.", monster:"Two-Model Sphinx", emoji:"&#127768;" },
-{ n:14, section:'B', tier:'Intermediate', srcTest:'M3', body:"A radiator heats the air in a room. The air just above it warms up, becomes less dense, and rises toward the ceiling, while cooler air near the floor sinks to replace it. What is this process called?",
-  options:["Convection","Evaporation","Condensation","Dissolving"], ans:1,
-  why:"Convection is warm, less-dense fluid rising while cooler, denser fluid sinks, creating a circulating current.", lessonMore:"Convection is one of three ways heat moves — alongside conduction (heat passing through a touching solid, like a metal spoon's handle in hot soup) and radiation (invisible rays crossing empty space, like sunlight reaching Earth) — and the giveaway for convection specifically is a current: warm, less-dense fluid rising while cooler, denser fluid sinks in to replace it, over and over, until everything reaches the same temperature.", monster:"Rising-Current Phantom", emoji:"&#127744;" },
-{ n:15, section:'C', tier:'Applied', srcTest:'M4', body:"For a science fair display, a student has a tub of small plastic beads, table salt, and water all mixed together. They evaporate the whole tub FIRST, without filtering out the beads beforehand. What problem does this create?",
-  options:["No trouble at all — the order of evaporating and filtering never actually changes the final result", "Evaporation only removes the liquid — it does nothing to solid, insoluble beads, which stay stuck in the dried salt", "The heat from evaporating actually breaks the plastic beads down into nothing, so they vanish completely", "Only the water and the beads evaporate together, while the salt is somehow left floating on top"], ans:2,
-  why:"Evaporation only removes the liquid solvent — it does nothing to insoluble solid pieces like plastic beads, so skipping filtering first leaves the beads stuck in with the dried salt.",
-  lessonMore:"Evaporation only works on the liquid solvent — it turns to vapour and escapes into the air, but insoluble solid pieces like beads never turn to gas no matter how much you heat them. That's why order matters: filtering has to come FIRST to trap and remove any insoluble solid, and only THEN should you evaporate the remaining liquid to recover a dissolved solute like salt.", monster:"Bead-Tub Trickster", emoji:"&#128167;" },
-{ n:16, section:'C', tier:'Applied', srcTest:'M4', body:"A tomato plant is classified as a flowering plant, and its ripe tomatoes contain seeds inside juicy flesh. Explain the connection between the flower's job and the tomato fruit — and why a seed's stored food inside it matters for a NEW seedling, using what you know about digestion too.",
-  options:["The flower and the fruit are actually completely unrelated structures with absolutely no real connection to each other at all, not even indirectly", "Tomatoes never actually grow from real flowers at all, and their seeds contain no stored food of any kind whatsoever, ever", "The tomato's seed actually fully digests the fruit around it before germinating, quite similar to how a human stomach digests food", "The flower's ovary becomes the tomato fruit around the seeds; the seed's stored food feeds the tiny embryo until it can grow leaves and make its own food"], ans:4,
-  why:"The ovary develops into the fruit around the seeds after fertilization; the seed's stored food nourishes the new embryo the same way digested nutrients nourish a growing body, until the seedling can photosynthesize on its own.",
-  lessonMore:"A handy habit: whenever you look inside a fruit, mentally split it into 'the seeds' (these were the ovules) and 'everything else around them' (this was the ovary wall that swelled up) — that split works on almost any fruit, from an apple's core to a tomato's pulp. The seed's stored food acts like a tiny food reserve for the embryo, just as your own digestive system has to break big food down into nutrients small enough to absorb into your blood before your body can use them.", monster:"Fruit-Seed Oracle", emoji:"&#127813;" },
-{ n:17, section:'C', tier:'Applied', srcTest:'M4', body:"A student wants to test the claim: \"Cactus spines reduce water loss compared to broad leaves.\" Design the fairest way to test this with two potted plants — a cactus and a broad-leafed plant — over one week.",
-  options:["Give the cactus much less water overall than the broad-leafed plant, then compare which one wilts first", "Keep both plants in identical pots, soil, and sunlight, with the same starting water, then measure water loss over the week", "Put the cactus in full sun and the broad-leafed plant in full shade, then compare their water loss", "Measure water loss across two entirely different weeks, one for each plant, so they don't affect each other"], ans:2,
-  why:"A fair test keeps every other variable (pot, soil, sunlight, starting water) identical between the two plants, changing only their real difference — the type of leaf/spine covering — so any difference in water loss can be trusted.",
-  lessonMore:"A cactus's spines really are shrunk-down leaves — less leaf surface area means less water lost through evaporation, which is exactly the real difference this test is trying to isolate. To prove that's what causes any difference in water loss (and not something else), only the leaf/spine type should differ between the two plants — everything else has to be identical, or you can't tell which factor actually caused the result.", monster:"Cactus-Test Wraith", emoji:"&#127797;" },
-{ n:18, section:'C', tier:'Applied', srcTest:'MOCK', body:"Three bar magnets, X, Y and Z, are lined up in a row, touching end to end: X-Y-Z. X and Y ATTRACT each other. Y and Z REPEL each other. Magnet X's LEFT end (the end not touching Y) is a SOUTH (S) pole. What are the poles at BOTH ends of Magnet Z?",
-  options:["Left end N, right end S","Left end S, right end N","Both ends are N poles","Both ends are S poles"], ans:1,
-  why:"Work one join at a time. X's left is S, so X's right (touching Y) is N. X-Y ATTRACT means unlike poles touch, so Y's left (touching X) must be S — making Y's right (touching Z) N. Y-Z REPEL means LIKE poles touch, so Z's left (touching Y) must also be N — making Z's right end S.",
-  lessonMore:"Chains like this are solved one join at a time, working outward from what you're given — figure out X's poles first, then use the X–Y attract rule to pin down Y's poles, then use the Y–Z repel rule to pin down Z's. The underlying rule never changes (same poles repel, different poles attract) — you're just carefully tracking which specific pole is facing which direction at each join, one step at a time, like following a chain link by link.", monster:"Three-Magnet Enigma", emoji:"&#129418;" },
-{ n:19, section:'C', tier:'Applied', srcTest:'MOCK', body:"Ploy wants to find out if the amount of water affects how tall a sunflower grows. She grows Plant A in a sunny spot with 50ml of water per day, and Plant B in a shady spot with 100ml of water per day. After 3 weeks, Plant B is taller. Ploy concludes: 'more water makes sunflowers grow taller.' What is the main problem with Ploy's experiment?",
-  options:["Sunflowers cannot grow indoors at all","Nothing — more water clearly helped","She changed two things at once, not one","She should have measured weight, not height"], ans:3,
-  why:"A fair test can only change ONE variable at a time while keeping everything else the same. Ploy changed BOTH the water amount and the amount of sunlight between the two plants, so the height difference could be caused by either factor (or both) — she can't fairly conclude it was the water alone.",
-  lessonMore:"This is the classic warning sign from fair testing: whenever two or more things change at once between groups being compared, you can no longer tell which change actually caused the result. To fix Ploy's test, only the water amount should differ between the two plants — sunlight, pot, soil, and everything else needs to be kept identical, or the height difference could just as easily be blamed on the extra sunlight as the water.", monster:"Two-Variable Illusionist", emoji:"&#127803;" },
-{ n:20, section:'C', tier:'Applied', srcTest:'MOCK', body:"Nine identical biscuit pieces were tested in three set-ups, each with 30ml of the same digestive juice: Set-up P used large chunks and took 40 minutes to fully break down. Set-up Q used medium pieces and took 25 minutes. Set-up R used tiny crushed crumbs and took 10 minutes. What conclusion can be drawn from this experiment?",
-  options:["Smaller pieces break down faster due to more surface area","Larger pieces simply taste better than smaller ones","The type of digestive juice makes no difference here","Biscuits only break down once crushed into crumbs"], ans:1,
-  why:"Cutting food into smaller pieces increases its total surface area — more of the biscuit's surface is touching the digestive juice at once, so the chemical breakdown happens faster. This is one reason chewing your food well before swallowing helps digestion.",
-  lessonMore:"This is mechanical digestion at work — physically breaking food into smaller pieces doesn't change WHAT the food is, just its size, but that size change matters enormously. It's the same surface-area trick your small intestine uses with its millions of tiny finger-like bumps to soak up nutrients faster — more exposed surface means digestive juices can act on more of the food at once.", monster:"Crumb-Speed Golem", emoji:"&#127850;" }
+{ n:1, section:'A', tier:'Basic', body:"A metal ruler is held firmly at the edge of a desk, and the free end is flicked so it wobbles rapidly back and forth. As it wobbles, a buzzing sound is heard. What is actually causing this sound?",
+  options:["The rapid vibration (wobbling) of the ruler","The ruler getting warmer as it moves","The desk absorbing energy from the ruler","The colour of the ruler changing the air around it"], ans:1,
+  why:"Sound is produced by vibration — here, the ruler's rapid back-and-forth wobble is what creates the buzzing sound.",
+  lessonMore:"When something vibrates, it pushes and pulls on the air particles right next to it, and those particles bump the next ones in a chain — a compression wave spreads outward until it reaches your ear. That's true for every sound, whether it's a wobbling ruler, a guitar string, or a slamming door: no vibration, no sound.",
+  monster:"Vibration Golem", emoji:"&#128243;" },
+{ n:2, section:'A', tier:'Basic', body:"Which of these best describes what happens to sound in a place that is a true vacuum — completely empty of any matter at all?",
+  options:["Sound travels through a vacuum, just more slowly than through air","Sound travels through a vacuum just as fast as it always does through ordinary air","Sound cannot travel through a vacuum at all, because there is no matter to carry the vibration","Sound travels through a vacuum, but only very quiet sounds can get through"], ans:3,
+  why:"A vacuum has no matter at all, and sound needs a medium (matter) to travel through — so sound simply cannot travel through a vacuum, at any speed.",
+  lessonMore:"Light and sound behave completely differently in a vacuum: light can cross empty space just fine, which is exactly how sunlight reaches Earth across millions of miles of vacuum, but sound has no particles to bump into out there, so it can't cross even a tiny gap of true vacuum.",
+  monster:"Silence Wraith", emoji:"&#128263;" },
+{ n:3, section:'A', tier:'Basic', body:"In sound, what does the word 'pitch' actually describe?",
+  options:["How high or low a sound is","How loud or soft a sound is","How long a sound lasts","How far away the sound source is"], ans:1,
+  why:"Pitch describes how high or low a sound is — it comes from how fast the sound source is vibrating.",
+  lessonMore:"Fast vibration = high pitch (think of a tiny bird's tweet), and slow vibration = low pitch (think of a deep drum). Pitch is separate from volume, so a sound's pitch never tells you how loud or soft it is.",
+  monster:"Highnote Sprite", emoji:"&#127926;" },
+{ n:4, section:'A', tier:'Basic', body:"In sound, what does the word 'volume' actually describe?",
+  options:["How high or low a sound is","How far a sound can travel before stopping completely","How loud or soft a sound is","How many different sounds are playing at once"], ans:3,
+  why:"Volume describes how loud or soft a sound is — it comes from how big or strong the vibration is.",
+  lessonMore:"Volume comes from how BIG or STRONG the vibration is — a big vibration makes a loud sound, and a small vibration makes a soft one. This is a separate property from pitch, so a sound can be loud and high-pitched (a siren), loud and low-pitched (a booming drum), or any other mix.",
+  monster:"Volume Ogre", emoji:"&#128227;" },
+
+{ n:5, section:'B', tier:'Intermediate', body:"A worker leans against a long steel fence and taps it once at the far end. A friend standing right next to the worker, with an ear pressed to the fence, hears the tap through the metal, and also hears the same tap arrive again slightly later through the open air. Through which path did the sound of the tap arrive first?",
+  options:["Through the open air, since air carries sound fastest of all","Through the solid steel fence, since sound travels fastest through solids","Both paths carried the sound at exactly the same speed, so there is no real difference","Neither path actually carried any sound at all, since fences do not vibrate"], ans:2,
+  why:"Sound travels fastest through solids, since their particles are packed most tightly together — so the tap arrives through the steel fence before it arrives through the air.",
+  lessonMore:"This is the same idea used by railway workers: a train's wheels vibrate the metal rail long before the sound reaches through the air, so pressing an ear to the rail lets you hear an approaching train earlier. It all comes back to particle spacing — solid particles are packed so tightly that a vibration bumps from one to the next almost instantly.",
+  monster:"Steel Rail Wraith", emoji:"&#128642;&#65039;" },
+{ n:6, section:'B', tier:'Intermediate', body:"Two divers underwater want to signal each other. One diver taps hard on a metal air tank, and the sound is heard clearly by the other diver a good distance away underwater — much more clearly than the same tap would be heard through open air at that same distance. What does this tell you about the speed of sound in water compared to air?",
+  options:["Sound moves through water more slowly than it moves through air","Water completely blocks sound, so no tap could ever be heard underwater at all","Water and air both carry sound at identical speeds, with no real difference between them","Sound moves through water more quickly than it moves through air"], ans:4,
+  why:"Water's particles are packed closer together than air's, so sound travels faster through water than through air — exactly why the tap is heard so clearly underwater.",
+  lessonMore:"Water sits in the middle of the speed ranking — slower than a solid like steel, but still faster than air — because its particles are closer together than air's but not as tightly packed as a solid's. This is the same reason whales can call to each other across huge stretches of ocean.",
+  monster:"Deep Tide Serpent", emoji:"&#127754;" },
+{ n:7, section:'B', tier:'Intermediate', body:"A mosquito's wings beat extremely fast, producing a high-pitched whine, while an elephant's rumble comes from very slow vibrations deep in its body. Based on this, what can you say about the link between vibration speed and pitch?",
+  options:["Faster vibrations produce a higher pitch, and slower vibrations produce a lower pitch","Vibration speed has no effect on pitch at all","Faster vibrations produce a lower pitch, and slower vibrations produce a higher pitch","Only animals can produce pitch; machines cannot"], ans:1,
+  why:"The mosquito's fast wing vibrations produce a high pitch, while the elephant's slow, deep vibrations produce a low pitch — faster vibration always means higher pitch.",
+  lessonMore:"This is a pitch clue, not a volume one — whenever a description is about a sound being higher or lower, that's always about how fast something is vibrating, never about how loud it is. A tiny, fast-vibrating source like a mosquito's wings will always sound higher-pitched than a slow, deep vibration, no matter how loud or quiet either one is.",
+  monster:"Buzzwing Chimera", emoji:"&#129341;" },
+{ n:8, section:'B', tier:'Intermediate', body:"A drummer taps a drum very gently, then strikes the exact same drum much harder without changing anything else. What changes about the sound between the gentle tap and the hard strike?",
+  options:["The pitch becomes higher with the harder strike","The pitch becomes lower with the harder strike","The volume becomes louder with the harder strike","Nothing at all changes between the two strikes"], ans:3,
+  why:"Striking harder makes a bigger vibration, which increases volume (louder) — it does not change the pitch, since the vibration speed stays the same.",
+  lessonMore:"Whenever a description is about a sound going louder or softer, that's a volume change caused by the SIZE or strength of the vibration — striking harder doesn't make something vibrate faster, just more strongly. That's different from a pitch change, which only happens if the speed of the vibration itself changes.",
+  monster:"Thunder Drum Beast", emoji:"&#129345;" },
+{ n:9, section:'B', tier:'Intermediate', body:"A tuning fork is struck and produces a note that is both very quiet and very high-pitched at the same time. Is it possible for a sound to be quiet AND high-pitched together?",
+  options:["No — quiet sounds must always be low-pitched","Yes — pitch and volume are separate properties, so any combination is possible","No — high-pitched sounds must always be loud","Yes, but a quiet and high-pitched combination like this could only ever happen with a tuning fork, and with no other kind of sound source"], ans:2,
+  why:"Pitch and volume are two completely separate properties of a sound — a note can be quiet and high-pitched, loud and low-pitched, or any other combination.",
+  lessonMore:"Pitch and volume can mix in any combination at all: high-pitched and quiet (a soft whistle), high-pitched and loud (a siren), low-pitched and quiet (a soft hum), or low-pitched and loud (a booming drum). A whisper and a shout can even share the exact same pitch while being totally different volumes.",
+  monster:"Tuning Fork Phantom", emoji:"&#128276;" },
+{ n:10, section:'B', tier:'Intermediate', body:"A powerful telescope on Earth observes a brilliant flash of light from a massive explosion on a distant star, even though the explosion happens far out in the empty vacuum of space between stars. If that same explosion also produced an incredibly loud bang, would the sound of the bang ever reach Earth?",
+  options:["No — the bang's sound has no medium to travel through across the vacuum of space, but the explosion's light can cross that same vacuum just fine","Yes — sound and light both travel through the total vacuum of space at exactly the same incredible speed, arriving at Earth together every single time","Yes, but only if the explosion happens extremely close to Earth","No — neither the light nor the sound from the explosion could ever reach Earth at all"], ans:1,
+  why:"Light does not need a medium and can travel through a vacuum, but sound absolutely needs a medium (matter) to travel, so it cannot cross empty space at all.",
+  lessonMore:"This is exactly why two astronauts floating apart in open space can't hear each other shout, even if they're right next to each other — with zero particles in a true vacuum, there's nothing at all for the sound vibration to bump into and carry itself along.",
+  monster:"Silent Nova Specter", emoji:"&#127756;" },
+
+{ n:11, section:'C', tier:'Applied', body:"Three identical tuning forks are struck at exactly the same moment, and a listener times how long the sound takes to arrive along three equal-length paths. Path 1 travels through a long steel rod. Path 2 travels through a sealed pipe filled with water. Path 3 travels through open air. In which order does the sound arrive, from FASTEST to SLOWEST?",
+  options:["Path 3 (air), Path 1 (steel rod), Path 2 (water pipe)","Path 1 (steel rod), Path 3 (air), Path 2 (water pipe)","Path 1 (steel rod), Path 2 (water pipe), Path 3 (air)","All three paths carry the sound at exactly the same time, regardless of the material"], ans:3,
+  why:"Sound travels fastest through solids, then liquids, then gases — so the steel rod (solid) is fastest, then the water pipe (liquid), then air (gas) is slowest.",
+  lessonMore:"Picture it as a bar chart: solid is the tallest bar (fastest), liquid is the middle bar, and gas is the shortest bar (slowest) — and the reason for that order always comes back to how closely packed the particles are in each state of matter.",
+  monster:"Threefold Echo Titan", emoji:"&#127950;" },
+{ n:12, section:'C', tier:'Applied', body:"A student claims: 'If I hit a drum harder, the vibration gets bigger, so the pitch must get higher.' Is this reasoning correct?",
+  options:["No — hitting harder changes how big the vibration is, which changes volume (louder), not pitch; pitch depends on how FAST the vibration is, not how big it is","Yes — hitting harder always raises the pitch of a drum","Yes, but this pattern is only true for drums specifically, and does not apply to any other kind of musical instrument at all, including strings and wind instruments","No — hitting harder actually has no effect on the drum's sound at all"], ans:1,
+  why:"Hitting harder makes a bigger vibration, which changes volume, not pitch. Pitch only changes when the SPEED of the vibration changes.",
+  lessonMore:"This is a classic mix-up to watch for: force or hitting-strength changes how BIG a vibration is, which is volume, while pitch only changes when the SPEED of the vibration changes. If a claim links 'harder' directly to 'higher pitch,' that's the flaw to spot.",
+  monster:"Faulty Logic Djinn", emoji:"&#128226;" },
+{ n:13, section:'C', tier:'Applied', body:"As a student walks away from a ringing school bell, she writes two notes. Note 1: 'The bell sounded quieter and quieter the further away I walked.' Note 2: 'This must be because sound spreads out and loses strength over distance.' Which note describes something she directly OBSERVED, rather than something she worked out afterwards?",
+  options:["This must be because sound spreads out and loses strength over distance","Sound must be a type of matter that gets used up as it spreads outward","The bell would sound louder again if she walked back toward it","The bell sounded quieter and quieter the further away she walked"], ans:4,
+  why:"'The bell sounded quieter and quieter' is what she directly heard — the observation. The explanation about sound spreading out is something she worked out afterwards, an inference.",
+  lessonMore:"The giveaway test: could a camera or microphone have captured it happening, or does it take extra reasoning to get there? A toy car speeding up down a ramp is something a camera catches directly, but 'its kinetic energy is increasing' is a conclusion worked out from that speeding-up, not something the camera itself shows. A stretched rubber band snapping across a table is the same — the snap is caught on camera, but 'it was storing energy' only comes from reasoning about what caused the snap. Sound spreading out and losing strength over distance is that same second kind of statement: a correct explanation, but one built afterwards from what was actually heard, not something the ear picks up on its own.",
+  monster:"Fading Echo Wraith", emoji:"&#128201;" },
+{ n:14, section:'C', tier:'Applied', body:"A student claims: 'Sound can still travel through a total vacuum, just much more slowly than through air.' What is the BEST critique of this claim?",
+  options:["The claim is completely correct, and this is exactly and precisely how astronauts are able to hear each other clearly while spacewalking together without using any radio equipment at all","The claim is wrong in the opposite direction — sound actually travels FASTER through a vacuum than through air, not slower","The claim is wrong — sound cannot travel through a vacuum at all, at any speed, because there is no matter present to carry the vibration from particle to particle","The claim is correct only for very loud sounds, such as explosions, but not for quieter everyday sounds"], ans:3,
+  why:"A vacuum has no matter at all, so there's nothing to carry a vibration — sound cannot travel through it at any speed, not even slowly.",
+  lessonMore:"This is a common trap: assuming that if two things behave differently, the truth must be a 'bit of both' — like sound traveling but just slower. Sound isn't like light at all here; a vacuum has zero particles, so the answer isn't 'slow,' it's 'not at all,' no matter how loud the sound would have been.",
+  monster:"Vacuum Deceiver", emoji:"&#128683;" },
+{ n:15, section:'C', tier:'Applied', body:"A swimmer underwater can clearly hear a boat engine running on the surface well before she can make out any engine sound after climbing out and standing on the dock, even though she is now physically closer to the boat. What is the BEST explanation for this?",
+  options:["Water actually blocks almost all sound, so what she heard underwater could not have been the boat engine at all","Sound travels faster through water than through air, so the engine sound reached her ears more efficiently while she was still submerged","Standing on the dock made her ears stop working properly for a short time","The boat engine was turned off the moment she climbed out of the water"], ans:2,
+  why:"Sound travels faster (and often more efficiently over that distance) through water than through air, which is why the swimmer heard the engine so clearly while submerged.",
+  lessonMore:"This is the same underwater-listening idea sonar operators rely on: sound moves faster through water than through air because water's particles are packed closer together, so vibrations from the engine reach her ears more quickly while she's submerged than once she's back in the air on the dock.",
+  monster:"Tide Whisper Kraken", emoji:"&#128011;" },
+{ n:16, section:'C', tier:'Applied', body:"A violinist tightens a string, and the exact same bow stroke now produces a noticeably higher note than before, while sounding just as loud as it did before tightening. What has changed about the string's sound?",
+  options:["Only the volume has changed; the pitch has stayed exactly the same","The pitch and volume shifted together, changing at the same time","The string's sound stayed completely the same in every way, with no change at all","Only the pitch has changed; the volume has stayed about the same"], ans:4,
+  why:"Tightening the string changed how fast it vibrates, raising the pitch, while the same bow stroke kept the volume about the same — pitch and volume changed independently.",
+  lessonMore:"Tightening a string is a classic way to raise its pitch, because it changes how FAST the string vibrates when plucked or bowed — it doesn't change how hard the bow presses, so the volume (how big the vibration is) can stay about the same while the pitch rises.",
+  monster:"String Tension Sprite", emoji:"&#127931;" },
+{ n:17, section:'C', tier:'Applied', body:"'A sound that is very deep and booming' describes LOW pitch. 'A sound that can be heard from far across a football field' describes HIGH volume. A new sound is described as 'a very high, ear-piercing whistle that can only be heard up close.' Which combination is this?",
+  options:["High pitch, high volume","Low pitch, low volume","Low pitch, high volume","High pitch, low volume"], ans:4,
+  why:"'Ear-piercing whistle' means a very high pitch, while 'can only be heard up close' means low volume — so this is high pitch, low volume.",
+  lessonMore:"'Ear-piercing' is a pitch word (fast vibration = high pitch), while 'can only be heard up close' is a volume word (small vibration = soft sound) — keeping the two questions separate, 'is it high or low?' and 'is it loud or soft?', is the trick to sorting any sound description like this correctly.",
+  monster:"Shrill Cricket Wisp", emoji:"&#129431;" },
+{ n:18, section:'C', tier:'Applied', body:"A student says: 'Sound travels fastest through solids like steel because steel conducts electricity really well.' Is this the correct EXPLANATION for why sound travels fastest through solids?",
+  options:["Yes — materials that conduct electricity particularly well, such as copper and steel, will always carry sound the very fastest too, since both properties come from exactly the same underlying physical reason inside the material","No — the conclusion (solids carry sound fastest) is right, but the reason given is wrong; solids carry sound fastest because their particles are packed most tightly together, not because of electrical conductivity","No — solids do not actually carry sound fastest at all; gases do","Yes, but only for metals specifically, since only metals both conduct electricity and carry sound well"], ans:2,
+  why:"The student's conclusion is correct, but the reasoning is wrong — solids carry sound fastest because of tightly packed particles, which has nothing to do with electrical conductivity.",
+  lessonMore:"This is the same kind of mistake as claiming air carries sound faster than water because air feels 'lighter' — both claims grab onto some other property of the material (weight, or how well it conducts electricity) instead of the one that actually matters: how closely packed the particles are.",
+  monster:"Faulty Circuit Djinn", emoji:"&#128268;" },
+{ n:19, section:'C', tier:'Applied', body:"A student wants to test whether hitting a cymbal harder changes its pitch. She strikes the exact same cymbal once gently and once hard, keeping the striking spot and angle identical both times. Based on what she has learned about pitch and volume, what should she PREDICT before testing?",
+  options:["The hard strike will definitely produce a noticeably different and higher pitch than before, since a much stronger vibration always changes exactly how fast something vibrates back and forth","The hard strike will sound louder, but the pitch should stay about the same, since striking force changes the SIZE of the vibration, not its speed","The gentle strike will have a higher pitch than the hard strike, since gentler strikes are always higher-pitched","The hard strike will have a lower pitch than the gentle strike, since harder strikes are always lower-pitched"], ans:2,
+  why:"Striking harder only changes volume (louder), not pitch — force changes how BIG the vibration is, not how FAST it vibrates, so the pitch should stay about the same regardless of strike strength.",
+  lessonMore:"Making a prediction like this works the same way the lesson's worked example does: think through the rule first — striking force changes the SIZE of a vibration (volume), not its SPEED (pitch) — then predict the outcome before testing it, rather than guessing.",
+  monster:"Cymbal Clash Ogre", emoji:"&#128165;" },
+{ n:20, section:'C', tier:'Applied', body:"Two astronauts are doing a spacewalk, floating a short distance apart in open space with their spacesuits touching (helmet-to-helmet contact), and no radio switched on. One astronaut speaks, and to their surprise, the other can actually hear a faint voice through the contact point, even though shouting normally into open space produces total silence. What is the BEST explanation?",
+  options:["Sound can travel through the vacuum of space after all, as long as astronauts are close enough together","The astronauts' radios must have switched on by accident, since sound cannot travel any other way in space","This must be a trick or a mistake of some kind, since sound is never able to pass between two people wearing spacesuits under any circumstance at all, no matter how closely they are positioned together","The touching helmets/suits form a solid material pathway (a medium) for the vibrations to travel through directly, even though the empty space around them still has no medium and stays silent"], ans:4,
+  why:"The touching suits/helmets create a solid medium that vibrations can travel through directly — the empty space around them is still a vacuum with no medium, so shouting into open space stays silent.",
+  lessonMore:"This isn't an exception to the rule — it actually proves it: wherever there's a medium (here, the solid material of the touching helmets), sound can travel through it, and everywhere else around them is still a true vacuum with zero particles, which is exactly why shouting into the open space around them stays silent.",
+  monster:"Helmet Contact Phantom", emoji:"&#128640;" },
 ];
 /* ================= END unchanged content ================= */
-
-const SRC_LABEL = { M1:'Milestone 1', M2:'Milestone 2', M3:'Milestone 3', M4:'Milestone 4', MOCK:'ASMOPSS Mock Test' };
 
 function shuffle(arr){
   const a = arr.slice();
@@ -483,7 +503,6 @@ function renderQuestion(){
   document.getElementById('battle-card').classList.toggle('boss', isBoss);
   document.getElementById('q-tier').textContent = q.tier;
   document.getElementById('q-tier').className = 'tierlbl ' + q.tier;
-  document.getElementById('q-src').textContent = q.srcTest ? ('from ' + SRC_LABEL[q.srcTest]) : '';
   document.getElementById('monster-emoji').innerHTML = q.emoji;
   document.getElementById('monster-emoji').className = 'monster-emoji';
   document.getElementById('monster-name').textContent = (isBoss ? 'BOSS: ' : '') + q.monster;
@@ -587,7 +606,7 @@ function showEnd(){
   document.getElementById('rank-emoji').textContent = score >= GOLD_BAR ? '🥇' : (pass ? '🥈' : '🥉');
   document.getElementById('rank-lbl').textContent = score >= GOLD_BAR ? 'Gold Explorer!' : (pass ? 'Silver Explorer!' : 'Trial Survived');
   document.getElementById('end-msg').textContent = pass
-    ? `Great job — that's a PASS! Real reasoning questions pulled straight from the Milestone and Mock tests.`
+    ? `Great job — that's a PASS! Same content as your real Unit 16 test.`
     : `Good effort! Worth a rematch once you've reviewed the tips.`;
   document.getElementById('end-score').textContent = `${score}/${TOTAL} (${pct}%)`;
   countUp('end-coins', coins);
@@ -603,7 +622,7 @@ function showEnd(){
 }
 
 async function saveResults(){
-  const filename = `CIT_Apex_GameMode_Results_${window._lastResults.dateTaken}.json`;
+  const filename = `U16_GameMode_Results_${window._lastResults.dateTaken}.json`;
   const json = JSON.stringify(window._lastResults, null, 2);
   const statusEl = document.getElementById('save-status');
 
@@ -624,7 +643,7 @@ async function saveResults(){
   a.href = URL.createObjectURL(blob);
   a.download = filename;
   document.body.appendChild(a); a.click(); a.remove();
-  if (!GITHUB_CONFIG.enabled) statusEl.textContent = `Downloaded ${filename} (GitHub save not set up yet — separate from the official record — this is a compiled cross-unit trial).`;
+  if (!GITHUB_CONFIG.enabled) statusEl.textContent = `Downloaded ${filename} (GitHub save not set up yet — separate from the official Unit 16 record).`;
 }
 </script>
 </body>

@@ -87,6 +87,9 @@
   @keyframes pop{0%{transform:scale(.6)}60%{transform:scale(1.15)}100%{transform:scale(1)}}
   .why{display:none;text-align:left;margin-top:14px;padding:12px 14px;border-radius:10px;background:var(--chip);border-left:4px solid var(--gold);font-size:.85rem;color:#f0ddb8}
   .why.show{display:block}
+  .lesson-more{display:none;text-align:left;margin-top:10px;padding:12px 14px;border-radius:10px;background:#0e2622;border-left:4px solid var(--steel);font-size:.85rem;color:#bfe8de;line-height:1.55}
+  .lesson-more.show{display:block}
+  .lesson-more b{color:#5fd9c4}
   #next-btn{display:none;margin-top:16px}
 
   /* ---------- END SCREEN ---------- */
@@ -215,6 +218,7 @@
       <div class="opts" id="q-opts"></div>
       <div class="fx" id="fx"></div>
       <div class="why" id="why"></div>
+      <div class="lesson-more" id="lesson-more"></div>
       <button class="btn gold" id="next-btn" onclick="nextQuestion()">Next &#8594;</button>
     </div>
   </div>
@@ -286,64 +290,64 @@ async function pushToGitHub(filename, jsonText){
 const Q = [
 { n:1, section:'A', tier:'Basic', body:"Which imaginary line does Earth spin around?",
   options:["The axis","The equator","The orbit","The horizon"], ans:1,
-  why:"Earth spins around its axis, an imaginary line running through the North and South Poles.", monster:"Axis Wisp", emoji:"&#129517;" },
+  why:"Earth spins around its axis, an imaginary line running through the North and South Poles.", lessonMore:"This axis is the same tilted line Earth spins around every 24 hours — and unlike the daily spin itself, that tilt always points the exact same direction in space all year long. That fixed tilt direction turns out to be the single biggest clue for figuring out the seasons.", monster:"Axis Wisp", emoji:"&#129517;" },
 { n:2, section:'A', tier:'Basic', body:"What is Earth's one-year trip around the Sun called?",
   options:["Rotation","Revolution","Hemisphere","Sunlight"], ans:2,
-  why:"Earth's yearly journey around the Sun is called revolution.", monster:"Yearly Orbit Sprite", emoji:"&#127759;" },
+  why:"Earth's yearly journey around the Sun is called revolution.", lessonMore:"Revolution (the yearly trip) is different from rotation (the daily 24-hour spin) — Earth does both at once. As Earth revolves, it moves to different spots in its orbit, and that's exactly what changes which hemisphere the fixed tilt happens to be pointing toward.", monster:"Yearly Orbit Sprite", emoji:"&#127759;" },
 { n:3, section:'A', tier:'Basic', body:"About how many degrees is Earth's axis tilted?",
   options:["0 degrees","90 degrees","23.5 degrees","45 degrees"], ans:3,
-  why:"Earth's axis is tilted about 23.5 degrees, and that tilt stays pointed the same direction all year.", monster:"Tilt Golem", emoji:"&#128208;" },
+  why:"Earth's axis is tilted about 23.5 degrees, and that tilt stays pointed the same direction all year.", lessonMore:"That 23.5° tilt never changes size during the year — the only thing that changes is Earth's position as it travels around the Sun, which flips which hemisphere the same fixed tilt happens to be facing.", monster:"Tilt Golem", emoji:"&#128208;" },
 { n:4, section:'A', tier:'Basic', body:"A family in the Northern Hemisphere is wearing heavy coats because of the cold winter weather. What season is a family in the Southern Hemisphere experiencing at that exact same moment?",
   options:["Winter","Autumn","Spring","Summer"], ans:4,
-  why:"The two hemispheres always have opposite seasons at the same time — Northern Winter pairs with Southern Summer.", monster:"Hemisphere Twin", emoji:"&#10052;&#65039;" },
+  why:"The two hemispheres always have opposite seasons at the same time — Northern Winter pairs with Southern Summer.", lessonMore:"Earth only has one tilt pointing one way, so the two hemispheres are always exact opposites for all four seasons, not just summer and winter — Northern autumn pairs with Southern spring, and Northern spring pairs with Southern autumn too.", monster:"Hemisphere Twin", emoji:"&#10052;&#65039;" },
 { n:5, section:'B', tier:'Intermediate', body:"Earth's axis currently has the North Pole leaning toward the Sun. What season is the Northern Hemisphere experiencing?",
   options:["Summer","Winter","Spring","Autumn"], ans:1,
-  why:"A hemisphere whose pole leans toward the Sun gets direct sunlight and longer days — that's summer.", monster:"Sunward Tilt Phoenix", emoji:"&#9728;&#65039;" },
+  why:"A hemisphere whose pole leans toward the Sun gets direct sunlight and longer days — that's summer.", lessonMore:"A handy shortcut: ignore Earth's distance from the Sun completely and just ask which way this hemisphere's tilt is currently pointing — toward the Sun always means direct rays plus longer days, and those two things together are what make summer.", monster:"Sunward Tilt Phoenix", emoji:"&#9728;&#65039;" },
 { n:6, section:'B', tier:'Intermediate', body:"Using that same information — the North Pole leaning toward the Sun — what season is the Southern Hemisphere experiencing at that same moment?",
   options:["Summer","Winter","Spring","Autumn"], ans:2,
-  why:"If the North Pole leans toward the Sun, the South Pole leans away at that same moment — that's winter for the Southern Hemisphere.", monster:"Shadowed Pole Wraith", emoji:"&#127761;" },
+  why:"If the North Pole leans toward the Sun, the South Pole leans away at that same moment — that's winter for the Southern Hemisphere.", lessonMore:"Because Earth has only one axis tilted one way, whichever hemisphere isn't facing the Sun always gets the leftover position at that same moment — slanted rays and shorter days, which together mean winter.", monster:"Shadowed Pole Wraith", emoji:"&#127761;" },
 { n:7, section:'B', tier:'Intermediate', body:"A student in Australia spends Christmas Day (December 25th) at the beach in hot sunshine. Which explanation correctly accounts for this?",
   options:["Australia physically moves much closer to the Sun every single December, changing the temperature","Every single place on Earth experiences exactly the same warm weather on Christmas Day, no matter the hemisphere","December falls in the Southern Hemisphere's summer — the opposite of the Northern Hemisphere's winter","Australia has no winter season at all, during any month or time of the entire year whatsoever"], ans:3,
-  why:"December is Southern Hemisphere summer, the direct opposite of the Northern Hemisphere's winter at that time.", monster:"Southern Solstice Sprite", emoji:"&#127958;&#65039;" },
+  why:"December is Southern Hemisphere summer, the direct opposite of the Northern Hemisphere's winter at that time.", lessonMore:"This same reversal changes school schedules too — summer holidays run roughly June-August in the Northern Hemisphere but roughly December-February in the Southern Hemisphere, exactly because their summers fall in different months.", monster:"Southern Solstice Sprite", emoji:"&#127958;&#65039;" },
 { n:8, section:'B', tier:'Intermediate', body:"A hemisphere tilted toward the Sun receives direct, concentrated sunlight and longer daylight hours. What season does this combination produce?",
   options:["Winter","Spring","Autumn","Summer"], ans:4,
-  why:"Direct, concentrated sunlight plus longer days together produce summer.", monster:"Direct Ray Djinn", emoji:"&#128262;" },
+  why:"Direct, concentrated sunlight plus longer days together produce summer.", lessonMore:"Direct rays hit the ground straight-on and pack their energy into a small patch, while slanted rays spread that same amount of energy over a much bigger patch — so direct rays deliver more warmth per spot, which combined with longer days is what makes a tilted-toward hemisphere feel like summer.", monster:"Direct Ray Djinn", emoji:"&#128262;" },
 { n:9, section:'B', tier:'Intermediate', body:"A student claims summer happens in the Northern Hemisphere because Earth moves closer to the Sun in June and July. What actual fact proves this claim wrong?",
   options:["Earth is actually farthest from the Sun in July, not closer to it","Earth's distance from the Sun changes dramatically enough each month to fully explain the seasons","This claim is completely correct and explains the seasons perfectly","Earth's distance from the Sun has never been measured by scientists"], ans:1,
-  why:"Earth is actually farthest from the Sun in July, during Northern Hemisphere summer — proving distance isn't the real cause.", monster:"Distance Myth Wraith", emoji:"&#128683;" },
+  why:"Earth is actually farthest from the Sun in July, during Northern Hemisphere summer — proving distance isn't the real cause.", lessonMore:"The myth actually gets it exactly backwards: Earth is closest to the Sun in early January, which is Northern Hemisphere winter, and farthest away in early July, which is Northern Hemisphere summer — the opposite of what the distance myth would predict.", monster:"Distance Myth Wraith", emoji:"&#128683;" },
 { n:10, section:'B', tier:'Intermediate', body:"A family in the Northern Hemisphere is raking piles of fallen leaves in their garden. What season is a family in the Southern Hemisphere experiencing at that exact same moment?",
   options:["Autumn","Spring","Winter","Summer"], ans:2,
-  why:"Northern Autumn always pairs with Southern Spring at the same moment.", monster:"Season Mirror Specter", emoji:"&#127810;" },
+  why:"Northern Autumn always pairs with Southern Spring at the same moment.", lessonMore:"Every season pairs with its exact opposite at the same moment, not just summer and winter — Earth's single tilt can only point one hemisphere toward the Sun at a time, so all four season pairs (including autumn/spring) flip together.", monster:"Season Mirror Specter", emoji:"&#127810;" },
 { n:11, section:'C', tier:'Applied', body:"A student claims: \"Since Earth's tilt causes the seasons, the tilt itself must change throughout the year — tilting more in summer and less in winter.\" Is this claim correct?",
   options:["Yes — the tilt angle physically increases every single summer and then decreases again every single winter","Yes — the tilt completely and totally disappears during each and every equinox throughout the whole year","No — the tilt itself never changes; only Earth's orbital position changes, changing which way the tilt points","No — Earth actually has no tilt at all, and the seasons are instead caused by something else entirely different"], ans:3,
-  why:"Earth's tilt angle stays fixed all year — it's Earth's changing position in its orbit that changes which way the tilt points toward the Sun.", monster:"Fixed-Tilt Titan", emoji:"&#128511;" },
+  why:"Earth's tilt angle stays fixed all year — it's Earth's changing position in its orbit that changes which way the tilt points toward the Sun.", lessonMore:"Nothing about the tilt itself ever grows, shrinks, or changes angle during the year — the only thing that changes is where Earth currently is along its orbit, which determines whether a hemisphere's fixed tilt happens to be facing toward or away from the Sun.", monster:"Fixed-Tilt Titan", emoji:"&#128511;" },
 { n:12, section:'C', tier:'Applied', body:"It is early April, and the Northern Hemisphere is in Spring. What season is the Southern Hemisphere experiencing at that same moment?",
   options:["Spring","Summer","Winter","Autumn"], ans:4,
-  why:"Northern Spring always pairs with Southern Autumn at the same moment.", monster:"Equinox Twin Sprite", emoji:"&#127809;" },
+  why:"Northern Spring always pairs with Southern Autumn at the same moment.", lessonMore:"The two hemispheres are always the exact opposite season, never just 'one season ahead or behind' — so spring in the north always means autumn in the south at that same moment, never summer or winter.", monster:"Equinox Twin Sprite", emoji:"&#127809;" },
 { n:13, section:'C', tier:'Applied', body:"A student argues: \"The Southern Hemisphere must be much farther from the Sun in June, since it's winter there.\" What is the flaw in this reasoning?",
   options:["Earth's distance from the Sun barely changes hemisphere to hemisphere — a hemisphere's season depends on which way it's tilted, not distance","This reasoning given by the student is completely and entirely correct, fully explaining the Southern Hemisphere's winter every single time","The Southern Hemisphere is actually a completely separate planet altogether, with its own totally different orbit around the Sun","Distance from the Sun is honestly the only single thing that has ever mattered at all for any hemisphere's season, in every case"], ans:1,
-  why:"A hemisphere's season depends on which way its tilt is pointing, not on any real difference in distance from the Sun.", monster:"Tilt-Not-Distance Oracle", emoji:"&#129517;" },
+  why:"A hemisphere's season depends on which way its tilt is pointing, not on any real difference in distance from the Sun.", lessonMore:"The real numbers actually go against the student's idea: Earth is closest to the Sun in January and farthest in July, so distance barely changes anything between hemispheres — it's purely which way the fixed tilt is pointing that decides the season.", monster:"Tilt-Not-Distance Oracle", emoji:"&#129517;" },
 { n:14, section:'C', tier:'Applied', body:"You shine a flashlight straight down onto a table, then tilt it to shine at a steep sideways angle instead. Which beam spreads its light over a bigger patch of table, making each spot dimmer?",
   options:["The straight-down beam only, in this specific case","The angled, slanted beam spreads its light out sideways","Both beams spread out over exactly the same identical size of patch","Neither beam actually spreads out over any area whatsoever"], ans:2,
-  why:"A slanted beam spreads the same light over a bigger patch, making each spot dimmer — the same idea behind why slanted sunlight warms a hemisphere less.", monster:"Slant Beam Djinn", emoji:"&#128294;" },
+  why:"A slanted beam spreads the same light over a bigger patch, making each spot dimmer — the same idea behind why slanted sunlight warms a hemisphere less.", lessonMore:"This is exactly the mechanism behind real sunlight and the seasons: a hemisphere tilted toward the Sun gets that same straight-on, concentrated-beam effect plus longer daylight hours, while a hemisphere tilted away gets the spread-out, dimmer, slanted-beam effect plus shorter days.", monster:"Slant Beam Djinn", emoji:"&#128294;" },
 { n:15, section:'C', tier:'Applied', body:"Explain why places near the equator don't experience big hot-and-cold season swings the way places far from the equator do.",
   options:["Because the equator supposedly has no tilt of its own whatsoever, completely unlike the rest of planet Earth","Because the equator is somehow a totally separate, unmoving part of Earth that doesn't orbit the Sun at all","Because sunlight near the equator stays close to a direct, overhead angle all year, no matter where Earth is in its orbit","Because the equator is apparently always the single part of Earth located farthest away from the Sun itself"], ans:3,
-  why:"The equator stays close to a direct sunlight angle all year, so it doesn't get the big direct-vs-slanted swing that higher latitudes get.", monster:"Equator Steadfast Guardian", emoji:"&#127796;" },
+  why:"The equator stays close to a direct sunlight angle all year, so it doesn't get the big direct-vs-slanted swing that higher latitudes get.", lessonMore:"The equator stays close to that same 'straight overhead' sun angle no matter where Earth is in its orbit, so it barely swings between concentrated and spread-out sunlight — the big hemisphere-reversal effect is strongest far from the equator, not right on it.", monster:"Equator Steadfast Guardian", emoji:"&#127796;" },
 { n:16, section:'C', tier:'Applied', body:"A student says: \"Since it's Winter in Canada in January but Summer in June, Earth's axis must physically tilt at a different angle in January than in June.\" Is this correct?",
   options:["Yes — the tilt angle physically grows noticeably larger every single January and shrinks every single June","Yes — Earth actually straightens up completely and fully upright during each Northern Hemisphere summer period","Yes — the tilt completely reverses its entire direction twice every single year, without exception","No — the tilt angle stays the same all year; only Earth's orbital position changes, changing which way it points"], ans:4,
-  why:"The tilt angle itself never changes — only Earth's position around the Sun changes, which changes which way that same fixed tilt happens to point.", monster:"Constant Angle Wraith", emoji:"&#128207;" },
+  why:"The tilt angle itself never changes — only Earth's position around the Sun changes, which changes which way that same fixed tilt happens to point.", lessonMore:"Picture Earth's tilt like an arrow glued in one direction in space — it doesn't tip more or less between January and June. What changes is only where Earth has traveled to along its orbit, which points that same glued arrow toward a different hemisphere.", monster:"Constant Angle Wraith", emoji:"&#128207;" },
 { n:17, section:'C', tier:'Applied', body:"A Southern Hemisphere country plans its summer school holidays for December-February, while a Northern Hemisphere country plans its summer school holidays for June-August. What best explains this difference?",
   options:["The two hemispheres always have opposite seasons at the same time, due to Earth's tilt","One of the two countries has made a scheduling mistake and should fix it","School holidays have nothing at all to do with the seasons in either hemisphere","Every country on Earth actually experiences summer during the exact same months"], ans:1,
-  why:"Because the hemispheres always have opposite seasons, their summer school holidays naturally fall in different months.", monster:"Holiday Season Phantom", emoji:"&#127979;" },
+  why:"Because the hemispheres always have opposite seasons, their summer school holidays naturally fall in different months.", lessonMore:"This scheduling difference is really just the season-pairing rule in action — since the two hemispheres are always opposite seasons at the same time, the same one-tilt-one-direction mechanism that flips summer and winter also flips exactly when each country's summer holidays land.", monster:"Holiday Season Phantom", emoji:"&#127979;" },
 { n:18, section:'C', tier:'Applied', body:"A student mixes up two different ideas: Earth's distance from the Sun, and which way Earth's tilt is currently pointing. Which one actually explains the seasons?",
   options:["Earth's distance from the Sun explains it, and the tilt direction does not matter at all","Which way Earth's tilt is pointing explains it, not Earth's distance from the Sun","Both ideas together explain the seasons equally, with each contributing half","Neither idea actually explains the seasons — the true cause is completely different"], ans:2,
-  why:"The tilt's direction — not Earth's distance from the Sun — is what actually explains the seasons.", monster:"True Cause Sentinel", emoji:"&#127919;" },
+  why:"The tilt's direction — not Earth's distance from the Sun — is what actually explains the seasons.", lessonMore:"The strongest evidence against distance is that Earth is actually farthest from the Sun during Northern Hemisphere summer and closest during its winter — the exact opposite of what you'd expect if distance were the real cause, which is why tilt direction is the one that matters.", monster:"True Cause Sentinel", emoji:"&#127919;" },
 { n:19, section:'C', tier:'Applied', body:"A student says: \"Since the two hemispheres always have opposite seasons, they must also always have opposite day lengths — when one hemisphere has more daylight hours, the other must have fewer, at that same moment.\" Is this reasoning valid?",
   options:["No — day length supposedly has absolutely nothing whatsoever to do with which way a hemisphere happens to be tilted","No — day length is apparently exactly the same everywhere on the entire Earth, all year round, without exception","Yes — the same tilt-direction idea that flips the seasons also flips which hemisphere gets more daylight hours","No — only one single hemisphere on Earth ever experiences any change in day length at all, throughout the whole year"], ans:3,
-  why:"The same tilt-direction reasoning that explains the season reversal also explains why daylight hours are reversed between hemispheres at the same moment.", monster:"Daylight Flip Specter", emoji:"&#128336;" },
+  why:"The same tilt-direction reasoning that explains the season reversal also explains why daylight hours are reversed between hemispheres at the same moment.", lessonMore:"This follows from combining two rules you already know: a hemisphere tilted toward the Sun gets both direct rays AND longer daylight hours, and since the two hemispheres are always tilted opposite ways, whichever one has more daylight, the other has less, at that same moment.", monster:"Daylight Flip Specter", emoji:"&#128336;" },
 { n:20, section:'C', tier:'Applied', body:"Two students debate why Earth has seasons. Student A says it's because Earth's distance from the Sun changes throughout the year. Student B says it's because Earth's tilted axis points different hemispheres toward or away from the Sun at different points in the orbit. Based on the evidence, who is correct?",
   options:["Student A is completely correct, because Earth is scientifically proven to be closest to the Sun during Northern Hemisphere summer","Neither student is correct at all, because Earth's seasons apparently have no real scientific explanation whatsoever","Both students are supposedly equally correct, since distance and tilt direction contribute to the seasons in exactly equal amounts","Student B, because Earth is actually farthest from the Sun during Northern Hemisphere summer, not closest — proving distance isn't the cause"], ans:4,
-  why:"Student B is correct — Earth's tilt direction causes the seasons, proven by the fact that Earth is farthest from the Sun during Northern Hemisphere summer, not closest.", monster:"Farthest Truth Titan", emoji:"&#127942;" },
+  why:"Student B is correct — Earth's tilt direction causes the seasons, proven by the fact that Earth is farthest from the Sun during Northern Hemisphere summer, not closest.", lessonMore:"A reliable way to settle debates like this: ignore distance entirely and just ask which way each hemisphere's tilt currently points — toward the Sun means direct rays and longer days (summer), away means slanted rays and shorter days (winter).", monster:"Farthest Truth Titan", emoji:"&#127942;" },
 ];
 /* ================= END unchanged content ================= */
 
@@ -464,6 +468,7 @@ function renderQuestion(){
   document.getElementById('q-body').textContent = q.body;
   document.getElementById('fx').className = 'fx';
   document.getElementById('why').className = 'why';
+  document.getElementById('lesson-more').className = 'lesson-more';
   document.getElementById('next-btn').style.display = 'none';
   document.getElementById('q-opts').innerHTML = q.options.map((opt,i) =>
     `<button class="opt" onclick="answer(${i+1})">${String.fromCharCode(65+i)}. ${opt}</button>`).join('');
@@ -535,6 +540,10 @@ function answer(idx){
   document.getElementById(`node-${pos}`).classList.remove('current');
   document.getElementById('why').innerHTML = `💡 <b>Why:</b> ${q.why}`;
   document.getElementById('why').classList.add('show');
+  if (q.lessonMore){
+    document.getElementById('lesson-more').innerHTML = `🧠⚡ <b>Brain Boost:</b> ${q.lessonMore}`;
+    document.getElementById('lesson-more').classList.add('show');
+  }
   document.getElementById('next-btn').style.display = 'inline-block';
   document.getElementById('next-btn').textContent = (pos === deck.length-1) ? 'See Results →' : 'Next →';
   updateStats();

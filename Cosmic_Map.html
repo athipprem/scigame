@@ -29,7 +29,6 @@
   #scene{position:relative;width:100%;height:110px;border-radius:20px;overflow:hidden;margin-top:16px;border:1.5px solid var(--line);
     background:radial-gradient(ellipse at 50% 120%,#241a4a 0%,#130f2c 55%,#0a0818 100%);box-shadow:0 8px 26px #0007}
   .planet{position:absolute;border-radius:50%}
-  .planet-ring{position:absolute;border:2px solid #c77dff77;border-radius:50%;transform:rotate(-18deg)}
   .star{position:absolute;border-radius:50%;background:#ffffffcc;animation:starTwinkle ease-in-out infinite}
   @keyframes starTwinkle{0%,100%{opacity:.25}50%{opacity:1}}
   .shooting-star{position:absolute;width:46px;height:2px;background:linear-gradient(90deg,#fff,transparent);animation:shootAcross linear infinite;opacity:0}
@@ -68,10 +67,41 @@
             <stop offset="0%" stop-color="#c77dff"/>
             <stop offset="100%" stop-color="#8fd8ff"/>
           </linearGradient>
+          <radialGradient id="jupBase" cx="35%" cy="28%" r="80%">
+            <stop offset="0%" stop-color="#fdeece"/>
+            <stop offset="35%" stop-color="#f0c893"/>
+            <stop offset="65%" stop-color="#c98f56"/>
+            <stop offset="100%" stop-color="#6e3f22"/>
+          </radialGradient>
+          <radialGradient id="spotGrad" cx="35%" cy="30%" r="75%">
+            <stop offset="0%" stop-color="#e8916a"/>
+            <stop offset="55%" stop-color="#c85a3a"/>
+            <stop offset="100%" stop-color="#8f3420"/>
+          </radialGradient>
+          <radialGradient id="limbShade" cx="35%" cy="30%" r="75%">
+            <stop offset="60%" stop-color="#000000" stop-opacity="0"/>
+            <stop offset="100%" stop-color="#3a1f10" stop-opacity=".55"/>
+          </radialGradient>
+          <clipPath id="jupClip">
+            <circle cx="100" cy="100" r="94"/>
+          </clipPath>
         </defs>
         <circle cx="26" cy="26" r="24" fill="none" stroke="url(#wGrad)" stroke-width="2.5"/>
         <circle cx="26" cy="26" r="18.5" fill="#120e2c" stroke="#332a5c" stroke-width="1"/>
-        <text x="26" y="33" text-anchor="middle" font-size="20">&#127758;</text>
+        <svg x="9" y="9" width="34" height="34" viewBox="0 0 200 200">
+          <g clip-path="url(#jupClip)">
+            <circle cx="100" cy="100" r="94" fill="url(#jupBase)"/>
+            <path d="M6,38 Q50,32 100,38 T194,38 L194,50 Q150,45 100,50 T6,50 Z" fill="#8a4f28" opacity=".55"/>
+            <path d="M6,72 Q50,67 100,73 T194,72 L194,86 Q150,80 100,86 T6,82 Z" fill="#a85a2e" opacity=".7"/>
+            <path d="M6,90 Q50,96 100,90 T194,91 L194,100 Q150,95 100,101 T6,98 Z" fill="#fdf1d9" opacity=".7"/>
+            <path d="M6,104 Q50,99 100,105 T194,104 L194,120 Q150,113 100,120 T6,116 Z" fill="#7d3f1f" opacity=".65"/>
+            <path d="M6,140 Q50,135 100,141 T194,140 L194,150 Q150,146 100,150 T6,148 Z" fill="#94512a" opacity=".55"/>
+            <ellipse cx="72" cy="126" rx="24" ry="14" fill="url(#spotGrad)" transform="rotate(-6 72 126)"/>
+            <circle cx="100" cy="100" r="94" fill="url(#limbShade)"/>
+          </g>
+          <circle cx="100" cy="100" r="94" fill="none" stroke="#3a2010" stroke-opacity=".25" stroke-width="1"/>
+          <ellipse cx="66" cy="52" rx="22" ry="14" fill="#ffffff" opacity=".18"/>
+        </svg>
       </svg>
     </div>
     <h1>Cosmic Frontier</h1>
@@ -80,8 +110,37 @@
   </header>
 
   <div id="scene">
-    <div class="planet" style="top:14px;right:16%;width:34px;height:34px;background:radial-gradient(circle at 35% 30%,#e8c9ff,#c77dff 60%,#6a3f99 100%)"></div>
-    <div class="planet-ring" style="top:26px;right:11%;width:56px;height:16px"></div>
+    <svg style="position:absolute;top:6px;right:8%;width:84px;height:66px" viewBox="0 0 140 110" aria-hidden="true">
+      <defs>
+        <radialGradient id="pSphere" cx="35%" cy="30%" r="75%">
+          <stop offset="0%" stop-color="#f2e0ff"/>
+          <stop offset="45%" stop-color="#d9a6ff"/>
+          <stop offset="75%" stop-color="#a355e8"/>
+          <stop offset="100%" stop-color="#5a2a80"/>
+        </radialGradient>
+        <clipPath id="frontRingClip">
+          <rect x="0" y="60" width="140" height="50"/>
+        </clipPath>
+      </defs>
+      <g transform="rotate(-20 70 60)">
+        <ellipse cx="70" cy="60" rx="58" ry="13.5" fill="none" stroke="#e8c9ff" stroke-width="2.4" opacity=".4"/>
+        <ellipse cx="70" cy="60" rx="51" ry="11.9" fill="none" stroke="#b478e0" stroke-width="4" opacity=".6"/>
+        <ellipse cx="70" cy="60" rx="43" ry="10.1" fill="none" stroke="#2a1440" stroke-width="1.6" opacity=".45"/>
+        <ellipse cx="70" cy="60" rx="37" ry="8.7" fill="none" stroke="#c77dff" stroke-width="5" opacity=".7"/>
+        <ellipse cx="70" cy="60" rx="29" ry="6.8" fill="none" stroke="#f2e0ff" stroke-width="3" opacity=".55"/>
+      </g>
+      <g>
+        <circle cx="70" cy="60" r="24" fill="url(#pSphere)"/>
+        <path d="M46,50 Q70,46 94,50" stroke="#5a2a80" stroke-width="2" fill="none" opacity=".3"/>
+        <path d="M46,58 Q70,62 94,58" stroke="#f2e0ff" stroke-width="2" fill="none" opacity=".35"/>
+        <path d="M47,68 Q70,65 93,69" stroke="#5a2a80" stroke-width="1.6" fill="none" opacity=".25"/>
+        <circle cx="70" cy="60" r="24" fill="none" stroke="#3a1a5c" stroke-opacity=".3" stroke-width="1"/>
+      </g>
+      <g transform="rotate(-20 70 60)" clip-path="url(#frontRingClip)">
+        <ellipse cx="70" cy="60" rx="37" ry="8.7" fill="none" stroke="#c77dff" stroke-width="5" opacity=".85"/>
+        <ellipse cx="70" cy="60" rx="29" ry="6.8" fill="none" stroke="#f2e0ff" stroke-width="3" opacity=".7"/>
+      </g>
+    </svg>
     <div class="planet" style="bottom:10px;left:8%;width:16px;height:16px;background:radial-gradient(circle at 35% 30%,#bfe9ff,#5fa8ff 70%)"></div>
     <div class="shooting-star" style="top:20%;left:70%;animation-duration:5s;animation-delay:1s"></div>
     <div class="shooting-star" style="top:45%;left:85%;animation-duration:6.5s;animation-delay:3.2s"></div>

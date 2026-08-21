@@ -4,18 +4,18 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
-<title>Puzzle Citadel — The Apex Trials</title>
+<title>Physics Quest — The Push &amp; Pull Trials (Unit 10)</title>
 <style>
   :root{
     --gold:#FFD700; --gold-d:#DAA520; --amber:#FFA500;
     --steel:#00695c; --steel-d:#004d40; --steel-l:#e0f2f1;
-    --bg:#1a1030; --bg2:#3a1f42; --panel:#241533; --chip:#2e1a3f; --line:#4a2c52;
-    --ink:#fff3e6; --grey:#c9b3d9;
+    --bg:#0d1420; --bg2:#1c2c40; --panel:#141f30; --chip:#1b2a3f; --line:#2e4560;
+    --ink:#e8f1fb; --grey:#9db3c9;
     --ok:#43e97b; --bad:#ff5c6c;
     --a:#00e5c9; --b:#5fa8ff; --c:#c77dff;
-    /* --world = this trial's identity color, matching Puzzle Citadel on the World Map.
-       Applied Reasoning / Puzzle Citadel = coral-orange, shared across citadel trials. */
-    --world:#ff8a65;
+    /* --world = this trial's identity color, matching Force Peaks on the World Map.
+       Physics / Force Peaks = storm blue, shared across all Force Peaks trials. */
+    --world:#5fa8ff;
   }
   *{box-sizing:border-box}
   body{margin:0;font-family:'Segoe UI',Arial,sans-serif;background:radial-gradient(circle at 50% 0%,var(--bg2),var(--bg));color:var(--ink);min-height:100vh;padding-bottom:30px}
@@ -68,7 +68,6 @@
   .tierlbl.Basic{background:#00e5c933;color:var(--a)}
   .tierlbl.Intermediate{background:#5fa8ff33;color:var(--b)}
   .tierlbl.Applied{background:#c77dff33;color:var(--c)}
-  .srclbl{display:inline-block;font-size:.62rem;font-weight:700;letter-spacing:.3px;padding:2px 9px;border-radius:20px;margin-bottom:8px;margin-left:6px;background:var(--chip);border:1px solid var(--line);color:var(--grey)}
   .monster-emoji{font-size:3.4rem;margin:4px 0 2px;display:inline-block;transition:transform .25s}
   .monster-emoji.hit{animation:shake .35s}
   @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-10px) rotate(-6deg)}75%{transform:translateX(10px) rotate(6deg)}}
@@ -117,8 +116,8 @@
     background-repeat:repeat;background-size:280px 280px;animation:drift 70s linear infinite}
   @keyframes drift{from{background-position:0 0}to{background-position:-560px 280px}}
   #theme-glow{position:fixed;inset:0;z-index:-1;opacity:.55;transition:background 1s ease;pointer-events:none}
-  #theme-glow.world{background:radial-gradient(600px 400px at 50% 20%,#ff8a6530,transparent 70%)}
-  #theme-glow.boss{background:radial-gradient(680px 460px at 50% 20%,#ff8a6525,transparent 55%),radial-gradient(650px 450px at 50% 20%,#ffd70045,transparent 70%)}
+  #theme-glow.world{background:radial-gradient(600px 400px at 50% 20%,#00e5c930,transparent 70%)}
+  #theme-glow.boss{background:radial-gradient(680px 460px at 50% 20%,#00e5c925,transparent 55%),radial-gradient(650px 450px at 50% 20%,#ffd70045,transparent 70%)}
   #confetti-layer{position:fixed;inset:0;pointer-events:none;z-index:50;overflow:hidden}
   .confetti-piece{position:absolute;top:-20px;border-radius:2px;animation:confettiFall linear forwards}
   @keyframes confettiFall{to{transform:translateY(110vh) rotate(540deg);opacity:.2}}
@@ -177,28 +176,28 @@
 
   <!-- INTRO -->
   <div class="screen active" id="screen-intro">
-    <div class="world-badge">&#129513; Puzzle Citadel <span>&middot; Applied Reasoning world</span></div>
-    <div class="intro-emoji">&#128081;&#129513;</div>
-    <h1>The Apex Trials</h1>
-    <div class="sub">The Citadel's summit — ASMOPSS's hardest room, saved for very last.</div>
+    <div class="world-badge">&#9889; Force Peaks <span>&middot; Physics world</span></div>
+    <div class="intro-emoji">&#9878;&#65039;&#128170;</div>
+    <h1>The Push &amp; Pull Trials</h1>
+    <div class="sub">Balanced and unbalanced forces, friction and gravity — push, pull and predict your way through.</div>
     <div class="zone-card">
-      <div><b>Zone:</b> Compiled Trial &mdash; real Section B &amp; C reasoning questions pulled from the 4 Milestone tests + the ASMOPSS 2026 Mock Test</div>
+      <div><b>Zone:</b> Unit 10 &mdash; Forces</div>
       <ul>
         <li>20 monsters guard this trial &mdash; defeat each by picking the right answer</li>
-        <li>Every question is real, verbatim content from a real Milestone or Mock test — each tagged with its real source test</li>
+        <li>Same questions &amp; explanations as your real Unit 10 test &mdash; just shuffled, so it plays differently every time</li>
         <li>Wrong pick? You'll see why, then keep going &mdash; no game over, this is about learning</li>
         <li>Build a streak for bonus coins &middot; the final monster is a BOSS fight</li>
       </ul>
     </div>
     <button class="btn gold" onclick="startGame()">&#9876;&#65039; Begin the Trial</button><br>
-    <a class="w-map-link pill" href="Citadel_Map.html">&#8592; Back to Puzzle Citadel</a>
+    <a class="w-map-link pill" href="Peaks_Map.html">&#8592; Back to Force Peaks</a>
   </div>
 
   <!-- GAME -->
   <div class="screen" id="screen-game">
     <div id="world-topbar">
-      <div class="world-badge small">&#129513; Puzzle Citadel</div>
-      <a class="w-map-link" href="Citadel_Map.html">&#8592; Back</a>
+      <div class="world-badge small">&#9889; Force Peaks</div>
+      <a class="w-map-link" href="Peaks_Map.html">&#8592; Back</a>
     </div>
     <div id="path"></div>
     <div id="stats">
@@ -209,7 +208,6 @@
     <div class="battle" id="battle-card">
       <div class="boss-tag" id="boss-tag" style="display:none">&#128128; BOSS</div>
       <span class="tierlbl" id="q-tier"></span>
-      <span class="srclbl" id="q-src"></span>
       <div class="monster-wrap">
         <div class="monster-aura world" id="monster-aura"></div>
         <div class="monster-emoji" id="monster-emoji">&#128126;</div>
@@ -238,7 +236,7 @@
     <div class="sec-breakdown" id="sec-breakdown"></div>
     <button class="btn gold" onclick="location.reload()">&#128260; Play Again (reshuffled)</button><br>
     <button class="btn ghost" onclick="saveResults()">&#128190; Save Results (practice copy)</button><br>
-    <a class="btn ghost" href="Citadel_Map.html">&#8592; Back to Puzzle Citadel</a>
+    <a class="btn ghost" href="Peaks_Map.html">&#8592; Back to Force Peaks</a>
     <div id="save-status"></div>
     <div class="note">Copyright &copy; 2026 Luikishi. All rights reserved. Have fun !</div>
   </div>
@@ -246,9 +244,9 @@
 </div>
 
 <script>
-/* ================= SAME CONTENT AS Unit_12_Test — unchanged questions/answers/explanations ================= */
-const UNIT_NUM = 0;
-const UNIT_TITLE = "Applied Reasoning: Apex Trials (Compiled)";
+/* ================= SAME CONTENT AS Unit_10_Test — unchanged questions/answers/explanations ================= */
+const UNIT_NUM = 10;
+const UNIT_TITLE = "Physics: Forces";
 const PASS_BAR = 16;
 
 /* ================= GITHUB SAVE (optional) =================
@@ -290,88 +288,108 @@ async function pushToGitHub(filename, jsonText){
 }
 
 const Q = [
-{ n:1, section:'B', tier:'Intermediate', srcTest:'M1', body:"Two metal rods — one bare, one coated in plastic — both have one end placed in a cup of hot water. Which end will feel warm FIRST at the far end?",
-  options:["Neither end will ever feel warm", "The plastic-coated rod, since plastic holds heat well", "The bare metal rod, since metals conduct heat well", "Both will warm up at exactly the same rate"], ans:3,
-  why:"Metals like copper are good heat conductors; plastic is an insulator and conducts heat poorly.",
-  lessonMore:"Conduction works by passing heat directly through a touching solid, particle to particle — that's exactly why a metal spoon left in hot soup gets warm at the handle too, even though the handle never touched the soup. This same idea is why saucepan handles are made of wood or plastic instead of metal: since those materials are poor conductors, they stop the heat reaching your hand as fast.", monster:"Heat-Race Golem", emoji:"&#128293;" },
-{ n:2, section:'B', tier:'Intermediate', srcTest:'M2', body:"A tide chart shows the water was at its highest point at noon today. Sailors want to know when the water level will next be at its LOWEST point. About how many hours should they expect to wait?",
-  options:["About 3 hours","About 12 hours","About 6 hours","About 24 hours"], ans:3,
-  why:"Low tide falls roughly halfway between two high tides, about 6 hours after a high tide.",
-  lessonMore:"Tides happen because the Moon's gravity pulls ocean water into a bulge — one bulge forms on the side of Earth facing the Moon, and a second bulge forms on the exact opposite side too, since that far side is pulled slightly less and gets left behind. As Earth spins once a day, every coastline passes through both bulges, giving most places roughly two high tides and two low tides each day, spaced about six hours apart.", monster:"Tide-Clock Sentinel", emoji:"&#127754;" },
-{ n:3, section:'B', tier:'Intermediate', srcTest:'M3', body:"At the school fair, three friends drag a wagon: two drag it EAST with 14N and 9N, one drags it WEST with 8N. What is the net force on the wagon, and which way does it move?",
-  options:["31N, east (all added)", "15N, due east", "8N, west", "23N, east"], ans:2,
-  why:"Group by direction first: EAST = 14+9 = 23N. WEST = 8N. Then subtract: 23 − 8 = 15N, moving east.",
-  lessonMore:"With three or more forces, the trick is to treat it like a tug-of-war: sort every force into two piles by direction, add up each pile separately, then compare the two totals — the bigger pile always wins and decides which way things move. This exact method still works no matter how many forces get added, as long as you sort them into piles first instead of trying to combine them all at once in your head.", monster:"Tug-Line Trickster", emoji:"&#128127;" },
-{ n:4, section:'B', tier:'Intermediate', srcTest:'M4', body:"A golf ball, a flat, spread-out sheet of paper, and a tightly crumpled ball of that SAME sheet of paper are dropped together from the same height. Rank them from FIRST to LAST to land.",
-  options:["Flat sheet, then crumpled paper, then golf ball", "Golf ball, then crumpled paper, then flat sheet of paper", "The paper always beats the golf ball, whatever its shape", "Crumpled paper, then golf ball, then flat sheet"], ans:2,
-  why:"The dense, compact golf ball catches the least air resistance and lands first; the crumpled paper is compact too, just lighter, so it lands second; the flat, spread-out sheet catches the most air resistance and lands last.",
-  lessonMore:"It isn't really about 'heavy vs light' — the real factor is how much surface area an object presents to the air compared to its weight. The same sheet of paper, flat versus scrunched into a tight ball, falls at very different speeds even though its mass never changes at all — scrunching it shrinks its surface area a lot, so air resistance grabs onto it much less.", monster:"Fall-Order Sphinx", emoji:"&#127894;" },
-{ n:5, section:'B', tier:'Intermediate', srcTest:'MOCK', body:"Four balls, all with the same volume (100cm³), have different masses: Ball P = 70g, Ball Q = 130g, Ball R = 95g, Ball S = 110g. Water has a density of 1g/cm³ (so 100cm³ of water has a mass of 100g). Which balls will FLOAT in water?",
-  options:["Only Ball P will float","Ball P and Ball R will float","Ball Q and Ball S will float","All four balls will float"], ans:2,
-  why:"An object floats if its density is LESS than water's (mass under 100g for this 100cm&sup3; volume). Ball P (70g) and Ball R (95g) are both under 100g, so they float. Ball Q (130g) and Ball S (110g) are both over 100g, so they sink.",
-  lessonMore:"This kind of question is really a mass-ranking trick in disguise — since all four balls share the same volume, comparing their density is exactly the same as comparing their masses directly, no extra maths needed. Floating and sinking is always a comparison to the specific liquid too: the exact same ball could sink in water but float in a denser liquid, or float in water but sink in a liquid that's less dense.", monster:"Float-or-Sink Sphinx", emoji:"&#9875;&#65039;" },
-{ n:6, section:'C', tier:'Applied', srcTest:'M1', body:"Two identical rocks are compared: one stays on Earth, the other is carried to the Moon. Which statement is TRUE about them afterward?",
-  options:["Mass stays the same in both, but the Moon rock weighs less since gravity there is weaker", "The Moon rock's mass actually shrinks once it leaves Earth's atmosphere and reaches the Moon", "Weight stays exactly identical everywhere, since gravity never changes from place to place", "The Earth rock slowly gains extra mass over time simply by sitting still on the ground"], ans:1,
-  why:"Mass (amount of matter) doesn't change with location, but weight depends on gravity's strength, which is weaker on the Moon.",
-  lessonMore:"Weight depends on how strong the local gravity is pulling on an object's mass — since the Moon's gravity is weaker than Earth's, the exact same rock weighs less there, even though not a single bit of matter has been added or removed. That's different from the surprising fact that on the SAME planet, heavy and light objects fall at the same rate — that's about gravity's effect on falling speed, not about how heavy something feels when you pick it up.", monster:"Rock-and-Moon Oracle", emoji:"&#127765;" },
-{ n:7, section:'C', tier:'Applied', srcTest:'M1', body:"A baked cake cannot be turned back into its original flour, eggs, and sugar, but melted ice can easily be turned back into ice by freezing it again. What BEST explains this difference?",
-  options:["Cakes are baked at a much lower temperature than ice requires to freeze solid", "Baking causes a chemical reaction forming new substances that simple steps can't undo", "Ice is a far rarer and more valuable substance than basic cake ingredients", "There is truly no real difference between these two kinds of processes at all"], ans:2,
-  why:"Baking is a chemical reaction that creates genuinely new substances; melting/freezing is a physical change that's easily reversed.",
-  lessonMore:"The quick checklist is simple: can you get the original substance back using an easy physical step like freezing, evaporating, or reshaping? Melted butter passes that test (cool it and it turns solid again), but baked cake and toasted bread don't — cooking is a chemical reaction that creates genuinely new substances, and no amount of cooling ever turns toast back into plain bread.", monster:"Reverse-or-Not Wraith", emoji:"&#127856;" },
-{ n:8, section:'B', tier:'Intermediate', srcTest:'M1', body:"You give a toy car one firm push on a flat wooden floor, then let go completely. It rolls a short distance before coming to rest on its own. Which force brought it to rest?",
-  options:["Gravity pulling it sideways along the floor","Magnetism from metal hidden in the floorboards","The car simply running out of its own energy supply","Friction between the car's wheels and the floor"], ans:4,
-  why:"Friction between the wheels and floor is a contact force that opposes and slows motion after the push ends.", lessonMore:"The rougher a surface is, the more friction it creates, and more friction means a moving object slows and stops sooner — smooth tile lets a car roll much farther than rough gravel does. That's the exact logic behind the classic fair-test setup for this: release the SAME car from the SAME point on smooth tile, then carpet, then rough gravel, so the only thing that changed was the surface — meaning any difference in how far it rolled before stopping can be fairly blamed on that surface's friction.", monster:"Rolling-Halt Wraith", emoji:"&#128663;" },
-{ n:9, section:'C', tier:'Applied', srcTest:'M2', body:"A child on a playground swing is pulled back and held high in the air, completely still, right before being let go. A friend claims: 'At this highest, stillest point, the swing has mostly kinetic energy, since it's about to start moving again.' What is the BEST correction?",
-  options:["The claim is wrong - at the highest, stillest point, the energy is mostly potential, not kinetic","The claim is correct, since the swing was still moving through the air just one moment before this point","The claim is wrong, but only because playground swings don't actually store or use any energy whatsoever","Kinetic and potential energy are actually just two different names for the exact same underlying quantity"], ans:1,
-  why:"At the highest, momentarily-still point of a swing, the energy is mostly potential (due to height) - kinetic energy is highest at the bottom, where it moves fastest.",
-  lessonMore:"As something falls, its stored potential energy doesn't vanish — it transforms into kinetic energy, so height lost becomes exactly speed gained. A roller coaster cart works the same way: it has its highest potential energy at the top of the tallest hill where it's barely moving, and its highest kinetic energy at the bottom of that same hill where it's moving fastest — the total amount of energy stays the same the whole time, only its form changes.", monster:"Swing-Peak Illusionist", emoji:"&#127934;" },
-{ n:10, section:'C', tier:'Applied', srcTest:'M2', body:"A beachgoer insists: 'A high tide is always followed immediately by another high tide - a low tide never fits in between the two.' What is the BEST correction?",
-  options:["The claim is correct, since tides always repeat the exact same type over and over in a row","The claim is wrong, but only because tide timing is actually completely random and impossible to predict","The claim is wrong - a low tide typically comes next, roughly halfway between the two high tides","The claim is correct, but this pattern only holds true specifically during a full moon"], ans:3,
-  why:"Tides alternate - a low tide typically falls roughly halfway (about 6 hours) between two high tides, not another high tide right away.",
-  lessonMore:"Tides alternate because of how the Moon's gravity creates TWO bulges of ocean water at once — one on the side of Earth facing the Moon, and a second one on the exact opposite side, since that far side gets pulled slightly less and 'left behind.' As Earth spins once a day, every coastline rotates through both bulges and both gaps between them, giving roughly two high tides and two low tides each day.", monster:"Tide-Gap Trickster", emoji:"&#127754;" },
-{ n:11, section:'C', tier:'Applied', srcTest:'M2', body:"A student assumes: 'Since rubber is stretchy and bendy like some plastics, it must be a man-made material.' What is the BEST correction?",
-  options:["The claim is correct, since every stretchy and bendy material is always man-made, without exception","The claim is wrong, but only because rubber is actually a type of mined rock or mineral","The claim is correct, but this is only true specifically for black-coloured rubber products","The claim is wrong - rubber actually comes from the sap of rubber trees, making it a plant material"], ans:4,
-  why:"Rubber comes from the sap of rubber trees, making it a plant material, not a man-made one, despite feeling similar to some plastics.",
-  lessonMore:"Don't judge a material's origin by how it looks or feels — always ask what it actually came from. Rubber trips people up because it feels synthetic like plastic, but a simple checklist settles it fast: did a living plant produce this directly (sap, fibres, wood)? Rubber gets a 'yes' immediately from the tree's sap, so it's a plant material before you'd even need to consider whether it came from an animal or a factory.", monster:"Rubber-Origin Wraith", emoji:"&#127890;" },
-{ n:12, section:'C', tier:'Applied', srcTest:'M3', body:"A student claims: 'A block of solid steel will always sink, no matter its shape, since steel is denser than water.' What is the BEST correction?",
-  options:["The claim is correct — no steel object can ever float, regardless of shape", "Steel actually floats naturally, and the claim has it backwards", "A hollow steel shape, like a ship's hull, can float by displacing enough water", "Density has nothing to do with whether an object floats or sinks"], ans:3,
-  why:"A hollow shape displaces much more water than a solid block of the same mass, letting an object made of denser material still float.",
-  lessonMore:"Steel really is denser than water, so a solid lump of it sinks instantly — the trick is that a ship isn't solid steel. Its hollow hull traps a huge volume of air, spreading the ship's total mass out over a much bigger overall volume, so the ship's OVERALL density (steel plus all that trapped air combined) ends up less than water's, even though the raw material it's built from is denser on its own.", monster:"Steel-Sink Phantom", emoji:"&#9875;&#65039;" },
-{ n:13, section:'C', tier:'Applied', srcTest:'M3', body:"A student says: 'The geocentric and heliocentric models are just two equally good ways of describing the solar system — neither one is more correct.' What is the BEST correction?",
-  options:["The heliocentric model is correct — Venus phases prove it orbits the Sun", "Both models are equally correct and interchangeable", "The geocentric model is actually the correct one, not the heliocentric model", "Neither model has ever been tested against real evidence"], ans:1,
-  why:"Venus showing a full range of phases (not just crescents) is only possible if it orbits the Sun — real evidence that settled the debate in favour of the heliocentric model.",
-  lessonMore:"For thousands of years, believing Earth stood still was actually a reasonable, evidence-based conclusion — the ground under your feet feels perfectly still, while the Sun and stars appear to move across the sky. Without a telescope, both models explained those everyday observations equally well, which is exactly why nobody could prove which one was correct until new evidence — from telescopes — finally settled the debate in favour of the Sun-centred model that Copernicus had proposed.", monster:"Two-Model Sphinx", emoji:"&#127768;" },
-{ n:14, section:'B', tier:'Intermediate', srcTest:'M3', body:"A radiator heats the air in a room. The air just above it warms up, becomes less dense, and rises toward the ceiling, while cooler air near the floor sinks to replace it. What is this process called?",
-  options:["Convection","Evaporation","Condensation","Dissolving"], ans:1,
-  why:"Convection is warm, less-dense fluid rising while cooler, denser fluid sinks, creating a circulating current.", lessonMore:"Convection is one of three ways heat moves — alongside conduction (heat passing through a touching solid, like a metal spoon's handle in hot soup) and radiation (invisible rays crossing empty space, like sunlight reaching Earth) — and the giveaway for convection specifically is a current: warm, less-dense fluid rising while cooler, denser fluid sinks in to replace it, over and over, until everything reaches the same temperature.", monster:"Rising-Current Phantom", emoji:"&#127744;" },
-{ n:15, section:'C', tier:'Applied', srcTest:'M4', body:"For a science fair display, a student has a tub of small plastic beads, table salt, and water all mixed together. They evaporate the whole tub FIRST, without filtering out the beads beforehand. What problem does this create?",
-  options:["No trouble at all — the order of evaporating and filtering never actually changes the final result", "Evaporation only removes the liquid — it does nothing to solid, insoluble beads, which stay stuck in the dried salt", "The heat from evaporating actually breaks the plastic beads down into nothing, so they vanish completely", "Only the water and the beads evaporate together, while the salt is somehow left floating on top"], ans:2,
-  why:"Evaporation only removes the liquid solvent — it does nothing to insoluble solid pieces like plastic beads, so skipping filtering first leaves the beads stuck in with the dried salt.",
-  lessonMore:"Evaporation only works on the liquid solvent — it turns to vapour and escapes into the air, but insoluble solid pieces like beads never turn to gas no matter how much you heat them. That's why order matters: filtering has to come FIRST to trap and remove any insoluble solid, and only THEN should you evaporate the remaining liquid to recover a dissolved solute like salt.", monster:"Bead-Tub Trickster", emoji:"&#128167;" },
-{ n:16, section:'C', tier:'Applied', srcTest:'M4', body:"A tomato plant is classified as a flowering plant, and its ripe tomatoes contain seeds inside juicy flesh. Explain the connection between the flower's job and the tomato fruit — and why a seed's stored food inside it matters for a NEW seedling, using what you know about digestion too.",
-  options:["The flower and the fruit are actually completely unrelated structures with absolutely no real connection to each other at all, not even indirectly", "Tomatoes never actually grow from real flowers at all, and their seeds contain no stored food of any kind whatsoever, ever", "The tomato's seed actually fully digests the fruit around it before germinating, quite similar to how a human stomach digests food", "The flower's ovary becomes the tomato fruit around the seeds; the seed's stored food feeds the tiny embryo until it can grow leaves and make its own food"], ans:4,
-  why:"The ovary develops into the fruit around the seeds after fertilization; the seed's stored food nourishes the new embryo the same way digested nutrients nourish a growing body, until the seedling can photosynthesize on its own.",
-  lessonMore:"A handy habit: whenever you look inside a fruit, mentally split it into 'the seeds' (these were the ovules) and 'everything else around them' (this was the ovary wall that swelled up) — that split works on almost any fruit, from an apple's core to a tomato's pulp. The seed's stored food acts like a tiny food reserve for the embryo, just as your own digestive system has to break big food down into nutrients small enough to absorb into your blood before your body can use them.", monster:"Fruit-Seed Oracle", emoji:"&#127813;" },
-{ n:17, section:'C', tier:'Applied', srcTest:'M4', body:"A student wants to test the claim: \"Cactus spines reduce water loss compared to broad leaves.\" Design the fairest way to test this with two potted plants — a cactus and a broad-leafed plant — over one week.",
-  options:["Give the cactus much less water overall than the broad-leafed plant, then compare which one wilts first", "Keep both plants in identical pots, soil, and sunlight, with the same starting water, then measure water loss over the week", "Put the cactus in full sun and the broad-leafed plant in full shade, then compare their water loss", "Measure water loss across two entirely different weeks, one for each plant, so they don't affect each other"], ans:2,
-  why:"A fair test keeps every other variable (pot, soil, sunlight, starting water) identical between the two plants, changing only their real difference — the type of leaf/spine covering — so any difference in water loss can be trusted.",
-  lessonMore:"A cactus's spines really are shrunk-down leaves — less leaf surface area means less water lost through evaporation, which is exactly the real difference this test is trying to isolate. To prove that's what causes any difference in water loss (and not something else), only the leaf/spine type should differ between the two plants — everything else has to be identical, or you can't tell which factor actually caused the result.", monster:"Cactus-Test Wraith", emoji:"&#127797;" },
-{ n:18, section:'C', tier:'Applied', srcTest:'MOCK', body:"Three bar magnets, X, Y and Z, are lined up in a row, touching end to end: X-Y-Z. X and Y ATTRACT each other. Y and Z REPEL each other. Magnet X's LEFT end (the end not touching Y) is a SOUTH (S) pole. What are the poles at BOTH ends of Magnet Z?",
-  options:["Left end N, right end S","Left end S, right end N","Both ends are N poles","Both ends are S poles"], ans:1,
-  why:"Work one join at a time. X's left is S, so X's right (touching Y) is N. X-Y ATTRACT means unlike poles touch, so Y's left (touching X) must be S — making Y's right (touching Z) N. Y-Z REPEL means LIKE poles touch, so Z's left (touching Y) must also be N — making Z's right end S.",
-  lessonMore:"Chains like this are solved one join at a time, working outward from what you're given — figure out X's poles first, then use the X–Y attract rule to pin down Y's poles, then use the Y–Z repel rule to pin down Z's. The underlying rule never changes (same poles repel, different poles attract) — you're just carefully tracking which specific pole is facing which direction at each join, one step at a time, like following a chain link by link.", monster:"Three-Magnet Enigma", emoji:"&#129418;" },
-{ n:19, section:'C', tier:'Applied', srcTest:'MOCK', body:"Ploy wants to find out if the amount of water affects how tall a sunflower grows. She grows Plant A in a sunny spot with 50ml of water per day, and Plant B in a shady spot with 100ml of water per day. After 3 weeks, Plant B is taller. Ploy concludes: 'more water makes sunflowers grow taller.' What is the main problem with Ploy's experiment?",
-  options:["Sunflowers cannot grow indoors at all","Nothing — more water clearly helped","She changed two things at once, not one","She should have measured weight, not height"], ans:3,
-  why:"A fair test can only change ONE variable at a time while keeping everything else the same. Ploy changed BOTH the water amount and the amount of sunlight between the two plants, so the height difference could be caused by either factor (or both) — she can't fairly conclude it was the water alone.",
-  lessonMore:"This is the classic warning sign from fair testing: whenever two or more things change at once between groups being compared, you can no longer tell which change actually caused the result. To fix Ploy's test, only the water amount should differ between the two plants — sunlight, pot, soil, and everything else needs to be kept identical, or the height difference could just as easily be blamed on the extra sunlight as the water.", monster:"Two-Variable Illusionist", emoji:"&#127803;" },
-{ n:20, section:'C', tier:'Applied', srcTest:'MOCK', body:"Nine identical biscuit pieces were tested in three set-ups, each with 30ml of the same digestive juice: Set-up P used large chunks and took 40 minutes to fully break down. Set-up Q used medium pieces and took 25 minutes. Set-up R used tiny crushed crumbs and took 10 minutes. What conclusion can be drawn from this experiment?",
-  options:["Smaller pieces break down faster due to more surface area","Larger pieces simply taste better than smaller ones","The type of digestive juice makes no difference here","Biscuits only break down once crushed into crumbs"], ans:1,
-  why:"Cutting food into smaller pieces increases its total surface area — more of the biscuit's surface is touching the digestive juice at once, so the chemical breakdown happens faster. This is one reason chewing your food well before swallowing helps digestion.",
-  lessonMore:"This is mechanical digestion at work — physically breaking food into smaller pieces doesn't change WHAT the food is, just its size, but that size change matters enormously. It's the same surface-area trick your small intestine uses with its millions of tiny finger-like bumps to soak up nutrients faster — more exposed surface means digestive juices can act on more of the food at once.", monster:"Crumb-Speed Golem", emoji:"&#127850;" }
+{ n:1, section:'A', tier:'Basic', body:"Which of these is something a force can do to an object?",
+  options:["Change its colour permanently", "Make it start moving, stop, speed up, slow down, or change direction", "Turn it into a completely different substance", "Change how much matter it contains"], ans:2,
+  why:"Forces are pushes or pulls, and they're the only thing that can start, stop, speed up, slow down, or redirect an object's motion.",
+  lessonMore:"A push on a still ball makes it start moving, kicking a rolling ball harder makes it speed up, catching it makes it stop, and a light tap to the side changes its direction — all five of those motion changes only ever happen because of a force.",
+  monster:"Push-Pull Phantom", emoji:"&#128074;" },
+{ n:2, section:'A', tier:'Basic', body:"Which of these forces can act on an object even when nothing is touching it?",
+  options:["A hand pushing open a heavy door", "Friction slowing down a sliding crate", "A magnet pulling a steel pin toward it before they touch", "Air resistance pushing against a moving cyclist"], ans:3,
+  why:"A magnet can pull certain metals toward it before they ever touch — that's exactly what makes magnetism a non-contact force.",
+  lessonMore:"Gravity works the exact same way as magnetism here — both pull on things from a distance with nothing touching, which is exactly why they're the only two non-contact forces on the list. Magnetism as a non-contact force is actually an idea carried over from Unit 3.",
+  monster:"Magnet Wraith", emoji:"&#129522;" },
+{ n:3, section:'A', tier:'Basic', body:"Which of these forces needs the two objects to be physically touching?",
+  options:["Gravity holding a satellite in orbit around Earth", "The pull between two magnets before they even touch", "Friction between a sliding crate and the floor beneath it", "A magnet attracting a paperclip from across a table"], ans:3,
+  why:"Friction only happens between surfaces that are actually pressed together and touching.",
+  lessonMore:"Friction sits in the same contact-force group as pushing, pulling, and air resistance — the single test for spotting any contact force is asking whether the two objects are actually touching while the force acts, and for a crate sliding on a floor, they clearly are.",
+  monster:"Grip Wraith", emoji:"&#128095;" },
+{ n:4, section:'A', tier:'Basic', body:"When the forces on an object are BALANCED, what happens to its motion?",
+  options:["It always speeds up", "It always stops immediately", "Its motion does not change", "It always changes direction"], ans:3,
+  why:"Balanced forces are equal and opposite, so there is no change in motion — the object stays still or keeps moving at a steady speed.",
+  lessonMore:"Balanced doesn't just mean 'not moving' — a car cruising at a steady speed on a flat road also has balanced forces, since balanced simply means the object's motion isn't changing at all, whether that's staying still or moving steadily.",
+  monster:"Balance Wraith", emoji:"&#9878;&#65039;" },
+{ n:5, section:'B', tier:'Intermediate', body:"A framed picture hangs completely still on a wall, held up by a single nail. What is TRUE about the forces acting on it?",
+  options:["There are no forces acting on it whatsoever", "The pull of gravity downward and the nail's support force upward cancel out, keeping the picture perfectly still", "Only the nail's force acts on it, with nothing pulling downward", "Magnetism between the nail and the frame is what holds it in place"], ans:2,
+  why:"Gravity constantly pulls the picture down, but the nail pushes back up with equal force — since they're balanced, the picture doesn't move.",
+  lessonMore:"This works exactly like a book resting on a table: gravity pulls down, and a support force pushes back up with the exact same strength, so the two forces cancel out. If you gave the picture a sideways nudge, that would add a new, unbalanced force and it would start to move.",
+  monster:"Wallframe Guardian", emoji:"&#128444;&#65039;" },
+{ n:6, section:'B', tier:'Intermediate', body:"A stationary football is kicked and starts rolling across the pitch. What caused this change in motion?",
+  options:["The ball started moving on its own, with no force involved", "An unbalanced force (the kick) acted on the ball", "Gravity alone made the ball start rolling sideways", "The forces stayed perfectly balanced throughout"], ans:2,
+  why:"The kick is an unbalanced force — it's what caused the ball's motion to change from still to moving.",
+  lessonMore:"Compare this to a tug-of-war rope that isn't moving — even though both teams pull hard, those forces are balanced. The moment the ball's motion actually changes, from still to rolling, that's the signal the forces just became unbalanced.",
+  monster:"Kickstart Imp", emoji:"&#9917;" },
+{ n:7, section:'B', tier:'Intermediate', body:"An ice rink is far more slippery than a rubber gym floor. What is the BEST explanation?",
+  options:["Ice has more friction than rubber", "There is much less friction between skates and ice than between shoes and rubber", "Gravity is weaker on an ice rink", "Ice is a non-contact surface"], ans:2,
+  why:"Smoother surfaces like ice create much less friction, which is exactly why they feel so slippery.",
+  lessonMore:"This follows the same rule shown for rolling surfaces: rougher surfaces create more friction, and smoother surfaces create less. Ice is about as smooth as a surface gets, so there's very little friction opposing your skates, while a rubber floor is rougher and gives your shoes far more grip.",
+  monster:"Ice Skater Wisp", emoji:"&#129482;" },
+{ n:8, section:'B', tier:'Intermediate', body:"A skydiver opens a parachute and slows down noticeably. Which force is mainly responsible for the slowing?",
+  options:["Gravity increasing suddenly", "Magnetism from the ground", "Air resistance, a contact force between the air and the parachute fabric", "Friction between the skydiver and the clouds"], ans:3,
+  why:"Air resistance is a contact force created by air pushing against the parachute's surface, and it's what slows the fall.",
+  lessonMore:"Air resistance counts as a contact force even though it doesn't feel like ordinary touching — the air is genuinely pressing against the parachute fabric the whole time. Gravity is still pulling the skydiver down throughout the fall too; the parachute just adds a second, opposing contact force.",
+  monster:"Skyfall Djinn", emoji:"&#129666;" },
+{ n:9, section:'B', tier:'Intermediate', body:"Two identical toy cars are pushed with exactly the same force — one rolls onto a smooth wooden floor, the other onto a thick rug. Which car keeps rolling for a LONGER distance?",
+  options:["The car on the rug, since soft surfaces let things glide farther", "The car on the wooden floor, since the surface resists its motion much less", "Both cars travel exactly the same distance no matter what", "Neither car moves once it reaches either surface"], ans:2,
+  why:"A smooth wooden floor creates far less friction than a rug, so the car experiences less resistance and keeps rolling longer.",
+  lessonMore:"This is exactly the fair-test setup used for comparing surfaces: same car, same starting push, only the surface changes. A rug is rougher than a smooth wooden floor, so it creates more friction, and more friction opposing the car's motion means it stops sooner and travels a shorter distance.",
+  monster:"Rolling Wraith", emoji:"&#128663;" },
+{ n:10, section:'B', tier:'Intermediate', body:"Compared to Earth, why does an object weigh less on the Moon even though it still contains exactly the same amount of matter?",
+  options:["The object's mass actually shrinks once it reaches the Moon", "The Moon's gravity is weaker than Earth's, so it pulls less strongly on that same amount of matter", "Weight has nothing to do with gravity at all", "The object gains extra mass from Moon dust"], ans:2,
+  why:"Mass (the amount of matter) doesn't change with location, but weight depends on how strongly gravity pulls — and the Moon's gravity is weaker than Earth's.",
+  lessonMore:"Mass is the amount of matter something contains, and that amount never changes no matter where you take it — only weight changes, because weight is actually a force created by gravity, and the Moon's gravity pulls less strongly than Earth's. This mass-versus-weight distinction was first introduced back in Unit 2.",
+  monster:"Moonweight Specter", emoji:"&#127769;" },
+{ n:11, section:'C', tier:'Applied', body:"A student wants to find out which surface has more friction, but pushes the car with much more force on one surface and uses a different-sized car for the other. Why is this NOT a fair test?",
+  options:["Two variables changed together — how hard it was pushed and which car was used — so there's no way to know which one caused any difference seen", "A fair test should always try to test as many surfaces as possible at once", "Friction has no real effect on how far a car rolls, so the test doesn't matter either way", "Testing several changes together always gives the most reliable results"], ans:1,
+  why:"A fair test changes only ONE variable — changing both the push force and the car makes it impossible to isolate which factor caused any result.",
+  lessonMore:"A proper fair test only changes ONE thing, the variable being tested, while everything else — including the car itself and how hard it's pushed — has to stay exactly the same. Change two things at once, like the push force and the car, and you can never be sure which one actually caused the result you measured.",
+  monster:"Tangled Variable Chimera", emoji:"&#129516;" },
+{ n:12, section:'C', tier:'Applied', body:"In a tug-of-war, both teams are pulling as hard as they can, but the rope isn't moving at all. What does this show?",
+  options:["Neither team is actually applying any force", "The forces from both teams are balanced — equal and opposite — so there's no change in motion", "Gravity is holding the rope in place instead of the teams", "The rope has no forces acting on it"], ans:2,
+  why:"Even though both teams are pulling hard, their forces are equal and opposite, so they balance out and the rope stays still.",
+  lessonMore:"The instant one team pulls even slightly harder than the other, the forces stop being equal and opposite — becoming unbalanced — and that's exactly the moment the rope would start to move toward the stronger team.",
+  monster:"Tug-o-War Titan", emoji:"&#129698;" },
+{ n:13, section:'C', tier:'Applied', body:"A 2 kg rock is taken from Earth to the Moon. A student claims 'the rock's weight AND mass will both be exactly the same on the Moon.' What is the BEST correction?",
+  options:["The claim is completely correct as stated", "The rock's mass stays 2 kg (same amount of matter), but its weight will be less on the Moon, since the Moon's gravity is weaker", "Both the mass and weight will increase on the Moon", "Weight and mass mean exactly the same thing, so there's nothing to correct"], ans:2,
+  why:"Mass depends only on the amount of matter (unchanged by location); weight depends on the strength of gravity, which is weaker on the Moon.",
+  lessonMore:"This is the same idea as a book taken to the Moon: it keeps its same mass (the same amount of matter) but weighs less there, because weight depends on how strongly gravity is pulling. A 2 kg rock behaves no differently — its mass stays 2 kg everywhere, but the weaker pull of the Moon's gravity means the force pulling down on it is smaller.",
+  monster:"Rockweight Golem", emoji:"&#129704;" },
+{ n:14, section:'C', tier:'Applied', body:"A marble is flicked with the same force across a smooth glass table and, on a separate try, across a thick bath towel. Which will make the marble stop SOONEST, and why?",
+  options:["The glass table, because smooth surfaces create the most friction", "The bath towel, because its rough, thick surface creates much more friction, opposing the marble's motion strongly", "Both stop at exactly the same time no matter the surface", "Surface type never affects how a marble moves"], ans:2,
+  why:"A thick towel's rough texture creates much more friction than smooth glass, which opposes the marble's motion strongly and brings it to a stop sooner.",
+  lessonMore:"Friction is a contact force that always works against motion, and the rougher a surface is, the stronger that opposing force becomes. A thick bath towel is far rougher than smooth glass, so it creates much more friction, which is exactly why the marble loses its motion and stops so much sooner there.",
+  monster:"Marble Roller Wraith", emoji:"&#128309;" },
+{ n:15, section:'C', tier:'Applied', body:"Car tyre manufacturers design different tread patterns for wet-weather tyres versus dry-weather racing tyres. What is the BEST reason for this?",
+  options:["Tread patterns are purely decorative and have no effect on grip", "Different tread patterns change how much friction (grip) the tyre has with the road in different conditions", "Weather has no effect on friction between tyres and the road", "All tyres perform identically regardless of tread pattern or conditions"], ans:2,
+  why:"Tread design changes how much friction (grip) a tyre generates with the road surface, which matters more or less depending on wet or dry conditions.",
+  lessonMore:"Tyre tread is a real engineering trick for controlling friction — patterned treads are designed to increase grip with the road, especially in the rain, when a smoother tyre would have far less friction against a wet surface. That's exactly why racing tyres and rain tyres are built to look so different from each other.",
+  monster:"Tread Golem", emoji:"&#128734;" },
+{ n:16, section:'C', tier:'Applied', body:"A student sets up two identical ramps and toy cars to test whether SURFACE affects rolling distance: both ramps are the same height and both cars are released the same way, but one rolls onto tile and the other onto carpet. Which is the best description of this setup?",
+  options:["It is unfair, because the ramp height should also have been changed", "It is a fair test — only the surface differs, so any result can be reasonably linked to the surface", "It is unfair, because you should always change every variable to get a clear answer", "It cannot be a fair test unless the cars are different sizes"], ans:2,
+  why:"Only the surface was changed while ramp height and release method stayed identical, which is exactly what a fair test requires.",
+  lessonMore:"This matches the changed / measured / kept-same breakdown from the friction experiment exactly: the surface is the one thing being changed and tested, the rolling distance is what gets measured, and the ramp height plus the way the car is released have to stay identical — which is exactly what happened here, making it a genuinely fair test.",
+  monster:"Ramp Warden", emoji:"&#129521;" },
+{ n:17, section:'C', tier:'Applied', body:"A student says: 'A car parked on a hill with the handbrake on isn't moving, so there must be no forces acting on it at all.' What is WRONG with this reasoning?",
+  options:["Nothing is wrong — a still car truly has no forces acting on it", "Forces (gravity pulling it down the hill, and the brake/friction holding it back) ARE acting on the car — they are simply balanced, which is why it stays still", "Cars on hills are always affected only by non-contact forces", "Balanced forces mean there are no forces at all"], ans:2,
+  why:"An object can have multiple forces acting on it and still not move, as long as those forces are balanced — 'not moving' does not mean 'no forces.'",
+  lessonMore:"This is the same trap as thinking a book resting on a table has no forces on it — really, gravity is constantly pulling the car down the slope, and the friction created by the brake and tyres is pushing back with just enough force to cancel it out. Both forces are genuinely there and genuinely strong; they're just perfectly balanced.",
+  monster:"Hillhold Colossus", emoji:"&#9968;&#65039;" },
+{ n:18, section:'C', tier:'Applied', body:"A skydiver falls and speeds up at first, but after a while falls at a STEADY speed (no longer speeding up), even though gravity is still pulling just as strongly. What BEST explains this?",
+  options:["Gravity has switched off", "Air resistance has increased enough to balance gravity, so the forces are now balanced and speed stays steady", "The skydiver has stopped falling completely", "Friction from the clouds has replaced gravity"], ans:2,
+  why:"As falling speed increases, air resistance increases too, until it becomes equal to gravity — at that point the forces are balanced and speed stops changing.",
+  lessonMore:"This is the 'moving at a steady speed' case of balanced forces — just like a car cruising steadily on a flat road, a steady speed means the forces are balanced even though the object is still moving. Air resistance is a contact force that grows stronger the faster you fall, so eventually it catches up to gravity's pull and the two balance out.",
+  monster:"Windshear Phantom", emoji:"&#127788;&#65039;" },
+{ n:19, section:'C', tier:'Applied', body:"Car and plane designers shape their vehicles to be smooth and streamlined rather than boxy. What is the BEST reason for this?",
+  options:["Streamlined shapes have no effect on how a vehicle moves through air", "A streamlined shape reduces air resistance, allowing the vehicle to move faster or use less energy", "Boxy shapes always create less air resistance than streamlined ones", "Shape only affects how a vehicle looks, never how it moves"], ans:2,
+  why:"A streamlined shape lets air flow past more easily, reducing air resistance (a contact force) so the vehicle needs less force to maintain its speed.",
+  lessonMore:"Air resistance is a contact force created by air pushing against a moving object, and a smoother, streamlined shape lets air flow past more easily, so the vehicle needs less force to keep moving. That's also the exact reason furniture makers do the opposite — adding rough rubber pads under chair legs to increase friction so they don't slide.",
+  monster:"Aero Specter", emoji:"&#9992;&#65039;" },
+{ n:20, section:'C', tier:'Applied', body:"Which statement MOST completely explains why an object's motion changes?",
+  options:["An object's motion only changes if you touch it directly", "An object's motion changes whenever the forces acting on it are unbalanced, whether those forces are contact or non-contact", "Motion can change with no force involved at all", "Only non-contact forces can ever change an object's motion"], ans:2,
+  why:"Any unbalanced force — contact or non-contact — causes a change in motion; balanced forces never do, regardless of force type.",
+  lessonMore:"Contact-vs-non-contact and balanced-vs-unbalanced are two completely separate ways of sorting forces — a kick (contact) and gravity (non-contact) can both be unbalanced and both change motion, while a support force (contact) and gravity (non-contact) can both be part of a balanced pair. What actually changes motion is only ever whether the forces are unbalanced, never whether they involve touching.",
+  monster:"The Force Overlord", emoji:"&#127744;" },
 ];
 /* ================= END unchanged content ================= */
-
-const SRC_LABEL = { M1:'Milestone 1', M2:'Milestone 2', M3:'Milestone 3', M4:'Milestone 4', MOCK:'ASMOPSS Mock Test' };
 
 function shuffle(arr){
   const a = arr.slice();
@@ -483,7 +501,6 @@ function renderQuestion(){
   document.getElementById('battle-card').classList.toggle('boss', isBoss);
   document.getElementById('q-tier').textContent = q.tier;
   document.getElementById('q-tier').className = 'tierlbl ' + q.tier;
-  document.getElementById('q-src').textContent = q.srcTest ? ('from ' + SRC_LABEL[q.srcTest]) : '';
   document.getElementById('monster-emoji').innerHTML = q.emoji;
   document.getElementById('monster-emoji').className = 'monster-emoji';
   document.getElementById('monster-name').textContent = (isBoss ? 'BOSS: ' : '') + q.monster;
@@ -587,7 +604,7 @@ function showEnd(){
   document.getElementById('rank-emoji').textContent = score >= GOLD_BAR ? '🥇' : (pass ? '🥈' : '🥉');
   document.getElementById('rank-lbl').textContent = score >= GOLD_BAR ? 'Gold Explorer!' : (pass ? 'Silver Explorer!' : 'Trial Survived');
   document.getElementById('end-msg').textContent = pass
-    ? `Great job — that's a PASS! Real reasoning questions pulled straight from the Milestone and Mock tests.`
+    ? `Great job — that's a PASS! Same content as your real Unit 10 test.`
     : `Good effort! Worth a rematch once you've reviewed the tips.`;
   document.getElementById('end-score').textContent = `${score}/${TOTAL} (${pct}%)`;
   countUp('end-coins', coins);
@@ -603,7 +620,7 @@ function showEnd(){
 }
 
 async function saveResults(){
-  const filename = `CIT_Apex_GameMode_Results_${window._lastResults.dateTaken}.json`;
+  const filename = `U10_GameMode_Results_${window._lastResults.dateTaken}.json`;
   const json = JSON.stringify(window._lastResults, null, 2);
   const statusEl = document.getElementById('save-status');
 
@@ -624,7 +641,7 @@ async function saveResults(){
   a.href = URL.createObjectURL(blob);
   a.download = filename;
   document.body.appendChild(a); a.click(); a.remove();
-  if (!GITHUB_CONFIG.enabled) statusEl.textContent = `Downloaded ${filename} (GitHub save not set up yet — separate from the official record — this is a compiled cross-unit trial).`;
+  if (!GITHUB_CONFIG.enabled) statusEl.textContent = `Downloaded ${filename} (GitHub save not set up yet — separate from the official Unit 10 record).`;
 }
 </script>
 </body>

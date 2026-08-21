@@ -87,6 +87,9 @@
   @keyframes pop{0%{transform:scale(.6)}60%{transform:scale(1.15)}100%{transform:scale(1)}}
   .why{display:none;text-align:left;margin-top:14px;padding:12px 14px;border-radius:10px;background:var(--chip);border-left:4px solid var(--gold);font-size:.85rem;color:#f0ddb8}
   .why.show{display:block}
+  .lesson-more{display:none;text-align:left;margin-top:10px;padding:12px 14px;border-radius:10px;background:#0e2622;border-left:4px solid var(--steel);font-size:.85rem;color:#bfe8de;line-height:1.55}
+  .lesson-more.show{display:block}
+  .lesson-more b{color:#5fd9c4}
   #next-btn{display:none;margin-top:16px}
 
   /* ---------- END SCREEN ---------- */
@@ -215,6 +218,7 @@
       <div class="opts" id="q-opts"></div>
       <div class="fx" id="fx"></div>
       <div class="why" id="why"></div>
+      <div class="lesson-more" id="lesson-more"></div>
       <button class="btn gold" id="next-btn" onclick="nextQuestion()">Next &#8594;</button>
     </div>
   </div>
@@ -286,64 +290,64 @@ async function pushToGitHub(filename, jsonText){
 const Q = [
 { n:1, section:'A', tier:'Basic', body:"Which model says Earth stays still at the centre, with the Sun and planets circling around it?",
   options:["Geocentric","Heliocentric","Lunar model","Orbital model"], ans:1,
-  why:"The geocentric model places a still Earth at the centre, with everything else circling it.", monster:"Earth-Centered Ghost", emoji:"&#127757;" },
+  why:"The geocentric model places a still Earth at the centre, with everything else circling it.", lessonMore:"For thousands of years this wasn't seen as a mistake — from the ground you can't feel Earth moving at all, and the Sun and stars really do appear to travel across the sky each day, so a still Earth seemed like the only sensible conclusion to draw.", monster:"Earth-Centered Ghost", emoji:"&#127757;" },
 { n:2, section:'A', tier:'Basic', body:"Which model says the Sun stays still at the centre, with Earth and other planets orbiting it?",
   options:["Geocentric","Heliocentric","Lunar model","Orbital model"], ans:2,
-  why:"The heliocentric model places a still Sun at the centre, with planets (including Earth) orbiting it.", monster:"Sun-Centered Phoenix", emoji:"&#9728;&#65039;" },
+  why:"The heliocentric model places a still Sun at the centre, with planets (including Earth) orbiting it.", lessonMore:"This matches what you learned back in Unit 7: the Sun is a star at the middle of the solar system with the planets travelling around it, and the Moon orbits Earth rather than the Sun directly. For a long time nobody could prove this model over the older one, since both explained the everyday sky equally well.", monster:"Sun-Centered Phoenix", emoji:"&#9728;&#65039;" },
 { n:3, section:'A', tier:'Basic', body:"Which scientist proposed the Sun-centred (heliocentric) model?",
   options:["Newton (a scientist)","Darwin (a scientist)","Copernicus (a scientist)","Einstein (a scientist)"], ans:3,
-  why:"Copernicus proposed the heliocentric model, with the Sun at the centre.", monster:"Copernicus's Echo", emoji:"&#128220;" },
+  why:"Copernicus proposed the heliocentric model, with the Sun at the centre.", lessonMore:"Copernicus's idea wasn't accepted as proven the moment he suggested it — it fit the everyday sky just as well as the older geocentric model did, so nobody could tell which one was actually true until Galileo's telescope observations of Venus gave real proof decades later.", monster:"Copernicus's Echo", emoji:"&#128220;" },
 { n:4, section:'A', tier:'Basic', body:"Which scientist first observed Venus's phases through a telescope, in 1610?",
   options:["Copernicus","Newton","Darwin","Galileo"], ans:4,
-  why:"Galileo observed Venus's phases through a telescope in 1610, providing key evidence for the heliocentric model.", monster:"Galileo's Lens", emoji:"&#128301;" },
+  why:"Galileo observed Venus's phases through a telescope in 1610, providing key evidence for the heliocentric model.", lessonMore:"Galileo wasn't just looking through a telescope for curiosity's sake — both models had already made a clear, different prediction about what shape Venus should show, before he ever looked. Testing a prediction like that against what you actually observe is one of the most powerful tools in science.", monster:"Galileo's Lens", emoji:"&#128301;" },
 { n:5, section:'B', tier:'Intermediate', body:"A description says: \"In this idea, the ground under your feet never moves, and the Sun rises and crosses the sky each day because the Sun itself is circling around Earth.\" Which model is being described?",
   options:["Geocentric","Heliocentric","Lunar phase model","Orbital eclipse model"], ans:1,
-  why:"A still Earth with the Sun circling around it describes the geocentric model.", monster:"Still-Ground Wraith", emoji:"&#127758;" },
+  why:"A still Earth with the Sun circling around it describes the geocentric model.", lessonMore:"The quick trick: find whichever object the description says stays fixed and unmoving in the middle. Here it's Earth that never moves, with the Sun looping around it — that fixed-Earth detail is exactly what marks this as the geocentric model.", monster:"Still-Ground Wraith", emoji:"&#127758;" },
 { n:6, section:'B', tier:'Intermediate', body:"A student notices they can't feel Earth moving at all, and every night the stars appear to wheel slowly overhead. Based only on this everyday observation, which model would this student most naturally believe, before any telescope existed?",
   options:["Heliocentric model","Geocentric model","Lunar orbit model","Neither model at all"], ans:2,
-  why:"A still-feeling Earth and a visibly moving sky naturally led early observers to the geocentric model.", monster:"Naive Stargazer Specter", emoji:"&#128065;&#65039;" },
+  why:"A still-feeling Earth and a visibly moving sky naturally led early observers to the geocentric model.", lessonMore:"This exact feeling — solid, unmoving ground under your feet and a sky that visibly wheels overhead — is the same everyday evidence that made nearly everyone believe the geocentric model for most of human history. It shows how a completely reasonable idea can still turn out to be wrong once better evidence, like a telescope, comes along.", monster:"Naive Stargazer Specter", emoji:"&#128065;&#65039;" },
 { n:7, section:'B', tier:'Intermediate', body:"A stargazer explains: \"Venus doesn't glow on its own — I'm actually seeing sunlight bouncing off its surface, the same way I see the Moon.\" What is this stargazer correctly describing?",
   options:["Why Venus is the brightest planet","Why Venus has rings circling around it","Why Venus can show phases like the Moon","Why Venus has no moons of its own"], ans:3,
-  why:"Reflected sunlight is exactly why Venus, like the Moon, can show phases.", monster:"Reflected Light Sprite", emoji:"&#10024;" },
+  why:"Reflected sunlight is exactly why Venus, like the Moon, can show phases.", lessonMore:"This works exactly like the Moon's phases from Unit 7: what changes isn't how much light is hitting the object, it's how much of its already-lit half happens to be facing Earth as it moves along its own path.", monster:"Reflected Light Sprite", emoji:"&#10024;" },
 { n:8, section:'B', tier:'Intermediate', body:"Under the OLD geocentric model, Venus was pictured as always staying close to the Sun's position in the sky. Based on this, what range of phases should a geocentric believer expect to see through a telescope?",
   options:["The full range, from crescent to full","Only a completely dark, invisible phase","No phases — Venus should look the same always","Only ever a thin crescent, never more"], ans:4,
-  why:"The geocentric model predicted Venus would only ever show a thin crescent, never a fuller phase.", monster:"Crescent-Only Illusionist", emoji:"&#127762;" },
+  why:"The geocentric model predicted Venus would only ever show a thin crescent, never a fuller phase.", lessonMore:"In the geocentric picture, Venus was pictured always staying close to the Sun's position in the sky rather than swinging around it — and that fixed closeness is exactly why the model predicted Venus could only ever show a thin crescent, never a half, gibbous, or full phase.", monster:"Crescent-Only Illusionist", emoji:"&#127762;" },
 { n:9, section:'B', tier:'Intermediate', body:"Under the NEW heliocentric model, Venus orbits the Sun independently of Earth's position. Based on this, what range of phases should a heliocentric believer expect to see through a telescope?",
   options:["The full range, from crescent through to full","Only ever a thin crescent, and nothing more than that","No phases of any kind, ever, under any circumstances","Only a full phase, and never anything like a crescent"], ans:1,
-  why:"The heliocentric model predicted Venus should show the full range of phases, from crescent to full.", monster:"Full-Range Oracle", emoji:"&#127765;" },
+  why:"The heliocentric model predicted Venus should show the full range of phases, from crescent to full.", lessonMore:"Because Venus travels its own separate orbit around the Sun instead of being pinned near it, Earth ends up viewing Venus from many different angles as both planets move — which is exactly why the heliocentric model predicted the complete set of phases, from crescent to full.", monster:"Full-Range Oracle", emoji:"&#127765;" },
 { n:10, section:'B', tier:'Intermediate', body:"In 1610, a scientist pointed a telescope at Venus for the first time and carefully recorded what he saw over many nights. Which observation did he actually record?",
   options:["Venus stayed exactly the same unchanging shape every single night he looked","Venus moved through the full range of phases, from crescent to full","Venus vanished completely from the night sky for an entire year","Venus only ever showed a single, completely full phase and nothing else"], ans:2,
-  why:"Galileo recorded Venus moving through the full range of phases — the observation that confirmed the heliocentric model.", monster:"Venus Phase Chronicler", emoji:"&#129680;" },
+  why:"Galileo recorded Venus moving through the full range of phases — the observation that confirmed the heliocentric model.", lessonMore:"This observation mattered so much because it didn't just fit the heliocentric prediction — it directly ruled out the geocentric one, which said Venus should never be able to show anything fuller than a crescent. A test that only one idea can pass is exactly what finally settled the argument.", monster:"Venus Phase Chronicler", emoji:"&#129680;" },
 { n:11, section:'C', tier:'Applied', body:"A scientist says: \"Both the geocentric and heliocentric models explain why the Sun appears to rise and set every day.\" Is this statement true or false, and why?",
   options:["False — only the heliocentric model has ever been able to explain sunrise and sunset happening","False — only the geocentric model has ever been able to explain sunrise and sunset happening","True — both models were designed to fit the same everyday sky observations equally well","False — neither model has ever been able to explain sunrise or sunset at all"], ans:3,
-  why:"For centuries, both models fit the everyday sky observations equally well, which is why they couldn't be told apart without new evidence.", monster:"Sunrise Paradox Wraith", emoji:"&#127749;" },
+  why:"For centuries, both models fit the everyday sky observations equally well, which is why they couldn't be told apart without new evidence.", lessonMore:"This is exactly why the two models stayed tied for so long: when two ideas explain the same everyday facts equally well, you have to hunt for some new observation where they predict different outcomes — which is exactly what Venus's phases turned out to provide.", monster:"Sunrise Paradox Wraith", emoji:"&#127749;" },
 { n:12, section:'C', tier:'Applied', body:"A student argues: \"Since ancient astronomers had no telescopes, they must not have been using any real evidence at all when they proposed the geocentric model.\" What is wrong with this argument?",
   options:["Nothing is wrong at all — ancient astronomers genuinely used no real evidence whatsoever when forming their ideas","Ancient astronomers actually did have working telescopes available, but they simply chose not to use them at the time","The claim is wrong because the geocentric model was actually proven completely correct by later scientific evidence","The claim is wrong — the geocentric model came from real, careful sky observations, evidence that later turned out misleading"], ans:4,
-  why:"The geocentric model was a reasonable conclusion from real, careful observation, even though it later turned out to be incorrect.", monster:"Ancient Observer Ghost", emoji:"&#128214;" },
+  why:"The geocentric model was a reasonable conclusion from real, careful observation, even though it later turned out to be incorrect.", lessonMore:"The ideas ancient astronomers formed were built on real evidence: a ground that feels perfectly still and a sky that visibly moves across it every day. That counts as genuine, careful observation, even though a better explanation existed and wasn't discovered until much later.", monster:"Ancient Observer Ghost", emoji:"&#128214;" },
 { n:13, section:'C', tier:'Applied', body:"A telescope observation shows Venus displaying a full, brightly lit disc, much like a Full Moon. Which model does this specific observation support?",
   options:["The heliocentric model","The geocentric model","Both models equally","Neither model — this observation is impossible"], ans:1,
-  why:"A full, brightly lit Venus matches only the heliocentric prediction, not the geocentric one.", monster:"Full Disc Herald", emoji:"&#127765;" },
+  why:"A full, brightly lit Venus matches only the heliocentric prediction, not the geocentric one.", lessonMore:"A full, brightly lit Venus is the exact observation Galileo recorded in 1610, and it's only possible if Venus can move to where its whole sunlit half faces Earth — something the geocentric model, which kept Venus pinned near the Sun's position, said should never happen.", monster:"Full Disc Herald", emoji:"&#127765;" },
 { n:14, section:'C', tier:'Applied', body:"If Galileo had instead observed Venus ALWAYS appearing as a thin crescent, no matter when he looked, what would this have supported?",
   options:["The heliocentric model","The geocentric model","Both models equally","This observation would have been impossible to make"], ans:2,
-  why:"An always-crescent Venus would have matched the geocentric prediction instead.", monster:"Crescent Loop Specter", emoji:"&#127768;" },
+  why:"An always-crescent Venus would have matched the geocentric prediction instead.", lessonMore:"This scenario shows why Venus's phases made such a fair test: the observation could genuinely have gone either way. If Venus had only ever shown a crescent, that would have matched the geocentric prediction just as clearly as the full range matched heliocentric.", monster:"Crescent Loop Specter", emoji:"&#127768;" },
 { n:15, section:'C', tier:'Applied', body:"A student claims: \"Copernicus proved the heliocentric model correct the moment he proposed it, using only his own reasoning.\" Explain what's wrong with this claim.",
   options:["Nothing is wrong at all — pure reasoning alone was always enough to fully prove any scientific idea correct","Copernicus actually proposed the geocentric, Earth-centred model instead of the heliocentric one","Copernicus's model wasn't proven at the time — later telescope evidence, like Venus's phases, confirmed it was correct","Copernicus never proposed any kind of model describing the solar system whatsoever"], ans:3,
-  why:"Copernicus's idea needed later telescope evidence (Venus's phases) before it could actually be confirmed correct.", monster:"Unproven Theorist Shade", emoji:"&#128208;" },
+  why:"Copernicus's idea needed later telescope evidence (Venus's phases) before it could actually be confirmed correct.", lessonMore:"Copernicus published his idea long before anyone could test it, and it took Galileo's 1610 telescope observations of Venus to actually supply proof. A good scientific idea still needs to be checked against real observations before it can be called confirmed, no matter how convincing the reasoning behind it sounds.", monster:"Unproven Theorist Shade", emoji:"&#128208;" },
 { n:16, section:'C', tier:'Applied', body:"A student says: \"The old geocentric model was just a silly mistake with no good reasoning behind it.\" Why is this an unfair description of the geocentric model?",
   options:["Because the geocentric model is actually still widely believed to be completely correct by scientists today","Because hardly anyone throughout history ever seriously believed the geocentric model at all","Because ancient astronomers supposedly never made any real, careful observations of the sky whatsoever","Because the model was a reasonable conclusion from real, careful sky-and-ground observations, before better evidence existed"], ans:4,
-  why:"The geocentric model was a genuinely reasonable conclusion from the evidence available at the time.", monster:"Reasonable Ghost", emoji:"&#129517;" },
+  why:"The geocentric model was a genuinely reasonable conclusion from the evidence available at the time.", lessonMore:"For thousands of years, the geocentric model wasn't a fringe guess — it was the accepted, mainstream scientific idea, built from real observation of how the sky and ground behave. It only stopped being useful once a genuinely new kind of evidence, the telescope, became available.", monster:"Reasonable Ghost", emoji:"&#129517;" },
 { n:17, section:'C', tier:'Applied', body:"Which piece of evidence below would be the STRONGEST test for telling the geocentric and heliocentric models apart?",
   options:["Observing whether Venus ever shows more than a thin crescent phase","Observing whether the Sun appears to rise in the morning sky as usual","Observing whether stars appear scattered across the night sky","Observing whether the Moon shows phases at all during the month"], ans:1,
-  why:"Venus's phase range is the one observation where the two models made clearly different, testable predictions.", monster:"Decisive Evidence Titan", emoji:"&#9876;&#65039;" },
+  why:"Venus's phase range is the one observation where the two models made clearly different, testable predictions.", lessonMore:"Sunrise, the scattered stars, and the Moon's phases were all things both models already explained equally well, so none of those could break the tie between them. Venus's phase range was different — it was the one place the two models made genuinely different, testable predictions.", monster:"Decisive Evidence Titan", emoji:"&#9876;&#65039;" },
 { n:18, section:'C', tier:'Applied', body:"A classmate says: \"The Moon and Venus show phases for completely different reasons.\" Is this correct?",
   options:["Yes, the Moon and Venus have completely unrelated, unconnected reasons behind why they show phases","No — both the Moon and Venus reflect sunlight, showing phases because their visible lit portion changes","Yes, because only the Moon actually reflects sunlight while Venus does not reflect any light at all","Yes, because Venus makes its own light entirely, while the Moon reflects light instead of making its own"], ans:2,
-  why:"Both the Moon and Venus reflect sunlight, and their phases work the same way — from a changing view of their lit side.", monster:"Twin Reflection Sprite", emoji:"&#127767;" },
+  why:"Both the Moon and Venus reflect sunlight, and their phases work the same way — from a changing view of their lit side.", lessonMore:"Neither the Moon nor Venus makes its own light — both simply reflect sunlight, and their phase changes as their position shifts and a different portion of their sunlit half becomes visible from Earth. That shared mechanism is exactly why the same words — crescent, half, gibbous, full — describe both.", monster:"Twin Reflection Sprite", emoji:"&#127767;" },
 { n:19, section:'C', tier:'Applied', body:"Before Galileo's telescope observation, both models could explain the Sun's daily rising and setting. What made the Venus-phases observation different from earlier evidence?",
   options:["It was supposedly the first time in all of human history that anyone had ever looked up and observed the night sky","It confirmed once and for all, beyond any possible doubt, that the geocentric model had been correct the whole time","It gave a case where the two models made clearly DIFFERENT predictions that could actually be tested and told apart","It somehow proved, according to this flawed idea, that the planet Venus does not actually exist at all in the sky"], ans:3,
-  why:"Venus's phases gave a testable case where the two models predicted different outcomes, finally allowing them to be told apart.", monster:"Testable Divide Djinn", emoji:"&#128300;" },
+  why:"Venus's phases gave a testable case where the two models predicted different outcomes, finally allowing them to be told apart.", lessonMore:"Everyday sky-watching with just your eyes had been available for centuries and never settled the argument, because it fit both models equally. Venus's phases needed a brand-new tool, the telescope, to even be observable at all — exactly the kind of new evidence needed to finally break the tie.", monster:"Testable Divide Djinn", emoji:"&#128300;" },
 { n:20, section:'C', tier:'Applied', body:"A history book states: \"For centuries, most people accepted the geocentric model not because they were foolish, but because it matched what they could observe with their own eyes.\" What does this best illustrate about how scientific ideas can change?",
   options:["Scientific ideas never change at all once they have been widely accepted by everyone","Scientific ideas are always chosen completely randomly, without any reasoning behind them","Evidence has never once actually changed anyone's mind about anything throughout all of history","A widely-believed idea can still be overturned by new evidence — a normal, healthy part of science"], ans:4,
-  why:"Science regularly updates even widely-held beliefs when strong new evidence comes in — that's a healthy, normal part of how it works.", monster:"Evolving Idea Phoenix", emoji:"&#128293;" },
+  why:"Science regularly updates even widely-held beliefs when strong new evidence comes in — that's a healthy, normal part of how it works.", lessonMore:"This isn't just a story about astronomy long ago — scientists today still update their beliefs the same way when strong new evidence comes in. Being willing to change your mind when the evidence changes is a sign of good scientific thinking, not a weakness.", monster:"Evolving Idea Phoenix", emoji:"&#128293;" },
 ];
 /* ================= END unchanged content ================= */
 
@@ -464,6 +468,7 @@ function renderQuestion(){
   document.getElementById('q-body').textContent = q.body;
   document.getElementById('fx').className = 'fx';
   document.getElementById('why').className = 'why';
+  document.getElementById('lesson-more').className = 'lesson-more';
   document.getElementById('next-btn').style.display = 'none';
   document.getElementById('q-opts').innerHTML = q.options.map((opt,i) =>
     `<button class="opt" onclick="answer(${i+1})">${String.fromCharCode(65+i)}. ${opt}</button>`).join('');
@@ -535,6 +540,10 @@ function answer(idx){
   document.getElementById(`node-${pos}`).classList.remove('current');
   document.getElementById('why').innerHTML = `💡 <b>Why:</b> ${q.why}`;
   document.getElementById('why').classList.add('show');
+  if (q.lessonMore){
+    document.getElementById('lesson-more').innerHTML = `🧠⚡ <b>Brain Boost:</b> ${q.lessonMore}`;
+    document.getElementById('lesson-more').classList.add('show');
+  }
   document.getElementById('next-btn').style.display = 'inline-block';
   document.getElementById('next-btn').textContent = (pos === deck.length-1) ? 'See Results →' : 'Next →';
   updateStats();

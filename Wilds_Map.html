@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<title>Living Wilds — Land World</title>
+<style>
+  :root{
+    --bg:#0a1f13; --bg2:#153a22; --panel:#0f2a1a; --line:#2c5c3a;
+    --ink:#eafbf0; --grey:#a9d9b8; --gold:#FFD700; --amber:#FFA500;
+    --world:#43e97b;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;font-family:'Segoe UI',Arial,sans-serif;background:radial-gradient(circle at 50% -10%,var(--bg2),var(--bg));color:var(--ink);min-height:100vh;padding-bottom:30px}
+  .wrap{max-width:900px;margin:0 auto;padding:20px 16px}
+
+  header{text-align:center;margin-bottom:10px}
+  .brand-badge{display:flex;justify-content:center}
+  .brand-badge svg{animation:brandPulse 3s ease-in-out infinite}
+  @keyframes brandPulse{0%,100%{filter:drop-shadow(0 0 5px #43e97b44)}50%{filter:drop-shadow(0 0 11px #43e97b88)}}
+  h1{font-size:1.6rem;margin:6px 0 4px;background:linear-gradient(135deg,var(--world),#c8ffe0);-webkit-background-clip:text;background-clip:text;color:transparent}
+  header .sub{color:var(--grey);font-size:.85rem;margin-bottom:4px}
+  #back-link{display:inline-block;margin-top:6px;color:var(--grey);font-size:.82rem;text-decoration:none;border:1.5px solid var(--line);border-radius:20px;padding:6px 14px}
+  #back-link:hover{color:var(--world);border-color:var(--world)}
+
+  /* ---------- FOREST CANOPY + FIREFLY SCENE STRIP ---------- */
+  #scene{position:relative;width:100%;height:110px;border-radius:20px;overflow:hidden;margin-top:16px;border:1.5px solid var(--line);
+    background:linear-gradient(180deg,#1e4a2c 0%,#123420 55%,#0a1f13 100%);box-shadow:0 8px 26px #0007}
+  .tree{position:absolute;bottom:0;width:0;height:0;border-style:solid}
+  .trunk{position:absolute;bottom:0;width:6px;background:#3e2a1a;border-radius:1px}
+  .ground{position:absolute;bottom:0;left:0;right:0;height:26px;background:linear-gradient(180deg,#2c5c3acc,#153a22);border-top:1px solid #43e97b55}
+  .mist{position:absolute;border-radius:50%;background:#ffffff14;filter:blur(2px)}
+  .firefly{position:absolute;border-radius:50%;background:#d9ff8ccc;box-shadow:0 0 6px 2px #d9ff8c88;animation:fireflyTwinkle ease-in-out infinite}
+  @keyframes fireflyTwinkle{0%,100%{opacity:.15}50%{opacity:.85}}
+  .leaf-drift{position:absolute;font-size:.9rem;opacity:.5;animation:leafDrift linear infinite}
+  @keyframes leafDrift{0%{transform:translateY(-6px) rotate(0deg)}100%{transform:translateY(90px) rotate(180deg)}}
+
+  /* ---------- TRIAL CARDS ---------- */
+  #trials{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin-top:20px}
+  .trial-card{background:var(--panel);border:1.5px solid var(--line);border-radius:18px;padding:20px 18px;text-align:center;position:relative;transition:transform .15s,border-color .2s}
+  .trial-card:hover{transform:translateY(-4px);border-color:var(--world)}
+  .trial-icon-wrap{position:relative;width:66px;height:66px;margin:0 auto 10px}
+  .trial-aura{position:absolute;inset:0;border-radius:50%;background:var(--world);filter:blur(16px);opacity:.5;animation:auraPulse 3s ease-in-out infinite}
+  @keyframes auraPulse{0%,100%{transform:scale(1);opacity:.4}50%{transform:scale(1.12);opacity:.65}}
+  .trial-icon{position:relative;font-size:2.4rem;display:flex;align-items:center;justify-content:center;height:100%}
+  .trial-unit{font-size:.66rem;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:var(--world)}
+  .trial-name{font-weight:800;font-size:1.05rem;margin:2px 0 6px}
+  .trial-tagline{font-size:.8rem;color:var(--grey);line-height:1.5;margin-bottom:12px;min-height:58px}
+  .trial-meta{display:flex;justify-content:center;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+  .meta-chip{background:#00000030;border:1px solid var(--line);border-radius:20px;padding:4px 10px;font-size:.7rem;font-weight:700;color:var(--grey)}
+  .trial-btn{display:block;width:100%;border:none;border-radius:12px;padding:11px;font-weight:800;font-size:.88rem;cursor:pointer;text-decoration:none;background:linear-gradient(135deg,var(--gold),var(--amber));color:#3a2a00}
+  .trial-btn:hover{filter:brightness(1.05)}
+
+  footer{text-align:center;margin-top:26px;color:var(--grey);font-size:.76rem;line-height:1.6;max-width:560px;margin-left:auto;margin-right:auto}
+  footer b{color:var(--ink)}
+  #footer-back-link{display:inline-block;color:var(--grey);font-size:.82rem;text-decoration:none;border:1.5px solid var(--line);border-radius:20px;padding:6px 14px}
+  #footer-back-link:hover{color:var(--world);border-color:var(--world)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="brand-badge">
+      <svg width="46" height="46" viewBox="0 0 52 52">
+        <defs>
+          <linearGradient id="wGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#43e97b"/>
+            <stop offset="100%" stop-color="#c8ffe0"/>
+          </linearGradient>
+        </defs>
+        <circle cx="26" cy="26" r="24" fill="none" stroke="url(#wGrad)" stroke-width="2.5"/>
+        <circle cx="26" cy="26" r="18.5" fill="#0f2a1a" stroke="#2c5c3a" stroke-width="1"/>
+        <text x="26" y="33" text-anchor="middle" font-size="20">&#127807;</text>
+      </svg>
+    </div>
+    <h1>Living Wilds</h1>
+    <div class="sub">Choose a trial — plants, microorganisms, photosynthesis, the body, cells &amp; ecosystems</div>
+    <a id="back-link" href="index.html">&#8592; Back to World Map</a>
+  </header>
+
+  <div id="scene">
+    <div class="tree" style="left:4%;bottom:24px;border-width:0 20px 50px 20px;border-color:transparent transparent #1e4a2c66 transparent"></div>
+    <div class="trunk" style="left:12.5%;bottom:16px;height:14px"></div>
+    <div class="tree" style="left:20%;bottom:24px;border-width:0 26px 66px 26px;border-color:transparent transparent #17402466 transparent"></div>
+    <div class="trunk" style="left:30.5%;bottom:16px;height:16px"></div>
+    <div class="tree" style="left:56%;bottom:24px;border-width:0 22px 56px 22px;border-color:transparent transparent #1e4a2c66 transparent"></div>
+    <div class="trunk" style="left:65.5%;bottom:16px;height:14px"></div>
+    <div class="tree" style="left:78%;bottom:24px;border-width:0 18px 42px 18px;border-color:transparent transparent #17402466 transparent"></div>
+    <div class="trunk" style="left:85.5%;bottom:16px;height:12px"></div>
+    <div class="mist" style="top:16px;left:12%;width:70px;height:14px"></div>
+    <div class="mist" style="top:24px;left:58%;width:50px;height:10px"></div>
+    <div class="leaf-drift" style="left:24%;animation-duration:7s;animation-delay:1s">&#127811;</div>
+    <div class="leaf-drift" style="left:70%;animation-duration:9s;animation-delay:3s">&#127809;</div>
+    <div class="ground"></div>
+  </div>
+
+  <div id="trials">
+    <div class="trial-card">
+      <div class="trial-icon-wrap"><div class="trial-aura"></div><div class="trial-icon">&#127793;</div></div>
+      <div class="trial-unit">Unit 1</div>
+      <div class="trial-name">The Root &amp; Leaf Trials</div>
+      <div class="trial-tagline">Plant parts, their jobs &amp; how water travels from root to leaf — trace the whole journey.</div>
+      <div class="trial-meta"><span class="meta-chip">15 Qs</span></div>
+      <a class="trial-btn" href="Wilds_Unit01_Trial.html">&#9876;&#65039; Begin Trial</a>
+    </div>
+
+    <div class="trial-card">
+      <div class="trial-icon-wrap"><div class="trial-aura"></div><div class="trial-icon">&#129440;</div></div>
+      <div class="trial-unit">Unit 4</div>
+      <div class="trial-name">The Mould &amp; Microbe Trials</div>
+      <div class="trial-tagline">Microorganism basics, mould growth &amp; fair tests — outsmart every tiny troublemaker.</div>
+      <div class="trial-meta"><span class="meta-chip">15 Qs</span></div>
+      <a class="trial-btn" href="Wilds_Unit04_Trial.html">&#9876;&#65039; Begin Trial</a>
+    </div>
+
+    <div class="trial-card">
+      <div class="trial-icon-wrap"><div class="trial-aura"></div><div class="trial-icon">&#9728;&#65039;</div></div>
+      <div class="trial-unit">Unit 8</div>
+      <div class="trial-name">The Sunlight Trials</div>
+      <div class="trial-tagline">Photosynthesis, gas exchange &amp; the factors that speed it up or slow it down.</div>
+      <div class="trial-meta"><span class="meta-chip">20 Qs</span></div>
+      <a class="trial-btn" href="Wilds_Unit08_Trial.html">&#9876;&#65039; Begin Trial</a>
+    </div>
+
+    <div class="trial-card">
+      <div class="trial-icon-wrap"><div class="trial-aura"></div><div class="trial-icon">&#129729;</div></div>
+      <div class="trial-unit">Unit 11</div>
+      <div class="trial-name">The Body Systems Trials</div>
+      <div class="trial-tagline">Body systems working as a team, breathing &amp; gas exchange — keep every system running.</div>
+      <div class="trial-meta"><span class="meta-chip">20 Qs</span></div>
+      <a class="trial-btn" href="Wilds_Unit11_Trial.html">&#9876;&#65039; Begin Trial</a>
+    </div>
+
+    <div class="trial-card">
+      <div class="trial-icon-wrap"><div class="trial-aura"></div><div class="trial-icon">&#129440;</div></div>
+      <div class="trial-unit">Unit 14</div>
+      <div class="trial-name">The Cell Trials</div>
+      <div class="trial-tagline">Cell parts, plant vs animal cells &amp; unicellular vs multicellular life — go microscopic.</div>
+      <div class="trial-meta"><span class="meta-chip">20 Qs</span></div>
+      <a class="trial-btn" href="Wilds_Unit14_Trial.html">&#9876;&#65039; Begin Trial</a>
+    </div>
+
+    <div class="trial-card">
+      <div class="trial-icon-wrap"><div class="trial-aura"></div><div class="trial-icon">&#127795;</div></div>
+      <div class="trial-unit">Unit 17</div>
+      <div class="trial-name">The Web of Life Trials</div>
+      <div class="trial-tagline">Food chains, human impact on ecosystems &amp; life cycles — hold the whole web together.</div>
+      <div class="trial-meta"><span class="meta-chip">20 Qs</span></div>
+      <a class="trial-btn" href="Wilds_Unit17_Trial.html">&#9876;&#65039; Begin Trial</a>
+    </div>
+  </div>
+
+  <footer>
+    <a id="footer-back-link" href="index.html">&#8592; Back to World Map</a>
+    <div style="margin-top:10px">Copyright &copy; 2026 Luikishi. All rights reserved. Have fun !</div>
+  </footer>
+</div>
+
+<script>
+const scene = document.getElementById('scene');
+for (let i=0;i<10;i++){
+  const s = document.createElement('div');
+  s.className = 'firefly';
+  const size = 2+Math.random()*2;
+  s.style.width = size+'px'; s.style.height = size+'px';
+  s.style.left = Math.random()*100+'%';
+  s.style.top = 10+Math.random()*55+'%';
+  s.style.animationDuration = (2+Math.random()*3)+'s';
+  s.style.animationDelay = (Math.random()*3)+'s';
+  scene.appendChild(s);
+}
+</script>
+</body>
+</html>

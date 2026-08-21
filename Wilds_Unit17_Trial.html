@@ -4,18 +4,18 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
-<title>Puzzle Citadel — The Apex Trials</title>
+<title>Living Wilds — The Web of Life Trials (Unit 17)</title>
 <style>
   :root{
     --gold:#FFD700; --gold-d:#DAA520; --amber:#FFA500;
     --steel:#00695c; --steel-d:#004d40; --steel-l:#e0f2f1;
-    --bg:#1a1030; --bg2:#3a1f42; --panel:#241533; --chip:#2e1a3f; --line:#4a2c52;
-    --ink:#fff3e6; --grey:#c9b3d9;
+    --bg:#0a1f13; --bg2:#153a22; --panel:#0f2a1a; --chip:#173a24; --line:#2c5c3a;
+    --ink:#eafbf0; --grey:#a9d9b8;
     --ok:#43e97b; --bad:#ff5c6c;
     --a:#00e5c9; --b:#5fa8ff; --c:#c77dff;
-    /* --world = this trial's identity color, matching Puzzle Citadel on the World Map.
-       Applied Reasoning / Puzzle Citadel = coral-orange, shared across citadel trials. */
-    --world:#ff8a65;
+    /* --world = this trial's identity color, matching Living Wilds on the World Map.
+       Biology / Living Wilds = forest green, shared across all Living Wilds trials. */
+    --world:#43e97b;
   }
   *{box-sizing:border-box}
   body{margin:0;font-family:'Segoe UI',Arial,sans-serif;background:radial-gradient(circle at 50% 0%,var(--bg2),var(--bg));color:var(--ink);min-height:100vh;padding-bottom:30px}
@@ -68,7 +68,6 @@
   .tierlbl.Basic{background:#00e5c933;color:var(--a)}
   .tierlbl.Intermediate{background:#5fa8ff33;color:var(--b)}
   .tierlbl.Applied{background:#c77dff33;color:var(--c)}
-  .srclbl{display:inline-block;font-size:.62rem;font-weight:700;letter-spacing:.3px;padding:2px 9px;border-radius:20px;margin-bottom:8px;margin-left:6px;background:var(--chip);border:1px solid var(--line);color:var(--grey)}
   .monster-emoji{font-size:3.4rem;margin:4px 0 2px;display:inline-block;transition:transform .25s}
   .monster-emoji.hit{animation:shake .35s}
   @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-10px) rotate(-6deg)}75%{transform:translateX(10px) rotate(6deg)}}
@@ -117,8 +116,8 @@
     background-repeat:repeat;background-size:280px 280px;animation:drift 70s linear infinite}
   @keyframes drift{from{background-position:0 0}to{background-position:-560px 280px}}
   #theme-glow{position:fixed;inset:0;z-index:-1;opacity:.55;transition:background 1s ease;pointer-events:none}
-  #theme-glow.world{background:radial-gradient(600px 400px at 50% 20%,#ff8a6530,transparent 70%)}
-  #theme-glow.boss{background:radial-gradient(680px 460px at 50% 20%,#ff8a6525,transparent 55%),radial-gradient(650px 450px at 50% 20%,#ffd70045,transparent 70%)}
+  #theme-glow.world{background:radial-gradient(600px 400px at 50% 20%,#00e5c930,transparent 70%)}
+  #theme-glow.boss{background:radial-gradient(680px 460px at 50% 20%,#00e5c925,transparent 55%),radial-gradient(650px 450px at 50% 20%,#ffd70045,transparent 70%)}
   #confetti-layer{position:fixed;inset:0;pointer-events:none;z-index:50;overflow:hidden}
   .confetti-piece{position:absolute;top:-20px;border-radius:2px;animation:confettiFall linear forwards}
   @keyframes confettiFall{to{transform:translateY(110vh) rotate(540deg);opacity:.2}}
@@ -177,28 +176,28 @@
 
   <!-- INTRO -->
   <div class="screen active" id="screen-intro">
-    <div class="world-badge">&#129513; Puzzle Citadel <span>&middot; Applied Reasoning world</span></div>
-    <div class="intro-emoji">&#128081;&#129513;</div>
-    <h1>The Apex Trials</h1>
-    <div class="sub">The Citadel's summit — ASMOPSS's hardest room, saved for very last.</div>
+    <div class="world-badge">&#127807; Living Wilds <span>&middot; Biology world</span></div>
+    <div class="intro-emoji">&#127795;&#129419;</div>
+    <h1>The Web of Life Trials</h1>
+    <div class="sub">Food chains, producers and decomposers, human impact, and the seed-to-flower life cycle — track energy through the wild and grow your way to victory.</div>
     <div class="zone-card">
-      <div><b>Zone:</b> Compiled Trial &mdash; real Section B &amp; C reasoning questions pulled from the 4 Milestone tests + the ASMOPSS 2026 Mock Test</div>
+      <div><b>Zone:</b> Unit 17 &mdash; Ecosystems</div>
       <ul>
         <li>20 monsters guard this trial &mdash; defeat each by picking the right answer</li>
-        <li>Every question is real, verbatim content from a real Milestone or Mock test — each tagged with its real source test</li>
+        <li>Same questions &amp; explanations as your real Unit 17 test &mdash; just shuffled, so it plays differently every time</li>
         <li>Wrong pick? You'll see why, then keep going &mdash; no game over, this is about learning</li>
         <li>Build a streak for bonus coins &middot; the final monster is a BOSS fight</li>
       </ul>
     </div>
     <button class="btn gold" onclick="startGame()">&#9876;&#65039; Begin the Trial</button><br>
-    <a class="w-map-link pill" href="Citadel_Map.html">&#8592; Back to Puzzle Citadel</a>
+    <a class="w-map-link pill" href="Wilds_Map.html">&#8592; Back to Living Wilds</a>
   </div>
 
   <!-- GAME -->
   <div class="screen" id="screen-game">
     <div id="world-topbar">
-      <div class="world-badge small">&#129513; Puzzle Citadel</div>
-      <a class="w-map-link" href="Citadel_Map.html">&#8592; Back</a>
+      <div class="world-badge small">&#127807; Living Wilds</div>
+      <a class="w-map-link" href="Wilds_Map.html">&#8592; Back</a>
     </div>
     <div id="path"></div>
     <div id="stats">
@@ -209,7 +208,6 @@
     <div class="battle" id="battle-card">
       <div class="boss-tag" id="boss-tag" style="display:none">&#128128; BOSS</div>
       <span class="tierlbl" id="q-tier"></span>
-      <span class="srclbl" id="q-src"></span>
       <div class="monster-wrap">
         <div class="monster-aura world" id="monster-aura"></div>
         <div class="monster-emoji" id="monster-emoji">&#128126;</div>
@@ -238,7 +236,7 @@
     <div class="sec-breakdown" id="sec-breakdown"></div>
     <button class="btn gold" onclick="location.reload()">&#128260; Play Again (reshuffled)</button><br>
     <button class="btn ghost" onclick="saveResults()">&#128190; Save Results (practice copy)</button><br>
-    <a class="btn ghost" href="Citadel_Map.html">&#8592; Back to Puzzle Citadel</a>
+    <a class="btn ghost" href="Wilds_Map.html">&#8592; Back to Living Wilds</a>
     <div id="save-status"></div>
     <div class="note">Copyright &copy; 2026 Luikishi. All rights reserved. Have fun !</div>
   </div>
@@ -246,9 +244,9 @@
 </div>
 
 <script>
-/* ================= SAME CONTENT AS Unit_12_Test — unchanged questions/answers/explanations ================= */
-const UNIT_NUM = 0;
-const UNIT_TITLE = "Applied Reasoning: Apex Trials (Compiled)";
+/* ================= SAME CONTENT AS Unit_17_Test — unchanged questions/answers/explanations ================= */
+const UNIT_NUM = 17;
+const UNIT_TITLE = "Biology: Ecosystems";
 const PASS_BAR = 16;
 
 /* ================= GITHUB SAVE (optional) =================
@@ -290,88 +288,108 @@ async function pushToGitHub(filename, jsonText){
 }
 
 const Q = [
-{ n:1, section:'B', tier:'Intermediate', srcTest:'M1', body:"Two metal rods — one bare, one coated in plastic — both have one end placed in a cup of hot water. Which end will feel warm FIRST at the far end?",
-  options:["Neither end will ever feel warm", "The plastic-coated rod, since plastic holds heat well", "The bare metal rod, since metals conduct heat well", "Both will warm up at exactly the same rate"], ans:3,
-  why:"Metals like copper are good heat conductors; plastic is an insulator and conducts heat poorly.",
-  lessonMore:"Conduction works by passing heat directly through a touching solid, particle to particle — that's exactly why a metal spoon left in hot soup gets warm at the handle too, even though the handle never touched the soup. This same idea is why saucepan handles are made of wood or plastic instead of metal: since those materials are poor conductors, they stop the heat reaching your hand as fast.", monster:"Heat-Race Golem", emoji:"&#128293;" },
-{ n:2, section:'B', tier:'Intermediate', srcTest:'M2', body:"A tide chart shows the water was at its highest point at noon today. Sailors want to know when the water level will next be at its LOWEST point. About how many hours should they expect to wait?",
-  options:["About 3 hours","About 12 hours","About 6 hours","About 24 hours"], ans:3,
-  why:"Low tide falls roughly halfway between two high tides, about 6 hours after a high tide.",
-  lessonMore:"Tides happen because the Moon's gravity pulls ocean water into a bulge — one bulge forms on the side of Earth facing the Moon, and a second bulge forms on the exact opposite side too, since that far side is pulled slightly less and gets left behind. As Earth spins once a day, every coastline passes through both bulges, giving most places roughly two high tides and two low tides each day, spaced about six hours apart.", monster:"Tide-Clock Sentinel", emoji:"&#127754;" },
-{ n:3, section:'B', tier:'Intermediate', srcTest:'M3', body:"At the school fair, three friends drag a wagon: two drag it EAST with 14N and 9N, one drags it WEST with 8N. What is the net force on the wagon, and which way does it move?",
-  options:["31N, east (all added)", "15N, due east", "8N, west", "23N, east"], ans:2,
-  why:"Group by direction first: EAST = 14+9 = 23N. WEST = 8N. Then subtract: 23 − 8 = 15N, moving east.",
-  lessonMore:"With three or more forces, the trick is to treat it like a tug-of-war: sort every force into two piles by direction, add up each pile separately, then compare the two totals — the bigger pile always wins and decides which way things move. This exact method still works no matter how many forces get added, as long as you sort them into piles first instead of trying to combine them all at once in your head.", monster:"Tug-Line Trickster", emoji:"&#128127;" },
-{ n:4, section:'B', tier:'Intermediate', srcTest:'M4', body:"A golf ball, a flat, spread-out sheet of paper, and a tightly crumpled ball of that SAME sheet of paper are dropped together from the same height. Rank them from FIRST to LAST to land.",
-  options:["Flat sheet, then crumpled paper, then golf ball", "Golf ball, then crumpled paper, then flat sheet of paper", "The paper always beats the golf ball, whatever its shape", "Crumpled paper, then golf ball, then flat sheet"], ans:2,
-  why:"The dense, compact golf ball catches the least air resistance and lands first; the crumpled paper is compact too, just lighter, so it lands second; the flat, spread-out sheet catches the most air resistance and lands last.",
-  lessonMore:"It isn't really about 'heavy vs light' — the real factor is how much surface area an object presents to the air compared to its weight. The same sheet of paper, flat versus scrunched into a tight ball, falls at very different speeds even though its mass never changes at all — scrunching it shrinks its surface area a lot, so air resistance grabs onto it much less.", monster:"Fall-Order Sphinx", emoji:"&#127894;" },
-{ n:5, section:'B', tier:'Intermediate', srcTest:'MOCK', body:"Four balls, all with the same volume (100cm³), have different masses: Ball P = 70g, Ball Q = 130g, Ball R = 95g, Ball S = 110g. Water has a density of 1g/cm³ (so 100cm³ of water has a mass of 100g). Which balls will FLOAT in water?",
-  options:["Only Ball P will float","Ball P and Ball R will float","Ball Q and Ball S will float","All four balls will float"], ans:2,
-  why:"An object floats if its density is LESS than water's (mass under 100g for this 100cm&sup3; volume). Ball P (70g) and Ball R (95g) are both under 100g, so they float. Ball Q (130g) and Ball S (110g) are both over 100g, so they sink.",
-  lessonMore:"This kind of question is really a mass-ranking trick in disguise — since all four balls share the same volume, comparing their density is exactly the same as comparing their masses directly, no extra maths needed. Floating and sinking is always a comparison to the specific liquid too: the exact same ball could sink in water but float in a denser liquid, or float in water but sink in a liquid that's less dense.", monster:"Float-or-Sink Sphinx", emoji:"&#9875;&#65039;" },
-{ n:6, section:'C', tier:'Applied', srcTest:'M1', body:"Two identical rocks are compared: one stays on Earth, the other is carried to the Moon. Which statement is TRUE about them afterward?",
-  options:["Mass stays the same in both, but the Moon rock weighs less since gravity there is weaker", "The Moon rock's mass actually shrinks once it leaves Earth's atmosphere and reaches the Moon", "Weight stays exactly identical everywhere, since gravity never changes from place to place", "The Earth rock slowly gains extra mass over time simply by sitting still on the ground"], ans:1,
-  why:"Mass (amount of matter) doesn't change with location, but weight depends on gravity's strength, which is weaker on the Moon.",
-  lessonMore:"Weight depends on how strong the local gravity is pulling on an object's mass — since the Moon's gravity is weaker than Earth's, the exact same rock weighs less there, even though not a single bit of matter has been added or removed. That's different from the surprising fact that on the SAME planet, heavy and light objects fall at the same rate — that's about gravity's effect on falling speed, not about how heavy something feels when you pick it up.", monster:"Rock-and-Moon Oracle", emoji:"&#127765;" },
-{ n:7, section:'C', tier:'Applied', srcTest:'M1', body:"A baked cake cannot be turned back into its original flour, eggs, and sugar, but melted ice can easily be turned back into ice by freezing it again. What BEST explains this difference?",
-  options:["Cakes are baked at a much lower temperature than ice requires to freeze solid", "Baking causes a chemical reaction forming new substances that simple steps can't undo", "Ice is a far rarer and more valuable substance than basic cake ingredients", "There is truly no real difference between these two kinds of processes at all"], ans:2,
-  why:"Baking is a chemical reaction that creates genuinely new substances; melting/freezing is a physical change that's easily reversed.",
-  lessonMore:"The quick checklist is simple: can you get the original substance back using an easy physical step like freezing, evaporating, or reshaping? Melted butter passes that test (cool it and it turns solid again), but baked cake and toasted bread don't — cooking is a chemical reaction that creates genuinely new substances, and no amount of cooling ever turns toast back into plain bread.", monster:"Reverse-or-Not Wraith", emoji:"&#127856;" },
-{ n:8, section:'B', tier:'Intermediate', srcTest:'M1', body:"You give a toy car one firm push on a flat wooden floor, then let go completely. It rolls a short distance before coming to rest on its own. Which force brought it to rest?",
-  options:["Gravity pulling it sideways along the floor","Magnetism from metal hidden in the floorboards","The car simply running out of its own energy supply","Friction between the car's wheels and the floor"], ans:4,
-  why:"Friction between the wheels and floor is a contact force that opposes and slows motion after the push ends.", lessonMore:"The rougher a surface is, the more friction it creates, and more friction means a moving object slows and stops sooner — smooth tile lets a car roll much farther than rough gravel does. That's the exact logic behind the classic fair-test setup for this: release the SAME car from the SAME point on smooth tile, then carpet, then rough gravel, so the only thing that changed was the surface — meaning any difference in how far it rolled before stopping can be fairly blamed on that surface's friction.", monster:"Rolling-Halt Wraith", emoji:"&#128663;" },
-{ n:9, section:'C', tier:'Applied', srcTest:'M2', body:"A child on a playground swing is pulled back and held high in the air, completely still, right before being let go. A friend claims: 'At this highest, stillest point, the swing has mostly kinetic energy, since it's about to start moving again.' What is the BEST correction?",
-  options:["The claim is wrong - at the highest, stillest point, the energy is mostly potential, not kinetic","The claim is correct, since the swing was still moving through the air just one moment before this point","The claim is wrong, but only because playground swings don't actually store or use any energy whatsoever","Kinetic and potential energy are actually just two different names for the exact same underlying quantity"], ans:1,
-  why:"At the highest, momentarily-still point of a swing, the energy is mostly potential (due to height) - kinetic energy is highest at the bottom, where it moves fastest.",
-  lessonMore:"As something falls, its stored potential energy doesn't vanish — it transforms into kinetic energy, so height lost becomes exactly speed gained. A roller coaster cart works the same way: it has its highest potential energy at the top of the tallest hill where it's barely moving, and its highest kinetic energy at the bottom of that same hill where it's moving fastest — the total amount of energy stays the same the whole time, only its form changes.", monster:"Swing-Peak Illusionist", emoji:"&#127934;" },
-{ n:10, section:'C', tier:'Applied', srcTest:'M2', body:"A beachgoer insists: 'A high tide is always followed immediately by another high tide - a low tide never fits in between the two.' What is the BEST correction?",
-  options:["The claim is correct, since tides always repeat the exact same type over and over in a row","The claim is wrong, but only because tide timing is actually completely random and impossible to predict","The claim is wrong - a low tide typically comes next, roughly halfway between the two high tides","The claim is correct, but this pattern only holds true specifically during a full moon"], ans:3,
-  why:"Tides alternate - a low tide typically falls roughly halfway (about 6 hours) between two high tides, not another high tide right away.",
-  lessonMore:"Tides alternate because of how the Moon's gravity creates TWO bulges of ocean water at once — one on the side of Earth facing the Moon, and a second one on the exact opposite side, since that far side gets pulled slightly less and 'left behind.' As Earth spins once a day, every coastline rotates through both bulges and both gaps between them, giving roughly two high tides and two low tides each day.", monster:"Tide-Gap Trickster", emoji:"&#127754;" },
-{ n:11, section:'C', tier:'Applied', srcTest:'M2', body:"A student assumes: 'Since rubber is stretchy and bendy like some plastics, it must be a man-made material.' What is the BEST correction?",
-  options:["The claim is correct, since every stretchy and bendy material is always man-made, without exception","The claim is wrong, but only because rubber is actually a type of mined rock or mineral","The claim is correct, but this is only true specifically for black-coloured rubber products","The claim is wrong - rubber actually comes from the sap of rubber trees, making it a plant material"], ans:4,
-  why:"Rubber comes from the sap of rubber trees, making it a plant material, not a man-made one, despite feeling similar to some plastics.",
-  lessonMore:"Don't judge a material's origin by how it looks or feels — always ask what it actually came from. Rubber trips people up because it feels synthetic like plastic, but a simple checklist settles it fast: did a living plant produce this directly (sap, fibres, wood)? Rubber gets a 'yes' immediately from the tree's sap, so it's a plant material before you'd even need to consider whether it came from an animal or a factory.", monster:"Rubber-Origin Wraith", emoji:"&#127890;" },
-{ n:12, section:'C', tier:'Applied', srcTest:'M3', body:"A student claims: 'A block of solid steel will always sink, no matter its shape, since steel is denser than water.' What is the BEST correction?",
-  options:["The claim is correct — no steel object can ever float, regardless of shape", "Steel actually floats naturally, and the claim has it backwards", "A hollow steel shape, like a ship's hull, can float by displacing enough water", "Density has nothing to do with whether an object floats or sinks"], ans:3,
-  why:"A hollow shape displaces much more water than a solid block of the same mass, letting an object made of denser material still float.",
-  lessonMore:"Steel really is denser than water, so a solid lump of it sinks instantly — the trick is that a ship isn't solid steel. Its hollow hull traps a huge volume of air, spreading the ship's total mass out over a much bigger overall volume, so the ship's OVERALL density (steel plus all that trapped air combined) ends up less than water's, even though the raw material it's built from is denser on its own.", monster:"Steel-Sink Phantom", emoji:"&#9875;&#65039;" },
-{ n:13, section:'C', tier:'Applied', srcTest:'M3', body:"A student says: 'The geocentric and heliocentric models are just two equally good ways of describing the solar system — neither one is more correct.' What is the BEST correction?",
-  options:["The heliocentric model is correct — Venus phases prove it orbits the Sun", "Both models are equally correct and interchangeable", "The geocentric model is actually the correct one, not the heliocentric model", "Neither model has ever been tested against real evidence"], ans:1,
-  why:"Venus showing a full range of phases (not just crescents) is only possible if it orbits the Sun — real evidence that settled the debate in favour of the heliocentric model.",
-  lessonMore:"For thousands of years, believing Earth stood still was actually a reasonable, evidence-based conclusion — the ground under your feet feels perfectly still, while the Sun and stars appear to move across the sky. Without a telescope, both models explained those everyday observations equally well, which is exactly why nobody could prove which one was correct until new evidence — from telescopes — finally settled the debate in favour of the Sun-centred model that Copernicus had proposed.", monster:"Two-Model Sphinx", emoji:"&#127768;" },
-{ n:14, section:'B', tier:'Intermediate', srcTest:'M3', body:"A radiator heats the air in a room. The air just above it warms up, becomes less dense, and rises toward the ceiling, while cooler air near the floor sinks to replace it. What is this process called?",
-  options:["Convection","Evaporation","Condensation","Dissolving"], ans:1,
-  why:"Convection is warm, less-dense fluid rising while cooler, denser fluid sinks, creating a circulating current.", lessonMore:"Convection is one of three ways heat moves — alongside conduction (heat passing through a touching solid, like a metal spoon's handle in hot soup) and radiation (invisible rays crossing empty space, like sunlight reaching Earth) — and the giveaway for convection specifically is a current: warm, less-dense fluid rising while cooler, denser fluid sinks in to replace it, over and over, until everything reaches the same temperature.", monster:"Rising-Current Phantom", emoji:"&#127744;" },
-{ n:15, section:'C', tier:'Applied', srcTest:'M4', body:"For a science fair display, a student has a tub of small plastic beads, table salt, and water all mixed together. They evaporate the whole tub FIRST, without filtering out the beads beforehand. What problem does this create?",
-  options:["No trouble at all — the order of evaporating and filtering never actually changes the final result", "Evaporation only removes the liquid — it does nothing to solid, insoluble beads, which stay stuck in the dried salt", "The heat from evaporating actually breaks the plastic beads down into nothing, so they vanish completely", "Only the water and the beads evaporate together, while the salt is somehow left floating on top"], ans:2,
-  why:"Evaporation only removes the liquid solvent — it does nothing to insoluble solid pieces like plastic beads, so skipping filtering first leaves the beads stuck in with the dried salt.",
-  lessonMore:"Evaporation only works on the liquid solvent — it turns to vapour and escapes into the air, but insoluble solid pieces like beads never turn to gas no matter how much you heat them. That's why order matters: filtering has to come FIRST to trap and remove any insoluble solid, and only THEN should you evaporate the remaining liquid to recover a dissolved solute like salt.", monster:"Bead-Tub Trickster", emoji:"&#128167;" },
-{ n:16, section:'C', tier:'Applied', srcTest:'M4', body:"A tomato plant is classified as a flowering plant, and its ripe tomatoes contain seeds inside juicy flesh. Explain the connection between the flower's job and the tomato fruit — and why a seed's stored food inside it matters for a NEW seedling, using what you know about digestion too.",
-  options:["The flower and the fruit are actually completely unrelated structures with absolutely no real connection to each other at all, not even indirectly", "Tomatoes never actually grow from real flowers at all, and their seeds contain no stored food of any kind whatsoever, ever", "The tomato's seed actually fully digests the fruit around it before germinating, quite similar to how a human stomach digests food", "The flower's ovary becomes the tomato fruit around the seeds; the seed's stored food feeds the tiny embryo until it can grow leaves and make its own food"], ans:4,
-  why:"The ovary develops into the fruit around the seeds after fertilization; the seed's stored food nourishes the new embryo the same way digested nutrients nourish a growing body, until the seedling can photosynthesize on its own.",
-  lessonMore:"A handy habit: whenever you look inside a fruit, mentally split it into 'the seeds' (these were the ovules) and 'everything else around them' (this was the ovary wall that swelled up) — that split works on almost any fruit, from an apple's core to a tomato's pulp. The seed's stored food acts like a tiny food reserve for the embryo, just as your own digestive system has to break big food down into nutrients small enough to absorb into your blood before your body can use them.", monster:"Fruit-Seed Oracle", emoji:"&#127813;" },
-{ n:17, section:'C', tier:'Applied', srcTest:'M4', body:"A student wants to test the claim: \"Cactus spines reduce water loss compared to broad leaves.\" Design the fairest way to test this with two potted plants — a cactus and a broad-leafed plant — over one week.",
-  options:["Give the cactus much less water overall than the broad-leafed plant, then compare which one wilts first", "Keep both plants in identical pots, soil, and sunlight, with the same starting water, then measure water loss over the week", "Put the cactus in full sun and the broad-leafed plant in full shade, then compare their water loss", "Measure water loss across two entirely different weeks, one for each plant, so they don't affect each other"], ans:2,
-  why:"A fair test keeps every other variable (pot, soil, sunlight, starting water) identical between the two plants, changing only their real difference — the type of leaf/spine covering — so any difference in water loss can be trusted.",
-  lessonMore:"A cactus's spines really are shrunk-down leaves — less leaf surface area means less water lost through evaporation, which is exactly the real difference this test is trying to isolate. To prove that's what causes any difference in water loss (and not something else), only the leaf/spine type should differ between the two plants — everything else has to be identical, or you can't tell which factor actually caused the result.", monster:"Cactus-Test Wraith", emoji:"&#127797;" },
-{ n:18, section:'C', tier:'Applied', srcTest:'MOCK', body:"Three bar magnets, X, Y and Z, are lined up in a row, touching end to end: X-Y-Z. X and Y ATTRACT each other. Y and Z REPEL each other. Magnet X's LEFT end (the end not touching Y) is a SOUTH (S) pole. What are the poles at BOTH ends of Magnet Z?",
-  options:["Left end N, right end S","Left end S, right end N","Both ends are N poles","Both ends are S poles"], ans:1,
-  why:"Work one join at a time. X's left is S, so X's right (touching Y) is N. X-Y ATTRACT means unlike poles touch, so Y's left (touching X) must be S — making Y's right (touching Z) N. Y-Z REPEL means LIKE poles touch, so Z's left (touching Y) must also be N — making Z's right end S.",
-  lessonMore:"Chains like this are solved one join at a time, working outward from what you're given — figure out X's poles first, then use the X–Y attract rule to pin down Y's poles, then use the Y–Z repel rule to pin down Z's. The underlying rule never changes (same poles repel, different poles attract) — you're just carefully tracking which specific pole is facing which direction at each join, one step at a time, like following a chain link by link.", monster:"Three-Magnet Enigma", emoji:"&#129418;" },
-{ n:19, section:'C', tier:'Applied', srcTest:'MOCK', body:"Ploy wants to find out if the amount of water affects how tall a sunflower grows. She grows Plant A in a sunny spot with 50ml of water per day, and Plant B in a shady spot with 100ml of water per day. After 3 weeks, Plant B is taller. Ploy concludes: 'more water makes sunflowers grow taller.' What is the main problem with Ploy's experiment?",
-  options:["Sunflowers cannot grow indoors at all","Nothing — more water clearly helped","She changed two things at once, not one","She should have measured weight, not height"], ans:3,
-  why:"A fair test can only change ONE variable at a time while keeping everything else the same. Ploy changed BOTH the water amount and the amount of sunlight between the two plants, so the height difference could be caused by either factor (or both) — she can't fairly conclude it was the water alone.",
-  lessonMore:"This is the classic warning sign from fair testing: whenever two or more things change at once between groups being compared, you can no longer tell which change actually caused the result. To fix Ploy's test, only the water amount should differ between the two plants — sunlight, pot, soil, and everything else needs to be kept identical, or the height difference could just as easily be blamed on the extra sunlight as the water.", monster:"Two-Variable Illusionist", emoji:"&#127803;" },
-{ n:20, section:'C', tier:'Applied', srcTest:'MOCK', body:"Nine identical biscuit pieces were tested in three set-ups, each with 30ml of the same digestive juice: Set-up P used large chunks and took 40 minutes to fully break down. Set-up Q used medium pieces and took 25 minutes. Set-up R used tiny crushed crumbs and took 10 minutes. What conclusion can be drawn from this experiment?",
-  options:["Smaller pieces break down faster due to more surface area","Larger pieces simply taste better than smaller ones","The type of digestive juice makes no difference here","Biscuits only break down once crushed into crumbs"], ans:1,
-  why:"Cutting food into smaller pieces increases its total surface area — more of the biscuit's surface is touching the digestive juice at once, so the chemical breakdown happens faster. This is one reason chewing your food well before swallowing helps digestion.",
-  lessonMore:"This is mechanical digestion at work — physically breaking food into smaller pieces doesn't change WHAT the food is, just its size, but that size change matters enormously. It's the same surface-area trick your small intestine uses with its millions of tiny finger-like bumps to soak up nutrients faster — more exposed surface means digestive juices can act on more of the food at once.", monster:"Crumb-Speed Golem", emoji:"&#127850;" }
+{ n:1, section:'A', tier:'Basic', body:"Which of these best describes a PRODUCER in an ecosystem?",
+  options:["An organism that makes its own food using sunlight", "An organism that eats other living things for energy", "An organism that breaks down dead material", "An organism that never needs any energy at all"], ans:1,
+  why:"A producer makes its own food using sunlight — plants and algae are the main examples.",
+  lessonMore:"Producer is one of exactly three ecosystem jobs — producer, consumer, or decomposer — and every single living thing fits into one of them, based on how it gets its energy, not whether it's a plant or an animal. An ecosystem actually needs all three roles working together, since losing even one causes the whole system to break down.",
+  monster:"Sunroot Sprite", emoji:"&#127803;" },
+{ n:2, section:'A', tier:'Basic', body:"If you compare the amount of nitrogen gas in the air to the amount of oxygen gas, which of these is TRUE?",
+  options:["There is far more nitrogen in the air than oxygen", "There is far more oxygen in the air than nitrogen", "Nitrogen and oxygen make up exactly equal amounts of the air", "There is no oxygen in the air at all, only nitrogen"], ans:1,
+  why:"Nitrogen makes up roughly 4 out of every 5 parts of air (about 78%), far outweighing oxygen (about 21%).",
+  lessonMore:"That huge majority of nitrogen matters more than it looks — plants actually need nitrogen to grow strong, almost like a vitamin, but they can't use the nitrogen gas floating in the air directly. Special bacteria living in the soil (and in tiny root lumps on plants like peas and beans) have to change it into a usable form first, a process called nitrogen fixation.",
+  monster:"Nitrogen Wisp", emoji:"&#128168;" },
+{ n:3, section:'A', tier:'Basic', body:"Which THREE things does a seed need before it can germinate (start sprouting)?",
+  options:["Soil, light, and warmth", "Water, warmth, and air", "Light, air, and fertiliser", "Soil, water, and light"], ans:2,
+  why:"A seed needs water, the right warmth, and air (oxygen) to germinate — soil and light are not required at this first stage.",
+  lessonMore:"Each of those three does a specific job: water softens the seed coat and wakes the tiny plant inside, warmth keeps it from staying dormant (too cold or too hot and it just stays asleep), and air supplies the oxygen the tiny plant needs to release energy from its own stored food. That's exactly why the classic bean-in-a-wet-paper-towel experiment works with no soil at all — the seed brings its own starter food supply.",
+  monster:"Sprout Golem", emoji:"&#127793;" },
+{ n:4, section:'A', tier:'Basic', body:"Which flower part holds the ovules, and later grows into a fruit once fertilization happens?",
+  options:["Sepal", "Petal", "Ovary", "Anther"], ans:3,
+  why:"The ovary holds the ovules inside it, and once fertilization happens it grows and develops into a fruit.",
+  lessonMore:"The ovary sits at the base of the flower's pistil, with the style rising above it like a tube connecting up to the sticky stigma where pollen first lands. Once fertilization happens, the ovary doesn't just hold the seeds — it swells into a fruit that protects the new seeds and helps them spread, completing the loop back to a fresh batch of germinating seeds.",
+  monster:"Ovary Warden", emoji:"&#127802;" },
+{ n:5, section:'B', tier:'Intermediate', body:"A caterpillar spends its whole day eating leaves from a bush. What ecosystem role does the caterpillar play?",
+  options:["Producer, since it lives on a plant", "Consumer, since it eats another living thing for energy", "Decomposer, since it breaks down plant material", "It has no ecosystem role, since it's an insect"], ans:2,
+  why:"Eating another living thing (the leaves) for energy makes the caterpillar a consumer, not a producer or decomposer.",
+  lessonMore:"The test for sorting any living thing isn't 'is it a plant or an animal' — it's 'how does it get its energy.' A caterpillar eating a bush's living leaves is getting energy from another living thing, so it's a consumer; if it were instead eating a rotting log, it would be decomposer territory, since decomposers specifically break down DEAD material.",
+  monster:"Leafmuncher Imp", emoji:"&#128027;" },
+{ n:6, section:'B', tier:'Intermediate', body:"In a food chain 'grain → mouse → owl,' what would you expect to happen to the owl population if all the grain suddenly disappeared?",
+  options:["The owl population would likely increase, since there is less competition", "The owl population would likely decrease, since mice would have less food and their numbers would likely drop too", "The owl population would be completely unaffected, since owls don't eat grain directly and never interact with it at all", "The mouse population would increase without the grain"], ans:2,
+  why:"Even though owls don't eat grain directly, losing the grain would reduce the mouse population, which would then reduce the owls' food supply too.",
+  lessonMore:"This is the food-web ripple effect: a real ecosystem isn't one single food chain, it's several chains connected together, so losing grain doesn't just remove a link — it can ripple outward to every chain that touches the mouse population, even ones several steps further along that never directly involve grain at all.",
+  monster:"Chainlink Owlwraith", emoji:"&#129417;" },
+{ n:7, section:'B', tier:'Intermediate', body:"A factory accidentally spills oil into a nearby river, killing fish downstream almost immediately. Which type of human impact does this describe?",
+  options:["Pollution, since a harmful substance directly entered the water and harmed living things", "The greenhouse effect, since the oil traps heat in the water", "Nitrogen fixation gone wrong", "A natural food web change, unrelated to humans"], ans:1,
+  why:"A harmful substance (oil) directly entering water and harming living things is pollution, separate from the greenhouse effect.",
+  lessonMore:"Pollution and the greenhouse effect are the two separate ways humans harm ecosystems, and they work completely differently: pollution is a harmful substance — litter, chemicals, oil — directly poisoning or killing living things, while the greenhouse effect is about gases trapping extra heat around the whole planet. An oil spill killing fish has nothing to do with heat, so it's pollution, not the greenhouse effect.",
+  monster:"Oilspill Specter", emoji:"&#128738;&#65039;" },
+{ n:8, section:'B', tier:'Intermediate', body:"A sealed glass jar contains a seed sitting on a folded, completely dry paper towel, kept at a warm, comfortable room temperature with plenty of air inside the jar. Will the seed germinate?",
+  options:["Yes, since warmth and air are the only two things a seed truly needs", "Yes, because the glass jar acts like a greenhouse", "No, because the seed also needs direct soil contact to germinate", "No — the seed is missing water, one of the three essential requirements"], ans:4,
+  why:"Even with warmth and air present, a completely dry paper towel means the seed has no water — one of the three essential requirements for germination.",
+  lessonMore:"Water's specific job is softening the seed coat and waking up the tiny plant inside — warmth and air alone can't substitute for it. This is the same 'missing even ONE requirement means no germination' rule that applies to all three needs: a seed can have two out of three perfect conditions, but without water, warmth, AND air together, it simply won't sprout, no matter how good the other two are.",
+  monster:"Drybed Wraith", emoji:"&#127964;&#65039;" },
+{ n:9, section:'B', tier:'Intermediate', body:"Pollen has just landed on a flower's stigma. Through which part will it now travel to reach the ovule inside the ovary?",
+  options:["The petal", "The sepal", "The filament", "The style"], ans:4,
+  why:"The style is the tube connecting the stigma to the ovary, and pollen travels down it to reach an ovule.",
+  lessonMore:"This is the middle step in the full pollen journey: pollen lands on the stigma (that's pollination), then travels down the style, and only becomes fertilization once it actually joins an ovule inside the ovary. So a pollen grain sitting on the stigma has completed pollination, but it still has a trip down the style ahead of it before fertilization can happen.",
+  monster:"Style Serpent", emoji:"&#128013;" },
+{ n:10, section:'B', tier:'Intermediate', body:"A farmer notices that corn grows noticeably better in a field where beans were planted the previous season, compared to a field where corn was grown two seasons in a row. What is the MOST likely explanation?",
+  options:["Bean plants make the soil warmer, which corn prefers", "Bean plants use up all the nitrogen in the soil, leaving less competition for the corn", "Bean plants and their root bacteria fixed extra nitrogen into the soil, which the corn could then use", "This is just a coincidence with no scientific explanation"], ans:3,
+  why:"Beans host nitrogen-fixing bacteria in their roots, which add extra usable nitrogen to the soil — a benefit the next crop (corn) can draw on.",
+  lessonMore:"This is nitrogen fixation in action: bacteria living in tiny root lumps on bean plants capture nitrogen gas from the air and convert it into a form plant roots can actually use, since plants can't use the nitrogen gas floating around them directly. When the beans are harvested, that extra fixed nitrogen stays behind in the soil as a bonus for whatever's planted next — exactly why farmers rotate crops like beans with heavy feeders like corn.",
+  monster:"Root Nodule Golem", emoji:"&#129716;" },
+{ n:11, section:'C', tier:'Applied', body:"A pond ecosystem has a simple food web: algae are eaten by small fish, and small fish are eaten by herons. One year, a disease wipes out almost all the algae. What is the BEST prediction for the herons?",
+  options:["Herons will be completely unaffected, since they don't ever eat algae directly at all", "Herons will likely increase in number due to less competition", "Herons will likely decrease in number, since fewer small fish will survive without algae to eat", "Herons will switch to eating algae directly instead"], ans:3,
+  why:"Losing algae reduces the small fish population (their food source), which in turn reduces food available for herons.",
+  lessonMore:"A pond food web works the same way as any food web: whatever happens to the base ripples upward, since consumers depend on what's below them for energy. Herons never touch algae directly, but they depend on small fish, and small fish depend on algae — so losing the base of that chain starves out everything connected above it, one link at a time.",
+  monster:"Heron Shade", emoji:"&#128038;" },
+{ n:12, section:'C', tier:'Applied', body:"A student claims: 'Ecosystems would actually be healthier without decomposers, since they're just gross things that rot stuff.' What is the BEST critique of this claim?",
+  options:["The claim is wrong — without decomposers, dead material would pile up forever and nutrients could never be recycled back for producers to use", "The claim is correct — decomposers only cause problems in an ecosystem", "The claim is correct, but only in ecosystems that already have more than enough stored nutrients available for producers and other living things to use", "Decomposers don't actually do anything useful, they just happen to exist"], ans:1,
+  why:"Decomposers are essential — without them, dead material would never break down and nutrients could never return to the soil for producers to reuse.",
+  lessonMore:"This connects to the bigger rule that an ecosystem needs producers, consumers, AND decomposers all working together, or the whole system breaks down. Decomposers are nature's recyclers — without them, nutrients would stay locked up in dead material forever instead of returning to the soil, and producers (who need those nutrients to grow) would eventually run out of what they need.",
+  monster:"Rot Reclaimer", emoji:"&#127812;" },
+{ n:13, section:'C', tier:'Applied', body:"While watching an anthill, a student writes two notes. Note 1: 'The ants kept carrying small pieces of a dead beetle back into their nest, one by one, for over an hour.' Note 2: 'This must mean ants act as decomposers, recycling nutrients from dead animals.' Which note describes something she directly OBSERVED, rather than something she worked out afterwards?",
+  options:["This must mean ants act as decomposers, recycling nutrients from dead animals back into the surrounding soil over time", "Ants must be the primary decomposer in every single ecosystem on Earth", "The beetle must have died from natural causes rather than being hunted", "The ants kept carrying small pieces of a dead beetle back into their nest, one by one, for over an hour"], ans:4,
+  why:"Watching the ants carry beetle pieces is the direct observation. The idea that this means 'ants act as decomposers' is a conclusion she worked out afterwards — an inference.",
+  lessonMore:"An observation is something you can directly see, hear, or measure; an inference is a conclusion you work out afterwards based on that observation. You can watch ants carrying beetle pieces with your own eyes, but you can't actually SEE the label 'decomposer' — that's a conclusion reasoned out from the behaviour, which makes it the inference, not the observation. Mixing these two up is one of the most common science-investigation mistakes.",
+  monster:"Antcolony Oracle", emoji:"&#128028;" },
+{ n:14, section:'C', tier:'Applied', body:"A city's factories release large amounts of both smoke particles AND carbon dioxide into the air. Local doctors report more breathing problems in residents, while scientists separately measure a slow rise in the city's average yearly temperature. Which BEST matches each effect?",
+  options:["Both effects are caused by the greenhouse effect alone", "Both effects are caused by pollution alone", "The breathing problems are from pollution (smoke particles harming lungs directly); the temperature rise is from the greenhouse effect (carbon dioxide trapping heat)", "The breathing problems are from the greenhouse effect trapping heat; the temperature rise is instead caused entirely by pollution particles in the air"], ans:3,
+  why:"Smoke particles directly harming lungs is pollution; carbon dioxide trapping heat and raising temperature is the greenhouse effect — two different mechanisms.",
+  lessonMore:"A little greenhouse effect is actually natural and necessary — it's what keeps Earth warm enough for life. The problem is that burning extra fuel in cars and factories releases extra carbon dioxide, thickening that heat-trapping 'blanket' beyond its natural level, which is part of what's called climate change — a completely separate mechanism from smoke particles directly harming lungs.",
+  monster:"Smokestack Behemoth", emoji:"&#127981;" },
+{ n:15, section:'C', tier:'Applied', body:"A student wants to test what seeds need to germinate. She sets up two identical trays of the same type of seed. Tray A gets water and warmth but is sealed in a jar with all the air removed. Tray B gets water, warmth, AND normal air. After a week, Tray B has sprouted seedlings but Tray A has none. What can she conclude?",
+  options:["Air is not actually required for germination", "Water is not actually required for germination", "This experiment actually proves nothing at all about germination, since the two trays were never really comparable to begin with", "Air (oxygen) is required for germination, since removing it while keeping everything else the same stopped the seeds from sprouting"], ans:4,
+  why:"Since water and warmth were the same in both trays, and only air differed, the missing air is what explains why Tray A didn't sprout.",
+  lessonMore:"Air's specific job in germination is supplying oxygen so the tiny plant inside the seed can release energy from its own stored food — without it, the seed simply can't power its first sprouting, no matter how much water and warmth it has. This experiment also works because only ONE thing was changed between the two trays (the air), which is exactly what lets her safely link the missing air to the missing sprouts.",
+  monster:"Vacuum Sprout", emoji:"&#129514;" },
+{ n:16, section:'C', tier:'Applied', body:"A bird accidentally brushes against one flower's anther and carries a few grains of pollen to a stigma on a nearby flower. Two weeks later, the gardener notices that second flower's ovary has swollen into a small developing seed pod. What does this observation tell us?",
+  options:["Both pollination and fertilization must have happened, since the ovary is developing into something that will contain seeds", "Only pollination happened; the ovary swelling could easily be caused by something else entirely, completely unrelated to fertilization", "This proves fertilization happened but pollination did not", "This is impossible, since birds cannot pollinate flowers"], ans:1,
+  why:"A swelling, developing seed pod is a sign that fertilization actually occurred after pollination — the ovary only grows this way once an ovule inside has been fertilized.",
+  lessonMore:"Pollination (pollen landing on the stigma) and fertilization (pollen actually joining an ovule) are two separate steps, and pollination happening first doesn't guarantee fertilization will follow. But a swelling, developing seed pod is solid evidence that fertilization specifically occurred, since the ovary only grows that way once an ovule inside has actually been fertilized — it's the same growth that eventually produces a fruit protecting the new seeds.",
+  monster:"Podswell Djinn", emoji:"&#127800;" },
+{ n:17, section:'C', tier:'Applied', body:"A student notices that a compost bin full of decomposing food scraps produces noticeably richer, darker soil after a few months, and plants grown in that soil grow unusually well. What is the BEST scientific explanation, connecting decomposers and nutrients?",
+  options:["The dark colour of the soil is what directly makes plants grow better, regardless of any nutrients that might also be present", "Decomposers broke down the food scraps and released nutrients (including nitrogen-containing compounds) back into the soil, which the plants can then use to grow", "Compost bins work by trapping heat like a greenhouse, which is unrelated to decomposers", "This has nothing to do with decomposers; the soil was already rich beforehand"], ans:2,
+  why:"Decomposers break down food scraps and release nutrients like nitrogen compounds back into the soil, directly explaining why plants grow better in composted soil.",
+  lessonMore:"This is the exact same invisible, essential job that nitrogen-fixing bacteria do in a bean plant's roots — tiny living things in the soil, unseen but necessary, keeping nutrients flowing through the ecosystem. Decomposers break down the food scraps and release nutrients like nitrogen-containing compounds back into the soil, which is exactly why compost consistently makes richer soil that helps plants grow better.",
+  monster:"Compost Colossus", emoji:"&#9851;&#65039;" },
+{ n:18, section:'C', tier:'Applied', body:"Four living things are found in a garden: a rose bush, a ladybird beetle that eats aphids, a mushroom growing on a rotting log, and a caterpillar eating rose leaves. Which pair correctly matches TWO of these to the CONSUMER role?",
+  options:["Rose bush and mushroom", "Ladybird beetle and caterpillar", "Rose bush and ladybird beetle", "Mushroom and caterpillar"], ans:2,
+  why:"The ladybird beetle (eats aphids) and the caterpillar (eats leaves) both get energy by eating other living things, making them both consumers.",
+  lessonMore:"This garden scene actually contains all three ecosystem jobs at once: the rose bush is the producer (makes its own food via sunlight), the mushroom on the rotting log is the decomposer (breaks down dead material), and the ladybird plus the caterpillar are both consumers, since both get their energy by eating other living things — one eating aphids, the other eating leaves.",
+  monster:"Garden Duo Wraith", emoji:"&#128036;" },
+{ n:19, section:'C', tier:'Applied', body:"Imagine a meadow ecosystem where every single producer (grass and wildflowers) suddenly died from a severe drought. What is the BEST prediction for the rest of the ecosystem?",
+  options:["Only the decomposers would be affected; consumers would be fine", "Nothing would change at all, since consumers only get their energy from each other and never depend on producers", "Consumers that eat plants directly would starve first, and this would eventually affect the predators that eat those plant-eating consumers too", "The ecosystem would actually become healthier with fewer producers competing for space"], ans:3,
+  why:"Losing all producers removes the base of the food web — plant-eaters would starve first, and that shortage would ripple up to the predators that depend on them.",
+  lessonMore:"Producers are the base every food web is built on, so losing them all at once is the most severe kind of ecosystem collapse — the same ripple effect as losing algae in a pond, just starting from the very bottom of the whole system instead of partway up. Plant-eating consumers starve first because their direct food source is gone, and that shortage then climbs the chain to the predators that depend on those plant-eaters.",
+  monster:"Meadow Famine Titan", emoji:"&#127806;" },
+{ n:20, section:'C', tier:'Applied', body:"A student keeps a seed floating in a fish tank permanently submerged in water and claims: 'This seed will definitely germinate eventually, since it's always sitting in water.' What is the BEST critique of this claim?",
+  options:["The claim is correct, since water is the only thing a seed actually needs to germinate, no matter how deep it is submerged or how long it stays underwater", "The claim is wrong, because seeds can never germinate underwater under any circumstance", "The claim is correct as long as the water is at room temperature", "The claim is wrong — a seed fully submerged in water may not get enough air (oxygen), which is also required for germination, even with plenty of water and reasonable warmth"], ans:4,
+  why:"A seed needs air as well as water and warmth — being fully and permanently submerged can prevent enough oxygen from reaching the seed, even though water is plentiful.",
+  lessonMore:"This is the flip side of a seed sitting on a dry towel: there, water was missing; here, water is plentiful but the seed is permanently blocked from air, so oxygen can't reach it either. Missing even ONE of the three requirements — water, warmth, or air — stops germination completely, no matter how perfect the other two conditions are.",
+  monster:"Submerged Seed Wraith", emoji:"&#127754;" },
 ];
 /* ================= END unchanged content ================= */
-
-const SRC_LABEL = { M1:'Milestone 1', M2:'Milestone 2', M3:'Milestone 3', M4:'Milestone 4', MOCK:'ASMOPSS Mock Test' };
 
 function shuffle(arr){
   const a = arr.slice();
@@ -483,7 +501,6 @@ function renderQuestion(){
   document.getElementById('battle-card').classList.toggle('boss', isBoss);
   document.getElementById('q-tier').textContent = q.tier;
   document.getElementById('q-tier').className = 'tierlbl ' + q.tier;
-  document.getElementById('q-src').textContent = q.srcTest ? ('from ' + SRC_LABEL[q.srcTest]) : '';
   document.getElementById('monster-emoji').innerHTML = q.emoji;
   document.getElementById('monster-emoji').className = 'monster-emoji';
   document.getElementById('monster-name').textContent = (isBoss ? 'BOSS: ' : '') + q.monster;
@@ -587,7 +604,7 @@ function showEnd(){
   document.getElementById('rank-emoji').textContent = score >= GOLD_BAR ? '🥇' : (pass ? '🥈' : '🥉');
   document.getElementById('rank-lbl').textContent = score >= GOLD_BAR ? 'Gold Explorer!' : (pass ? 'Silver Explorer!' : 'Trial Survived');
   document.getElementById('end-msg').textContent = pass
-    ? `Great job — that's a PASS! Real reasoning questions pulled straight from the Milestone and Mock tests.`
+    ? `Great job — that's a PASS! Same content as your real Unit 17 test.`
     : `Good effort! Worth a rematch once you've reviewed the tips.`;
   document.getElementById('end-score').textContent = `${score}/${TOTAL} (${pct}%)`;
   countUp('end-coins', coins);
@@ -603,7 +620,7 @@ function showEnd(){
 }
 
 async function saveResults(){
-  const filename = `CIT_Apex_GameMode_Results_${window._lastResults.dateTaken}.json`;
+  const filename = `U17_GameMode_Results_${window._lastResults.dateTaken}.json`;
   const json = JSON.stringify(window._lastResults, null, 2);
   const statusEl = document.getElementById('save-status');
 
@@ -624,7 +641,7 @@ async function saveResults(){
   a.href = URL.createObjectURL(blob);
   a.download = filename;
   document.body.appendChild(a); a.click(); a.remove();
-  if (!GITHUB_CONFIG.enabled) statusEl.textContent = `Downloaded ${filename} (GitHub save not set up yet — separate from the official record — this is a compiled cross-unit trial).`;
+  if (!GITHUB_CONFIG.enabled) statusEl.textContent = `Downloaded ${filename} (GitHub save not set up yet — separate from the official Unit 17 record).`;
 }
 </script>
 </body>

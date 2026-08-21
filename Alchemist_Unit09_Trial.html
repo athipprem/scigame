@@ -87,6 +87,9 @@
   @keyframes pop{0%{transform:scale(.6)}60%{transform:scale(1.15)}100%{transform:scale(1)}}
   .why{display:none;text-align:left;margin-top:14px;padding:12px 14px;border-radius:10px;background:var(--chip);border-left:4px solid var(--gold);font-size:.85rem;color:#f0ddb8}
   .why.show{display:block}
+  .lesson-more{display:none;text-align:left;margin-top:10px;padding:12px 14px;border-radius:10px;background:#0e2622;border-left:4px solid var(--steel);font-size:.85rem;color:#bfe8de;line-height:1.55}
+  .lesson-more.show{display:block}
+  .lesson-more b{color:#5fd9c4}
   #next-btn{display:none;margin-top:16px}
 
   /* ---------- END SCREEN ---------- */
@@ -215,6 +218,7 @@
       <div class="opts" id="q-opts"></div>
       <div class="fx" id="fx"></div>
       <div class="why" id="why"></div>
+      <div class="lesson-more" id="lesson-more"></div>
       <button class="btn gold" id="next-btn" onclick="nextQuestion()">Next &#8594;</button>
     </div>
   </div>
@@ -286,66 +290,106 @@ async function pushToGitHub(filename, jsonText){
 const Q = [
 { n:1, section:'A', tier:'Basic', body:"What happens during a chemical reaction?",
   options:["The substance only changes shape or size","One or more brand new substances form, with different properties","The substance disappears completely, leaving nothing behind","Nothing changes at all"], ans:2,
-  why:"A chemical reaction always produces genuinely new substances with different properties from the starting materials.", monster:"Reaction Wisp", emoji:"&#9878;&#65039;" },
+  why:"A chemical reaction always produces genuinely new substances with different properties from the starting materials.",
+  lessonMore:"The real test isn't just spotting a clue like bubbles or a colour change — none of those clues prove a reaction by itself. The one true test is whether a genuinely new substance formed with different properties from what you started with.",
+  monster:"Reaction Wisp", emoji:"&#9878;&#65039;" },
 { n:2, section:'A', tier:'Basic', body:"Which of these is a PHYSICAL change, not a chemical one?",
   options:["A nail rusting", "Wood burning in a fire", "Ice melting into water", "A firework exploding"], ans:3,
-  why:"Melting is a physical change — it's still the same substance (water), just in a different state.", monster:"Melt Specter", emoji:"&#10052;&#65039;" },
+  why:"Melting is a physical change — it's still the same substance (water), just in a different state.",
+  lessonMore:"The way to check any change is to ask if you can undo it with a simple step like freezing, evaporating, or reshaping — melted ice passes that test easily since refreezing brings back the exact same water. Compare that to burning paper into ash, where no simple step brings the paper back, which is what makes burning a chemical change instead.",
+  monster:"Melt Specter", emoji:"&#10052;&#65039;" },
 { n:3, section:'A', tier:'Basic', body:"Which of these is a clue that a chemical reaction MIGHT be happening?",
   options:["The object always gets lighter for no reason", "New gas bubbles, a colour change, or a temperature change", "The object stays exactly the same forever", "The object turns invisible"], ans:2,
-  why:"Gas bubbles, colour change, and temperature change are all classic warning signs that a reaction may be occurring.", monster:"Clue Sprite", emoji:"&#128269;" },
+  why:"Gas bubbles, colour change, and temperature change are all classic warning signs that a reaction may be occurring.",
+  lessonMore:"None of the four clues — gas, colour change, temperature change, or new smell — proves a reaction on its own. An ice cube getting cold as it melts is a temperature change too, but that's just a physical change, so clues are only warning signs, not final proof.",
+  monster:"Clue Sprite", emoji:"&#128269;" },
 { n:4, section:'A', tier:'Basic', body:"Which change is generally REVERSIBLE?",
   options:["Baking a cake", "Cooking an egg", "Freezing water into ice, which can be melted back", "Burning paper into ash"], ans:3,
-  why:"Freezing/melting water is a physical change you can repeat back and forth — the other three are irreversible chemical reactions.", monster:"Reversible Wraith", emoji:"&#128260;" },
+  why:"Freezing/melting water is a physical change you can repeat back and forth — the other three are irreversible chemical reactions.",
+  lessonMore:"The real checklist question is whether you can get the original substance back using a simple physical step like freezing, evaporating, or reshaping. Dissolved sugar and bent wire pass that test the same way freezing ice does, which is why they all count as reversible changes.",
+  monster:"Reversible Wraith", emoji:"&#128260;" },
 
 { n:5, section:'B', tier:'Intermediate', body:"A student mixes baking soda and vinegar in a cup and sees it fizz vigorously, releasing gas. What is the BEST way to describe this?",
   options:["A physical change, since nothing new was made", "A chemical reaction — gas is being produced and a new substance is forming", "Not a change of any kind, just noise", "A chemical reaction only if it also changes colour"], ans:2,
-  why:"Vigorous fizzing with gas release is a strong sign of a chemical reaction — new substances (including the gas) are forming.", monster:"Fizzing Slime", emoji:"&#129489;" },
+  why:"Vigorous fizzing with gas release is a strong sign of a chemical reaction — new substances (including the gas) are forming.",
+  lessonMore:"Watch for a sneaky trap here: fizzing bubbles by themselves don't prove a reaction, since even melting ice in soda can look like it's fizzing just from trapped gas escaping physically. What makes vinegar and baking soda different is that a genuinely new substance is forming along with the gas.",
+  monster:"Fizzing Slime", emoji:"&#129489;" },
 { n:6, section:'B', tier:'Intermediate', body:"An ice cube is left on a plate and turns into a puddle of water after an hour. Later, that same water is put in the freezer and turns solid again. What does this show?",
   options:["This must be a chemical reaction, since the water changed state twice", "This is a physical change — the substance is still water throughout, and the change can be reversed", "The puddle is now a completely different substance from the ice", "Freezing always creates a brand new substance"], ans:2,
-  why:"Being able to reverse the change by simply re-freezing is strong evidence this is a physical change, not a chemical reaction.", monster:"Cycle Golem", emoji:"&#10052;&#65039;" },
+  why:"Being able to reverse the change by simply re-freezing is strong evidence this is a physical change, not a chemical reaction.",
+  lessonMore:"This passes the reversibility checklist perfectly — refreezing gets back the exact original substance with a simple physical step, so nothing new was ever created. Compare that to something like rust or burnt toast, where no simple step can undo the change, because a real chemical reaction already happened.",
+  monster:"Cycle Golem", emoji:"&#10052;&#65039;" },
 { n:7, section:'B', tier:'Intermediate', body:"An iron nail is left outside in the rain for several months and develops a flaky orange-brown coating. What is the BEST explanation?",
   options:["The nail simply got dirty and can be wiped clean back to bare iron", "The iron has reacted with oxygen and water to form rust, a new substance — this is a chemical reaction", "The coating is just water sitting on the surface", "Nothing has actually changed about the nail's substance"], ans:2,
-  why:"Rust is a genuinely new substance (iron oxide) formed by a slow chemical reaction between iron, oxygen, and water — not something you can simply wipe away.", monster:"Rust Golem", emoji:"&#129704;" },
+  why:"Rust is a genuinely new substance (iron oxide) formed by a slow chemical reaction between iron, oxygen, and water — not something you can simply wipe away.",
+  lessonMore:"Rust forms because oxygen and water are both reacting with the iron at the same time — take either one away and the reaction can't happen. That's exactly why builders paint or oil iron railings and steel bridges: the coating blocks oxygen and water from reaching the metal, slowing the rusting reaction down.",
+  monster:"Rust Golem", emoji:"&#129704;" },
 { n:8, section:'B', tier:'Intermediate', body:"A slice of bread is put in a toaster and comes out browned and crisp. Which statement is TRUE?",
   options:["Toasting is reversible — the toast can be turned back into plain bread by cooling it", "Toasting is a chemical reaction, and the browning cannot be undone", "Toasting is purely a change in temperature with no new substances involved", "Toast and bread are chemically identical substances"], ans:2,
-  why:"Toasting triggers a chemical reaction in the bread's surface that produces new browned substances — there is no simple way to reverse it back into plain bread.", monster:"Toast Imp", emoji:"&#127838;" },
+  why:"Toasting triggers a chemical reaction in the bread's surface that produces new browned substances — there is no simple way to reverse it back into plain bread.",
+  lessonMore:"Here's a sneaky twist worth knowing: if you spread butter on that toast, the butter melting is a completely different, physical change — pop it in the fridge and it turns solid again. The toast itself can never go back to plain bread, but the melted butter on top can, since only one of those two changes is a true chemical reaction.",
+  monster:"Toast Imp", emoji:"&#127838;" },
 { n:9, section:'B', tier:'Intermediate', body:"Sugar is stirred into a glass of water until it can no longer be seen. A student wants to know if this was a chemical reaction. What is the key test?",
   options:["Whether the water got warmer or colder", "Whether the sugar could be recovered, unchanged, by evaporating the water away", "Whether the glass is see-through", "Whether the water was stirred clockwise or anticlockwise"], ans:2,
-  why:"If evaporating the water would leave the original sugar behind unchanged, that shows dissolving was a physical change, not a chemical reaction.", monster:"Dissolve Phantom", emoji:"&#127864;" },
+  why:"If evaporating the water would leave the original sugar behind unchanged, that shows dissolving was a physical change, not a chemical reaction.",
+  lessonMore:"This connects to the reversible/irreversible checklist: dissolving pairs with evaporating as one of the classic reversible changes, right alongside melting and freezing. The sugar molecules never stopped being sugar — they just spread out through the water instead of turning into anything new.",
+  monster:"Dissolve Phantom", emoji:"&#127864;" },
 { n:10, section:'B', tier:'Intermediate', body:"Two identical crushed-vs-whole antacid tablets are dropped into two cups of water at the same temperature. The crushed tablet finishes fizzing first. What is the BEST explanation?",
   options:["Crushed tablets are a different chemical substance from whole ones", "The crushed tablet has more surface area exposed to the water, so it reacts faster", "Whole tablets never react with water at all", "The water temperature must have been different between the two cups"], ans:2,
-  why:"Crushing increases the surface area in contact with the water, allowing more of the tablet to react at the same time — making the reaction faster.", monster:"Fizz Racer Goblin", emoji:"&#128138;" },
+  why:"Crushing increases the surface area in contact with the water, allowing more of the tablet to react at the same time — making the reaction faster.",
+  lessonMore:"Surface area is only one of three things that can speed up a reaction — heat and concentration (how much of the reacting substance is used) are the other two. This is also why doctors know a crushed tablet can act faster in the body than a whole one: more of it is exposed and able to react at once.",
+  monster:"Fizz Racer Goblin", emoji:"&#128138;" },
 
 { n:11, section:'C', tier:'Applied', body:"A student claims: 'Mixing blue paint and yellow paint to make green paint is a chemical reaction, because a brand new colour appeared.' What is the BEST correction?",
   options:["The claim is correct exactly as stated", "This is really just the pigments physically mixing together — no genuinely new substance with different chemical properties has formed, unlike a true reaction", "Paint can never be mixed at all", "Colour changes are never a useful clue for anything"], ans:2,
-  why:"Simply blending two colours together is a physical mixture, not a chemical reaction — the individual pigments are still present, just combined visually.", monster:"Paint Blend Trickster", emoji:"&#127912;" },
+  why:"Simply blending two colours together is a physical mixture, not a chemical reaction — the individual pigments are still present, just combined visually.",
+  lessonMore:"Looking different isn't proof by itself — a colour change is only one of the warning-sign clues, not final evidence of a reaction. When you mix blue and yellow paint, the individual pigments are still sitting there unchanged, just blended together, which is very different from a true reaction creating a substance with new properties.",
+  monster:"Paint Blend Trickster", emoji:"&#127912;" },
 { n:12, section:'C', tier:'Applied', body:"A student tests whether warming vinegar speeds up its reaction with baking soda, but also uses a bigger spoonful of baking soda in the warm cup than in the cold cup. Why is this NOT a fair test?",
   options:["Two things changed at once (temperature AND amount of baking soda), so you can't tell which one caused any difference observed", "Fair tests must always use cold vinegar only", "Temperature never affects reaction speed, so the test is pointless either way", "Changing two things at once always gives more reliable results"], ans:1,
-  why:"A fair test changes only ONE variable at a time — changing both temperature and the amount of baking soda makes it impossible to isolate which factor caused any result.", monster:"Variable Guardian", emoji:"&#9878;&#65039;" },
+  why:"A fair test changes only ONE variable at a time — changing both temperature and the amount of baking soda makes it impossible to isolate which factor caused any result.",
+  lessonMore:"A well-designed fair test needs three clear parts: exactly one thing CHANGED on purpose (here, temperature), one result MEASURED (fizzing time or gas made), and everything else KEPT SAME (the vinegar amount, the baking soda amount, and the timing). Changing the baking soda amount too breaks the KEPT SAME part, so the result can't be trusted.",
+  monster:"Variable Guardian", emoji:"&#9878;&#65039;" },
 { n:13, section:'C', tier:'Applied', body:"Why can't a baked cake ever be turned back into its original flour, eggs, sugar, and butter, no matter what you do to it afterwards?",
   options:["Because baking only changes the cake's shape, not its substances", "Because baking triggers chemical reactions that create genuinely new substances, and simple physical steps (cooling, cutting, etc.) cannot undo those reactions", "Because cakes are not really made of separate ingredients at all", "Because ovens destroy matter completely, leaving nothing behind"], ans:2,
-  why:"Baking causes real chemical changes in the ingredients; since new substances have formed, no simple physical process can restore the original raw ingredients.", monster:"Cake Golem", emoji:"&#127856;" },
+  why:"Baking causes real chemical changes in the ingredients; since new substances have formed, no simple physical process can restore the original raw ingredients.",
+  lessonMore:"Reversible doesn't always mean easy to undo — in a real lab, some chemical reactions can technically be reversed with special processes. But for everyday science, if a change can't be undone with a simple physical step like cooling or cutting, you treat it as irreversible, and baking a cake definitely fails that simple-step test.",
+  monster:"Cake Golem", emoji:"&#127856;" },
 { n:14, section:'C', tier:'Applied', body:"Two identical cups of vinegar and baking soda are set up, but Cup A's vinegar is warmed first while Cup B's stays at room temperature; everything else is kept the same. Which BEST explains the expected difference?",
   options:["No difference is expected, since both cups have the same amount of vinegar and baking soda", "Cup B will fizz faster, because cooler temperatures always speed up reactions", "Cup A will likely fizz faster, because the warmer temperature gives the particles more energy to react", "Temperature has no connection to how fast this reaction happens"], ans:3,
-  why:"Higher temperature increases particle energy and collision rate, which generally speeds up a chemical reaction like this one.", monster:"Heat Accelerant Imp", emoji:"&#127777;&#65039;" },
+  why:"Higher temperature increases particle energy and collision rate, which generally speeds up a chemical reaction like this one.",
+  lessonMore:"This is exactly the classic fair test for temperature: two identical cups, same amount of vinegar, same amount of baking soda added at the same time — with warming the vinegar in one cup as the only thing that's different. Because temperature is the only variable that changed, any difference in fizzing speed can be fairly blamed on it alone.",
+  monster:"Heat Accelerant Imp", emoji:"&#127777;&#65039;" },
 { n:15, section:'C', tier:'Applied', body:"Builders often paint or oil iron railings and steel bridges. Based on what you know about rusting, what is the BEST reason for this?",
   options:["Paint and oil have nothing to do with rust prevention", "Paint and oil create a barrier that keeps water and oxygen away from the iron, slowing down the chemical reaction that forms rust", "Painting iron turns it into a completely different metal", "Rust only forms on painted metal, never on bare metal"], ans:2,
-  why:"Rusting is a chemical reaction between iron, oxygen, and water — blocking oxygen and water from reaching the metal slows the reaction down significantly.", monster:"Rust Shield Sentinel", emoji:"&#128737;&#65039;" },
+  why:"Rusting is a chemical reaction between iron, oxygen, and water — blocking oxygen and water from reaching the metal slows the reaction down significantly.",
+  lessonMore:"Rusting needs both oxygen and water reaching the iron at the same time to happen — a coat of paint or oil forms a barrier that keeps both of those away from the metal's surface. Since the reaction can't get started without them, the rusting slows down dramatically, even though the iron underneath hasn't changed at all.",
+  monster:"Rust Shield Sentinel", emoji:"&#128737;&#65039;" },
 { n:16, section:'C', tier:'Applied', body:"A student sets up two cups to test whether the AMOUNT of baking soda affects fizzing: both cups get the same vinegar at the same temperature, but Cup A gets one spoonful of baking soda and Cup B gets three spoonfuls. Which is the best description of this setup?",
   options:["It is unfair, because temperature was not also changed", "It is a fair test — only the amount of baking soda differs, so any result can be reasonably linked to that", "It is unfair, because you should always change every variable to get a clear answer", "It cannot be a fair test unless the cups are different sizes"], ans:2,
-  why:"Only the amount of baking soda was changed while vinegar and temperature stayed identical, which is exactly what a fair test requires.", monster:"Amount Tester Sprite", emoji:"&#9879;&#65039;" },
+  why:"Only the amount of baking soda was changed while vinegar and temperature stayed identical, which is exactly what a fair test requires.",
+  lessonMore:"This setup matches the CHANGED / MEASURED / KEPT SAME structure of a proper fair test: only the amount of baking soda changes between the cups, while the vinegar amount and temperature stay exactly the same. That's the opposite of a flawed test where a student changes temperature AND the baking soda amount at once and can no longer tell which one caused the difference.",
+  monster:"Amount Tester Sprite", emoji:"&#9879;&#65039;" },
 { n:17, section:'C', tier:'Applied', body:"A student says: 'Since dissolving sugar makes the water look clear and different, dissolving must always be a chemical reaction.' What is WRONG with this reasoning?",
   options:["Nothing is wrong — looking different always proves a chemical reaction happened", "Looking different is not proof of a new substance forming — the sugar is still sugar, just spread through the water, and can be recovered by evaporation", "Sugar can never actually dissolve in water at all", "Chemical reactions never change how something looks"], ans:2,
-  why:"A change in appearance alone doesn't prove a chemical reaction — the real test is whether a genuinely new substance has formed, which is not the case when sugar simply dissolves.", monster:"Clear Water Deceiver", emoji:"&#128167;" },
+  why:"A change in appearance alone doesn't prove a chemical reaction — the real test is whether a genuinely new substance has formed, which is not the case when sugar simply dissolves.",
+  lessonMore:"A colour or appearance change is just one of the four warning-sign clues — by itself, it never proves a chemical reaction happened. The real test is always whether a genuinely new substance formed, and since evaporating the water would leave the same sugar behind, nothing new was actually created here.",
+  monster:"Clear Water Deceiver", emoji:"&#128167;" },
 { n:18, section:'C', tier:'Applied', body:"A sealed jar with a rusting nail inside is weighed every week for a month, and the reading slowly changes. Reasoning about the rusting reaction, what does this pattern BEST show?",
   options:["The nail is disappearing completely with nothing left behind", "Rusting is a chemical reaction that happens gradually over time as iron, oxygen, and water slowly combine into rust", "Rust only forms instantly, all at once", "Weighing a jar has nothing to do with chemical reactions"], ans:2,
-  why:"Rusting is a slow chemical reaction — unlike a fast fizzing reaction, it can take days or weeks to notice, but it is still the same kind of process: new substances gradually forming.", monster:"Weighing Wraith", emoji:"&#9878;&#65039;" },
+  why:"Rusting is a slow chemical reaction — unlike a fast fizzing reaction, it can take days or weeks to notice, but it is still the same kind of process: new substances gradually forming.",
+  lessonMore:"Not every reaction fizzes instantly — baking soda and vinegar react in seconds, but rusting can take days or weeks to become visible. Speed aside, both are still the same basic process: substances gradually combining to form something genuinely new that wasn't there before.",
+  monster:"Weighing Wraith", emoji:"&#9878;&#65039;" },
 { n:19, section:'C', tier:'Applied', body:"In a controlled experiment testing whether crushing a tablet affects reaction speed, one tablet is left completely whole and untouched. What is the PURPOSE of this whole, unchanged tablet in the experiment?",
   options:["It has no purpose and should be removed", "It acts as a control, showing the reaction speed with no crushing, so the crushed tablets can be fairly compared against it", "It is there to save tablets", "It represents the fastest possible reaction speed"], ans:2,
-  why:"An unchanged control tablet lets the experimenter compare the crushed tablets against a true baseline, isolating the effect of crushing.", monster:"Control Guardian", emoji:"&#127919;" },
+  why:"An unchanged control tablet lets the experimenter compare the crushed tablets against a true baseline, isolating the effect of crushing.",
+  lessonMore:"An unchanged control tablet is really just the fair test's KEPT SAME idea taken to its simplest form — it shows what the reaction looks like with zero crushing, so any speed difference in the crushed tablets can be confidently traced back to the crushing itself and nothing else.",
+  monster:"Control Guardian", emoji:"&#127919;" },
 { n:20, section:'C', tier:'Applied', body:"Which statement MOST completely explains why chemical reactions are generally much harder to reverse than physical changes?",
   options:["Chemical reactions never actually change anything", "Chemical reactions create substances with genuinely different properties, so simple physical steps like cooling or reshaping cannot restore the original materials", "Physical changes are impossible to reverse, unlike chemical reactions", "There is no real difference between physical and chemical changes"], ans:2,
-  why:"Because a chemical reaction forms new substances with different properties, undoing it would require another reaction entirely — not just a simple physical step like freezing or reshaping.", monster:"The Alchemist's Rival", emoji:"&#129497;&#8205;&#9877;&#65039;" },
+  why:"Because a chemical reaction forms new substances with different properties, undoing it would require another reaction entirely — not just a simple physical step like freezing or reshaping.",
+  lessonMore:"The quick checklist for any change is: can you undo it with a simple physical step like freezing, evaporating, or reshaping? Reactions like rusting, burning, and baking almost always fail that test, because the new substances they create have different properties that no simple physical step can turn back into the originals.",
+  monster:"The Alchemist's Rival", emoji:"&#129497;&#8205;&#9877;&#65039;" },
 ];
 /* ================= END unchanged content ================= */
 
@@ -466,6 +510,7 @@ function renderQuestion(){
   document.getElementById('q-body').textContent = q.body;
   document.getElementById('fx').className = 'fx';
   document.getElementById('why').className = 'why';
+  document.getElementById('lesson-more').className = 'lesson-more';
   document.getElementById('next-btn').style.display = 'none';
   document.getElementById('q-opts').innerHTML = q.options.map((opt,i) =>
     `<button class="opt" onclick="answer(${i+1})">${String.fromCharCode(65+i)}. ${opt}</button>`).join('');
@@ -537,6 +582,10 @@ function answer(idx){
   document.getElementById(`node-${pos}`).classList.remove('current');
   document.getElementById('why').innerHTML = `💡 <b>Why:</b> ${q.why}`;
   document.getElementById('why').classList.add('show');
+  if (q.lessonMore){
+    document.getElementById('lesson-more').innerHTML = `🧠⚡ <b>Brain Boost:</b> ${q.lessonMore}`;
+    document.getElementById('lesson-more').classList.add('show');
+  }
   document.getElementById('next-btn').style.display = 'inline-block';
   document.getElementById('next-btn').textContent = (pos === deck.length-1) ? 'See Results →' : 'Next →';
   updateStats();

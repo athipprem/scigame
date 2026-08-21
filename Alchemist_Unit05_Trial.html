@@ -87,6 +87,9 @@
   @keyframes pop{0%{transform:scale(.6)}60%{transform:scale(1.15)}100%{transform:scale(1)}}
   .why{display:none;text-align:left;margin-top:14px;padding:12px 14px;border-radius:10px;background:var(--chip);border-left:4px solid var(--gold);font-size:.85rem;color:#f0ddb8}
   .why.show{display:block}
+  .lesson-more{display:none;text-align:left;margin-top:10px;padding:12px 14px;border-radius:10px;background:#0e2622;border-left:4px solid var(--steel);font-size:.85rem;color:#bfe8de;line-height:1.55}
+  .lesson-more.show{display:block}
+  .lesson-more b{color:#5fd9c4}
   #next-btn{display:none;margin-top:16px}
 
   /* ---------- END SCREEN ---------- */
@@ -215,6 +218,7 @@
       <div class="opts" id="q-opts"></div>
       <div class="fx" id="fx"></div>
       <div class="why" id="why"></div>
+      <div class="lesson-more" id="lesson-more"></div>
       <button class="btn gold" id="next-btn" onclick="nextQuestion()">Next &#8594;</button>
     </div>
   </div>
@@ -286,51 +290,81 @@ async function pushToGitHub(filename, jsonText){
 const Q = [
 { n:1, section:'A', tier:'Basic', body:"Which TWO changes of state happen when you COOL something down?",
   options:["Freezing and condensing","Melting and evaporating","Freezing and evaporating","Melting and condensing"], ans:1,
-  why:"Cooling causes freezing (liquid → solid) and condensing (gas → liquid) — both happen when heat is removed.", monster:"Frost Wisp", emoji:"&#10052;&#65039;" },
+  why:"Cooling causes freezing (liquid → solid) and condensing (gas → liquid) — both happen when heat is removed.",
+  lessonMore:"The diagram rule is simple: heating always pushes matter solid → liquid → gas, and cooling always pushes it back the other way, gas → liquid → solid. So cooling can only ever cause freezing or condensing — never melting or evaporating, which are the heating pair.",
+  monster:"Frost Wisp", emoji:"&#10052;&#65039;" },
 { n:2, section:'A', tier:'Basic', body:"Which best explains why matter is NOT lost when it changes state?",
   options:["It just rearranges into a different arrangement of the same particles","Some of it turns into pure energy and disappears","It gets replaced by new matter from the air","It disappears until it is reheated"], ans:1,
-  why:"A change of state only rearranges how particles are packed together — no particles are created or destroyed.", monster:"Particle Shifter", emoji:"&#128142;" },
+  why:"A change of state only rearranges how particles are packed together — no particles are created or destroyed.",
+  lessonMore:"You can prove it with a scale: weigh a sealed bag with an ice cube inside, let it melt completely without opening the bag, then weigh it again — the mass is exactly the same, because every bit of the ice is still in there, just rearranged into liquid water.",
+  monster:"Particle Shifter", emoji:"&#128142;" },
 { n:3, section:'A', tier:'Basic', body:"Which word describes a material that lets water soak into it?",
   options:["Waterproof","Absorbent","Transparent","Rigid"], ans:2,
-  why:"Absorbent materials (like paper or cotton) let water soak in.", monster:"Sponge Sprite", emoji:"&#129528;" },
+  why:"Absorbent materials (like paper or cotton) let water soak in.",
+  lessonMore:"Absorbent is the opposite of waterproof on the property list — paper and cotton are classic absorbent materials, while plastic and rubber are classic waterproof ones, which is why a cotton towel soaks up water but a plastic raincoat doesn't.",
+  monster:"Sponge Sprite", emoji:"&#129528;" },
 { n:4, section:'A', tier:'Basic', body:"Which word describes a material that does NOT bend easily?",
   options:["Waterproof","Opaque","Rigid","Absorbent"], ans:3,
-  why:"Rigid materials (like glass or brick) keep their shape and do not bend.", monster:"Iron Golem", emoji:"&#129704;" },
+  why:"Rigid materials (like glass or brick) keep their shape and do not bend.",
+  lessonMore:"Rigid is the opposite of flexible — glass and brick keep their shape, while rubber and cloth bend easily. A material can be rigid and something else at the same time, like glass being both rigid and transparent, which is exactly why it's chosen for windows.",
+  monster:"Iron Golem", emoji:"&#129704;" },
 { n:5, section:'A', tier:'Basic', body:"Glass allows you to see clearly through it. Which property is this?",
   options:["Transparent","Opaque","Flexible","Hard"], ans:1,
-  why:"Transparent materials let light pass through so you can see through them.", monster:"Glass Specter", emoji:"&#128717;&#65039;" },
+  why:"Transparent materials let light pass through so you can see through them.",
+  lessonMore:"Transparent materials like glass and clear plastic let light straight through so you can see through them, while opaque materials like wood and metal block your view completely — that's the exact property engineers pick when choosing glass for a window.",
+  monster:"Glass Specter", emoji:"&#128717;&#65039;" },
 
 { n:6, section:'B', tier:'Intermediate', body:"On a cold morning, tiny water droplets (dew) appear on the grass outside, even though it did not rain. What most likely caused this?",
   options:["Water vapour in the air cooled and condensed onto the cool grass overnight","The grass melted","The grass absorbed rain from yesterday","Ice on the grass evaporated"], ans:1,
-  why:"Water vapour in the air cools near the cold grass overnight and condenses into tiny liquid droplets — the same idea as condensation on a cold surface.", monster:"Dew Wraith", emoji:"&#128167;" },
+  why:"Water vapour in the air cools near the cold grass overnight and condenses into tiny liquid droplets — the same idea as condensation on a cold surface.",
+  lessonMore:"This is the same idea as a cold drink glass 'sweating,' or steam forming droplets on a cold bathroom mirror: water vapour that's already floating in the air touches something cool, loses heat, and condenses back into tiny liquid droplets — the water didn't come from inside the grass at all.",
+  monster:"Dew Wraith", emoji:"&#128167;" },
 { n:7, section:'B', tier:'Intermediate', body:"Which pair of changes both happen because of ADDING heat?",
   options:["Melting and evaporating","Freezing and condensing","Melting and condensing","Freezing and evaporating"], ans:1,
-  why:"Heating causes melting (solid → liquid) and evaporating (liquid → gas).", monster:"Ember Djinn", emoji:"&#128293;" },
+  why:"Heating causes melting (solid → liquid) and evaporating (liquid → gas).",
+  lessonMore:"Water shows this perfectly: ice (solid) can be heated to become water (liquid), and that water can be heated further to become steam or water vapour (gas) — the very same substance moving through both heating changes, melting then evaporating.",
+  monster:"Ember Djinn", emoji:"&#128293;" },
 { n:8, section:'B', tier:'Intermediate', body:"A company is designing a large window for a greenhouse so plants inside get plenty of sunlight. Which property is MOST important for the material they choose?",
   options:["Transparent","Magnetic","Absorbent","Soft"], ans:1,
-  why:"The window's main job is to let light through to the plants, so transparency matters most.", monster:"Sunbeam Guardian", emoji:"&#9728;&#65039;" },
+  why:"The window's main job is to let light through to the plants, so transparency matters most.",
+  lessonMore:"Choosing a material always means matching its property to the job — just like a raincoat needs waterproof material and an oven mitt needs a poor heat conductor, a greenhouse window needs to be transparent so sunlight can reach the plants inside.",
+  monster:"Sunbeam Guardian", emoji:"&#9728;&#65039;" },
 { n:9, section:'B', tier:'Intermediate', body:"Priya wants to build a tent that keeps rain out AND can be folded up small to pack away. Which TWO properties does the tent material need?",
   options:["Waterproof and flexible","Hard and transparent","Absorbent and rigid","Magnetic and opaque"], ans:1,
-  why:"Waterproof keeps rain out, and flexible lets it fold up small — both properties are needed together.", monster:"Rain Cloak Imp", emoji:"&#127746;" },
+  why:"Waterproof keeps rain out, and flexible lets it fold up small — both properties are needed together.",
+  lessonMore:"Most materials have several properties at once, and that's exactly why some materials get picked for tricky jobs — rubber is both flexible AND waterproof, which is the same reason it's used for boots and tyres, not just one property alone.",
+  monster:"Rain Cloak Imp", emoji:"&#127746;" },
 { n:10, section:'B', tier:'Intermediate', body:"In a chart sorted by 'Absorbent/Waterproof' and 'Hard/Soft,' a material that soaks up water easily and squishes when pressed belongs in which box?",
   options:["Waterproof + Hard","Absorbent + Soft","Waterproof + Soft","Absorbent + Hard"], ans:2,
-  why:"It soaks up water (absorbent) and squishes (soft), so it belongs in the Absorbent + Soft box.", monster:"Squish Puff", emoji:"&#129681;" },
+  why:"It soaks up water (absorbent) and squishes (soft), so it belongs in the Absorbent + Soft box.",
+  lessonMore:"Reading a two-property chart means checking an object against each property in turn — a cotton towel is checked against 'hard/soft' (it's soft) and 'waterproof/absorbent' (it's absorbent), so it lands in the Soft + Absorbent box, the same method used here.",
+  monster:"Squish Puff", emoji:"&#129681;" },
 
 { n:11, section:'C', tier:'Applied', body:"To test which of three materials (cotton, plastic, wool) is most waterproof, a student pours a DIFFERENT amount of water on each one and times how long it takes to soak through. Why is this NOT a fair test?",
   options:["The amount of water changed along with the material, so you can't tell which one caused any difference","Wool can never be tested for waterproofness","Plastic always wins waterproof tests","Cotton and wool are the same material"], ans:1,
-  why:"A fair test changes only ONE thing. Here, both the material AND the water amount changed, so any difference can't be blamed on the material alone.", monster:"Fair-Test Sentinel", emoji:"&#9878;&#65039;" },
+  why:"A fair test changes only ONE thing. Here, both the material AND the water amount changed, so any difference can't be blamed on the material alone.",
+  lessonMore:"The lesson lists exactly what must stay the same in a waterproof fabric test: the size of the fabric piece, the amount of water, the drip height, and the timing — change any of those along with the material, and you can no longer tell whether the material or the extra water caused the difference.",
+  monster:"Fair-Test Sentinel", emoji:"&#9878;&#65039;" },
 { n:12, section:'C', tier:'Applied', body:"An open bowl contains 200g of water. After a day in a warm room, some of the water evaporates, leaving only 150g of water in the bowl. What happened to the missing 50g?",
   options:["It turned into water vapour and spread out into the air in the room","It was destroyed and no longer exists anywhere","It turned into ice at the bottom of the bowl","It was never really there in the first place"], ans:1,
-  why:"Evaporation doesn't destroy matter — the missing water became invisible water vapour that spread into the surrounding air.", monster:"Vapour Wisp", emoji:"&#127787;&#65039;" },
+  why:"Evaporation doesn't destroy matter — the missing water became invisible water vapour that spread into the surrounding air.",
+  lessonMore:"Nothing is ever truly lost, even when it looks like it vanished — if you could weigh all the air in the room before and after, that missing 50g of mass would show up there instead, spread out as invisible water vapour.",
+  monster:"Vapour Wisp", emoji:"&#127787;&#65039;" },
 { n:13, section:'C', tier:'Applied', body:"Which sequence correctly shows water changing state as a puddle dries up in the sun, rises into the sky, and later falls back down as rain?",
   options:["Evaporating, then condensing","Melting, then freezing","Condensing, then evaporating","Freezing, then melting"], ans:1,
-  why:"The puddle's water evaporates into vapour (liquid → gas), rises, then condenses into cloud droplets (gas → liquid) that fall as rain.", monster:"Cloud Cycle Serpent", emoji:"&#9729;&#65039;" },
+  why:"The puddle's water evaporates into vapour (liquid → gas), rises, then condenses into cloud droplets (gas → liquid) that fall as rain.",
+  lessonMore:"This is literally how weather works: a puddle evaporates in the sun (liquid → gas) and rises into the sky, then cools and condenses (gas → liquid) into cloud droplets, which is exactly how clouds and rain form.",
+  monster:"Cloud Cycle Serpent", emoji:"&#9729;&#65039;" },
 { n:14, section:'C', tier:'Applied', body:"A student sorts objects using 'Magnetic/Non-magnetic' and 'Hard/Soft.' A rubber ball is soft and non-magnetic. A steel nail is hard and magnetic. A soft putty with tiny iron filings mixed in is tested and found to stick to a magnet. Which box does the putty belong in?",
   options:["Soft + Magnetic","Hard + Magnetic","Soft + Non-magnetic","Hard + Non-magnetic"], ans:1,
-  why:"The putty squishes easily (soft) and sticks to a magnet (magnetic, because of the iron filings mixed in), so it belongs in the Soft + Magnetic box.", monster:"Magnet Putty Blob", emoji:"&#128280;" },
+  why:"The putty squishes easily (soft) and sticks to a magnet (magnetic, because of the iron filings mixed in), so it belongs in the Soft + Magnetic box.",
+  lessonMore:"Magnetic is its own separate property from hard/soft — iron and steel are magnetic, and mixing iron filings into soft putty makes the putty magnetic too, so you check magnetism and softness separately, then combine both answers to find its box in the chart.",
+  monster:"Magnet Putty Blob", emoji:"&#128280;" },
 { n:15, section:'C', tier:'Applied', body:"An engineer needs a material for a boat hull that must be both waterproof AND rigid enough to hold its shape in rough waves. What is the BEST reason to choose hard plastic over cotton fabric?",
   options:["Hard plastic is naturally waterproof and rigid, while cotton is absorbent and floppy, so cotton would soak up water and lose its shape","Cotton is always more expensive than plastic","Hard plastic is a better colour for boats","Cotton is magnetic, which would sink the boat"], ans:1,
-  why:"The hull needs waterproof + rigid properties. Hard plastic has both; cotton is absorbent (would soak up water) and not rigid (would lose its shape) — the wrong material for the job.", monster:"The Tide Golem", emoji:"&#127754;" },
+  why:"The hull needs waterproof + rigid properties. Hard plastic has both; cotton is absorbent (would soak up water) and not rigid (would lose its shape) — the wrong material for the job.",
+  lessonMore:"Get the property wrong and the object fails — just like a glass umbrella or a paper raincoat wouldn't work, a cotton boat hull would soak up water and go floppy instead of holding its shape, which is why matching waterproof + rigid properties to the job matters so much.",
+  monster:"The Tide Golem", emoji:"&#127754;" },
 ];
 /* ================= END unchanged content ================= */
 
@@ -451,6 +485,7 @@ function renderQuestion(){
   document.getElementById('q-body').textContent = q.body;
   document.getElementById('fx').className = 'fx';
   document.getElementById('why').className = 'why';
+  document.getElementById('lesson-more').className = 'lesson-more';
   document.getElementById('next-btn').style.display = 'none';
   document.getElementById('q-opts').innerHTML = q.options.map((opt,i) =>
     `<button class="opt" onclick="answer(${i+1})">${String.fromCharCode(65+i)}. ${opt}</button>`).join('');
@@ -522,6 +557,10 @@ function answer(idx){
   document.getElementById(`node-${pos}`).classList.remove('current');
   document.getElementById('why').innerHTML = `💡 <b>Why:</b> ${q.why}`;
   document.getElementById('why').classList.add('show');
+  if (q.lessonMore){
+    document.getElementById('lesson-more').innerHTML = `🧠⚡ <b>Brain Boost:</b> ${q.lessonMore}`;
+    document.getElementById('lesson-more').classList.add('show');
+  }
   document.getElementById('next-btn').style.display = 'inline-block';
   document.getElementById('next-btn').textContent = (pos === deck.length-1) ? 'See Results →' : 'Next →';
   updateStats();

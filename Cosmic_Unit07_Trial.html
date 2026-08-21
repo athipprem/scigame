@@ -87,6 +87,9 @@
   @keyframes pop{0%{transform:scale(.6)}60%{transform:scale(1.15)}100%{transform:scale(1)}}
   .why{display:none;text-align:left;margin-top:14px;padding:12px 14px;border-radius:10px;background:var(--chip);border-left:4px solid var(--gold);font-size:.85rem;color:#f0ddb8}
   .why.show{display:block}
+  .lesson-more{display:none;text-align:left;margin-top:10px;padding:12px 14px;border-radius:10px;background:#0e2622;border-left:4px solid var(--steel);font-size:.85rem;color:#bfe8de;line-height:1.55}
+  .lesson-more.show{display:block}
+  .lesson-more b{color:#5fd9c4}
   #next-btn{display:none;margin-top:16px}
 
   /* ---------- END SCREEN ---------- */
@@ -215,6 +218,7 @@
       <div class="opts" id="q-opts"></div>
       <div class="fx" id="fx"></div>
       <div class="why" id="why"></div>
+      <div class="lesson-more" id="lesson-more"></div>
       <button class="btn gold" id="next-btn" onclick="nextQuestion()">Next &#8594;</button>
     </div>
   </div>
@@ -286,49 +290,63 @@ async function pushToGitHub(filename, jsonText){
 const Q = [
 { n:1, section:'A', tier:'Basic', body:"What do we call Earth's daily spin on its own axis?",
   options:["Revolution","Rotation","Reflection","Eclipse"], ans:2,
-  why:"Earth's daily spin on its axis is called rotation — it's what causes day and night.", monster:"Spin Wisp", emoji:"&#127744;" },
+  why:"Earth's daily spin on its axis is called rotation — it's what causes day and night.", monster:"Spin Wisp", emoji:"&#127744;",
+  lessonMore:"The Sun itself isn't moving around Earth — it's Earth spinning that makes different parts of the globe face toward or away from the Sun. Your side of the planet gets sunlight (day) when it faces the Sun, and sits in Earth's own shadow (night) when it faces away." },
 { n:2, section:'A', tier:'Basic', body:"What do we call Earth's journey all the way around the Sun?",
   options:["Rotation","Revolution","Eclipse","Reflection"], ans:2,
-  why:"Earth's journey around the Sun is called revolution — one full trip takes about 365 days, or one year.", monster:"Orbit Drifter", emoji:"&#129680;" },
+  why:"Earth's journey around the Sun is called revolution — one full trip takes about 365 days, or one year.", monster:"Orbit Drifter", emoji:"&#129680;",
+  lessonMore:"Rotation and revolution are happening to Earth at the same time but doing two completely different jobs — a trap is mixing them up. If Earth kept revolving around the Sun but stopped rotating, one side would stay lit forever and the other would stay dark forever, with no day-night cycle at all." },
 { n:3, section:'A', tier:'Basic', body:"About how long does ONE rotation of Earth take?",
   options:["24 hours","48 hours","1 week","10 minutes"], ans:1,
-  why:"One full rotation (spin) of Earth takes about 24 hours — one day-night cycle.", monster:"Day-Night Sprite", emoji:"&#127767;" },
+  why:"One full rotation (spin) of Earth takes about 24 hours — one day-night cycle.", monster:"Day-Night Sprite", emoji:"&#127767;",
+  lessonMore:"Don't confuse the 24-hour spin with the much longer 365-day trip around the Sun — rotation is fast and gives you day and night, while revolution is slow and gives you a whole year." },
 { n:4, section:'A', tier:'Basic', body:"Which best describes what the Sun is?",
   options:["A planet","A moon","A star","A comet"], ans:3,
-  why:"The Sun is a star — it makes its own light and heat.", monster:"Starfire Core", emoji:"&#11088;" },
+  why:"The Sun is a star — it makes its own light and heat.", monster:"Starfire Core", emoji:"&#11088;",
+  lessonMore:"The Sun sits at the centre of the solar system, and everything else is arranged around that one fact: planets like Earth orbit the Sun because it's the big, light-making body at the middle, and moons then orbit those planets — not the Sun directly." },
 { n:5, section:'A', tier:'Basic', body:"Which of these bodies orbits Earth?",
   options:["The Sun","The Moon","Mars","Venus"], ans:2,
-  why:"The Moon orbits Earth, taking about 27–29 days for one full trip.", monster:"Moon Shade", emoji:"&#127769;" },
+  why:"The Moon orbits Earth, taking about 27–29 days for one full trip.", monster:"Moon Shade", emoji:"&#127769;",
+  lessonMore:"The Moon has no light of its own — what you actually see is sunlight bouncing off its surface, the same way sunlight bounces off a wall or a mirror. As the Moon orbits Earth, its position relative to the Sun keeps changing, which is what makes its lit shape appear to change too." },
 { n:6, section:'B', tier:'Intermediate', body:"Nok used a star app in April and saw the constellation Orion setting early in the night sky. In October, the app shows Orion is not visible at all after dark. What is the BEST explanation?",
   options:["The stars in Orion moved away to a new part of space","Earth spun faster in October than in April","Earth has orbited to a different position, so its night side now faces a different part of space","Orion's stars turned off their light for six months"], ans:3,
-  why:"Earth's position in its year-long orbit changes, so the part of space visible from the night side gradually shifts — the same reason different constellations are visible at different times of year.", monster:"Constellation Phantom", emoji:"&#10024;" },
+  why:"Earth's position in its year-long orbit changes, so the part of space visible from the night side gradually shifts — the same reason different constellations are visible at different times of year.", monster:"Constellation Phantom", emoji:"&#10024;",
+  lessonMore:"On a single night, stars seem to slide slowly across the sky just from Earth's rotation, but it's mostly the same constellations you saw a few hours earlier. It's only when Earth has travelled to a genuinely different point in its months-long orbit that the night side points toward a different part of space entirely, swapping out which constellations are visible." },
 { n:7, section:'B', tier:'Intermediate', body:"The Moon is positioned exactly between Earth and the Sun. Which phase does this cause?",
   options:["New Moon","Gibbous Moon","Crescent Moon","This always causes a solar eclipse"], ans:1,
-  why:"When the Moon is between Earth and the Sun, its lit half faces away from Earth, so we see the dark side — a New Moon.", monster:"New Moon Wraith", emoji:"&#127761;" },
+  why:"When the Moon is between Earth and the Sun, its lit half faces away from Earth, so we see the dark side — a New Moon.", monster:"New Moon Wraith", emoji:"&#127761;",
+  lessonMore:"A common mix-up is thinking Earth's shadow blocks part of the Moon to make phases happen — that's actually what causes a rare lunar eclipse, not this everyday New Moon. Regular phases are about the Moon's changing viewing angle as it orbits, not a shadow falling on it." },
 { n:8, section:'B', tier:'Intermediate', body:"Which of these is caused by Earth's ROTATION, not its revolution?",
   options:["The four seasons changing","One full year passing","Day turning into night","Earth's distance from the Sun slowly changing"], ans:3,
-  why:"Day turning into night happens every 24 hours because of rotation. Seasons and the length of a year come from the much slower revolution.", monster:"Twilight Golem", emoji:"&#127750;" },
+  why:"Day turning into night happens every 24 hours because of rotation. Seasons and the length of a year come from the much slower revolution.", monster:"Twilight Golem", emoji:"&#127750;",
+  lessonMore:"It's easy to mix these two up because they're both about Earth's movement — but the rule is clear: the fast daily SPIN is rotation, giving day and night, while the slow yearly LOOP around the Sun is revolution, which is what makes a year. A common trap is assuming the yearly loop is somehow responsible for day and night, when only the spin does that." },
 { n:9, section:'B', tier:'Intermediate', body:"Which statement is TRUE about how our solar system is arranged?",
   options:["Planets orbit the Moon","The Sun orbits Earth","Moons orbit their planets, and planets orbit the Sun","All moons orbit the Sun directly, not their planets"], ans:3,
-  why:"The Sun is at the centre; planets (including Earth) orbit the Sun; moons orbit their planets, not the Sun directly.", monster:"Celestial Hierarch", emoji:"&#9728;&#65039;" },
+  why:"The Sun is at the centre; planets (including Earth) orbit the Sun; moons orbit their planets, not the Sun directly.", monster:"Celestial Hierarch", emoji:"&#9728;&#65039;",
+  lessonMore:"Everything in the solar system orbits something bigger than itself: moons orbit their planet, and planets orbit the Sun sitting at the centre. Earth's own trip around the Sun is called revolution, but the Moon's trip is around Earth instead — two separate orbits with two separate centres, so it's a mistake to think the Moon orbits the Sun directly the way Earth does." },
 { n:10, section:'B', tier:'Intermediate', body:"A diagram shows Earth's night side facing a cluster of stars called Group X in January. Six months later, a new diagram shows Earth on the OPPOSITE side of its orbit. Which stars will Earth's night side most likely face now?",
   options:["Still Group X, unchanged","A different group of stars, roughly opposite Group X in the sky","No stars will be visible at all","The Sun itself will be visible at night"], ans:2,
-  why:"Being on the opposite side of the orbit means the night side points toward roughly the opposite direction in space, so a different set of stars becomes visible.", monster:"Star-Shift Specter", emoji:"&#127756;" },
+  why:"Being on the opposite side of the orbit means the night side points toward roughly the opposite direction in space, so a different set of stars becomes visible.", monster:"Star-Shift Specter", emoji:"&#127756;",
+  lessonMore:"This is just like the January-versus-July example: Earth on opposite sides of its orbit has its night side pointing toward opposite directions in space, so a totally different set of background stars becomes visible compared to six months earlier." },
 { n:11, section:'C', tier:'Applied', body:"A student models Moon phases using a flashlight (Sun) and an orange (Moon), but has nothing representing Earth, and looks at the orange from random, unfixed angles each time. Why is this a FLAWED model?",
   options:["Without a fixed viewpoint representing Earth, you can't tell which lit portion would actually be seen from a real observer at any one time — the viewing point matters as much as the light source and the object","Oranges can never represent the Moon","Flashlights are too bright to represent the Sun","The model is perfect exactly as described"], ans:1,
-  why:"A good model needs all three parts represented consistently — light source, object, AND a fixed observer position — otherwise you can't connect the model back to what a real observer on Earth would see.", monster:"Flawed Model Wraith", emoji:"&#128301;" },
+  why:"A good model needs all three parts represented consistently — light source, object, AND a fixed observer position — otherwise you can't connect the model back to what a real observer on Earth would see.", monster:"Flawed Model Wraith", emoji:"&#128301;",
+  lessonMore:"In the real Moon-phase model, a ball stands for the Moon, a lamp for the Sun, and your own head for Earth — and your head has to stay still, because it's the fixed observer point. Move it around randomly instead of keeping it as a steady stand-in for Earth, and you can no longer tell what a real person standing on Earth would actually see at any moment." },
 { n:12, section:'C', tier:'Applied', body:"A student says: \"A lunar eclipse and a New Moon are the same thing, since the Moon looks dark or hard to see in both cases.\" What is the BEST correction?",
   options:["They are different: a New Moon happens every month because of the Moon's ordinary position between Earth and the Sun, while a lunar eclipse is rare and happens when Earth's shadow falls on a Full Moon","The student is correct — they are exactly the same event","A lunar eclipse can only happen during a New Moon, so they must be identical","Neither a New Moon nor a lunar eclipse is a real event"], ans:1,
-  why:"New Moons happen every month as a normal part of the Moon's orbit; lunar eclipses are rare events caused by Earth's shadow falling on a Full Moon — different causes, different frequency.", monster:"Eclipse Shade", emoji:"&#127768;" },
+  why:"New Moons happen every month as a normal part of the Moon's orbit; lunar eclipses are rare events caused by Earth's shadow falling on a Full Moon — different causes, different frequency.", monster:"Eclipse Shade", emoji:"&#127768;",
+  lessonMore:"The real difference is about the mechanism, not just how the Moon looks: an eclipse happens because Earth's shadow physically blocks sunlight from reaching the Moon, while a New Moon happens purely because of viewing angle — its lit half is simply facing away from Earth, with no shadow involved at all." },
 { n:13, section:'C', tier:'Applied', body:"Earth is at a certain point in its orbit in March. It takes about 12 months to return to the same point. Which statement is correct about that point the FOLLOWING March?",
   options:["Earth will be back at roughly the same point, and a similar general area of night stars will be visible again","Earth will have stopped orbiting by then","Earth will be at a completely random, unpredictable point in space","The Sun will have moved to that point instead of Earth"], ans:1,
-  why:"Earth's revolution is a repeating yearly cycle, so it returns to roughly the same orbital position each year — which is why the night sky pattern for a given month repeats year after year.", monster:"Yearly Cycle Serpent", emoji:"&#128260;" },
+  why:"Earth's revolution is a repeating yearly cycle, so it returns to roughly the same orbital position each year — which is why the night sky pattern for a given month repeats year after year.", monster:"Yearly Cycle Serpent", emoji:"&#128260;",
+  lessonMore:"Revolution is a repeating loop that takes about 365 days, and then Earth simply starts the same lap over again. That's also tied to the changing night sky: because Earth returns to roughly the same orbital spot each year, the same general area of stars tends to be visible around the same month, year after year." },
 { n:14, section:'C', tier:'Applied', body:"To test whether changing the Moon's ORBITAL POSITION changes which phase is seen, a student changes both the ball's position AND the lamp's brightness at the same time in a model. Why is this NOT a fair test of the position idea?",
   options:["Both the position and the brightness changed at once, so you can't tell whether any change in the model was caused by the new position or the new brightness","Brightness never affects how a model looks","Position doesn't matter in this kind of model","Lamps cannot be used in science models"], ans:1,
-  why:"A fair test changes only ONE thing at a time. Changing both position and brightness together means any difference observed can't be blamed on position alone.", monster:"Fair-Test Sentinel", emoji:"&#9878;&#65039;" },
+  why:"A fair test changes only ONE thing at a time. Changing both position and brightness together means any difference observed can't be blamed on position alone.", lessonMore:"There's a simple warning sign for spotting this: if a group has two or more things different from the control at once, flag it right away — it can't be trusted as a single-variable test. The fix is always the same, whatever the topic: pick just one thing to change on purpose, and keep everything else exactly the same as the control.", monster:"Fair-Test Sentinel", emoji:"&#9878;&#65039;" },
 { n:15, section:'C', tier:'Applied', body:"Which sequence correctly shows the Moon's phases in order as it travels from New Moon, through the rest of its orbit, and back to New Moon again?",
   options:["New Moon → increasing lit portion → Full Moon → decreasing lit portion → back to New Moon","Full Moon → New Moon → Full Moon → New Moon, all in one night","New Moon → Full Moon → New Moon, but only during a lunar eclipse","The Moon stays at Full Moon forever once it reaches that phase"], ans:1,
-  why:"Over about one month, the visible lit portion grows from New Moon to Full Moon, then shrinks back down to New Moon again — a repeating cycle, not a one-night event.", monster:"Phase Cycle Djinn", emoji:"&#127762;" },
+  why:"Over about one month, the visible lit portion grows from New Moon to Full Moon, then shrinks back down to New Moon again — a repeating cycle, not a one-night event.", monster:"Phase Cycle Djinn", emoji:"&#127762;",
+  lessonMore:"The Moon takes about 27–29 days to complete one full orbit of Earth, and that whole trip is the phase cycle: starting at New Moon, the lit portion we see grows for about two weeks to Full Moon, then shrinks back down for about two more weeks to New Moon again, on repeat." },
 ];
 /* ================= END unchanged content ================= */
 
@@ -449,6 +467,7 @@ function renderQuestion(){
   document.getElementById('q-body').textContent = q.body;
   document.getElementById('fx').className = 'fx';
   document.getElementById('why').className = 'why';
+  document.getElementById('lesson-more').className = 'lesson-more';
   document.getElementById('next-btn').style.display = 'none';
   document.getElementById('q-opts').innerHTML = q.options.map((opt,i) =>
     `<button class="opt" onclick="answer(${i+1})">${String.fromCharCode(65+i)}. ${opt}</button>`).join('');
@@ -520,6 +539,10 @@ function answer(idx){
   document.getElementById(`node-${pos}`).classList.remove('current');
   document.getElementById('why').innerHTML = `💡 <b>Why:</b> ${q.why}`;
   document.getElementById('why').classList.add('show');
+  if (q.lessonMore){
+    document.getElementById('lesson-more').innerHTML = `🧠⚡ <b>Brain Boost:</b> ${q.lessonMore}`;
+    document.getElementById('lesson-more').classList.add('show');
+  }
   document.getElementById('next-btn').style.display = 'inline-block';
   document.getElementById('next-btn').textContent = (pos === deck.length-1) ? 'See Results →' : 'Next →';
   updateStats();

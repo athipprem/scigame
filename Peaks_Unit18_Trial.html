@@ -4,18 +4,18 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
-<title>Puzzle Citadel — The Apex Trials</title>
+<title>Physics Quest — The Energy Chain Trials (Unit 18)</title>
 <style>
   :root{
     --gold:#FFD700; --gold-d:#DAA520; --amber:#FFA500;
     --steel:#00695c; --steel-d:#004d40; --steel-l:#e0f2f1;
-    --bg:#1a1030; --bg2:#3a1f42; --panel:#241533; --chip:#2e1a3f; --line:#4a2c52;
-    --ink:#fff3e6; --grey:#c9b3d9;
+    --bg:#0d1420; --bg2:#1c2c40; --panel:#141f30; --chip:#1b2a3f; --line:#2e4560;
+    --ink:#e8f1fb; --grey:#9db3c9;
     --ok:#43e97b; --bad:#ff5c6c;
     --a:#00e5c9; --b:#5fa8ff; --c:#c77dff;
-    /* --world = this trial's identity color, matching Puzzle Citadel on the World Map.
-       Applied Reasoning / Puzzle Citadel = coral-orange, shared across citadel trials. */
-    --world:#ff8a65;
+    /* --world = this trial's identity color, matching Force Peaks on the World Map.
+       Physics / Force Peaks = storm blue, shared across all Force Peaks trials. */
+    --world:#5fa8ff;
   }
   *{box-sizing:border-box}
   body{margin:0;font-family:'Segoe UI',Arial,sans-serif;background:radial-gradient(circle at 50% 0%,var(--bg2),var(--bg));color:var(--ink);min-height:100vh;padding-bottom:30px}
@@ -68,7 +68,6 @@
   .tierlbl.Basic{background:#00e5c933;color:var(--a)}
   .tierlbl.Intermediate{background:#5fa8ff33;color:var(--b)}
   .tierlbl.Applied{background:#c77dff33;color:var(--c)}
-  .srclbl{display:inline-block;font-size:.62rem;font-weight:700;letter-spacing:.3px;padding:2px 9px;border-radius:20px;margin-bottom:8px;margin-left:6px;background:var(--chip);border:1px solid var(--line);color:var(--grey)}
   .monster-emoji{font-size:3.4rem;margin:4px 0 2px;display:inline-block;transition:transform .25s}
   .monster-emoji.hit{animation:shake .35s}
   @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-10px) rotate(-6deg)}75%{transform:translateX(10px) rotate(6deg)}}
@@ -117,8 +116,8 @@
     background-repeat:repeat;background-size:280px 280px;animation:drift 70s linear infinite}
   @keyframes drift{from{background-position:0 0}to{background-position:-560px 280px}}
   #theme-glow{position:fixed;inset:0;z-index:-1;opacity:.55;transition:background 1s ease;pointer-events:none}
-  #theme-glow.world{background:radial-gradient(600px 400px at 50% 20%,#ff8a6530,transparent 70%)}
-  #theme-glow.boss{background:radial-gradient(680px 460px at 50% 20%,#ff8a6525,transparent 55%),radial-gradient(650px 450px at 50% 20%,#ffd70045,transparent 70%)}
+  #theme-glow.world{background:radial-gradient(600px 400px at 50% 20%,#00e5c930,transparent 70%)}
+  #theme-glow.boss{background:radial-gradient(680px 460px at 50% 20%,#00e5c925,transparent 55%),radial-gradient(650px 450px at 50% 20%,#ffd70045,transparent 70%)}
   #confetti-layer{position:fixed;inset:0;pointer-events:none;z-index:50;overflow:hidden}
   .confetti-piece{position:absolute;top:-20px;border-radius:2px;animation:confettiFall linear forwards}
   @keyframes confettiFall{to{transform:translateY(110vh) rotate(540deg);opacity:.2}}
@@ -177,28 +176,28 @@
 
   <!-- INTRO -->
   <div class="screen active" id="screen-intro">
-    <div class="world-badge">&#129513; Puzzle Citadel <span>&middot; Applied Reasoning world</span></div>
-    <div class="intro-emoji">&#128081;&#129513;</div>
-    <h1>The Apex Trials</h1>
-    <div class="sub">The Citadel's summit — ASMOPSS's hardest room, saved for very last.</div>
+    <div class="world-badge">&#9889; Force Peaks <span>&middot; Physics world</span></div>
+    <div class="intro-emoji">&#127886;&#128267;</div>
+    <h1>The Energy Chain Trials</h1>
+    <div class="sub">Potential, kinetic and other forms of energy — follow the chain as it changes from one form to the next.</div>
     <div class="zone-card">
-      <div><b>Zone:</b> Compiled Trial &mdash; real Section B &amp; C reasoning questions pulled from the 4 Milestone tests + the ASMOPSS 2026 Mock Test</div>
+      <div><b>Zone:</b> Unit 18 &mdash; Energy Transformations</div>
       <ul>
         <li>20 monsters guard this trial &mdash; defeat each by picking the right answer</li>
-        <li>Every question is real, verbatim content from a real Milestone or Mock test — each tagged with its real source test</li>
+        <li>Same questions &amp; explanations as your real Unit 18 test &mdash; just shuffled, so it plays differently every time</li>
         <li>Wrong pick? You'll see why, then keep going &mdash; no game over, this is about learning</li>
         <li>Build a streak for bonus coins &middot; the final monster is a BOSS fight</li>
       </ul>
     </div>
     <button class="btn gold" onclick="startGame()">&#9876;&#65039; Begin the Trial</button><br>
-    <a class="w-map-link pill" href="Citadel_Map.html">&#8592; Back to Puzzle Citadel</a>
+    <a class="w-map-link pill" href="Peaks_Map.html">&#8592; Back to Force Peaks</a>
   </div>
 
   <!-- GAME -->
   <div class="screen" id="screen-game">
     <div id="world-topbar">
-      <div class="world-badge small">&#129513; Puzzle Citadel</div>
-      <a class="w-map-link" href="Citadel_Map.html">&#8592; Back</a>
+      <div class="world-badge small">&#9889; Force Peaks</div>
+      <a class="w-map-link" href="Peaks_Map.html">&#8592; Back to Force Peaks</a>
     </div>
     <div id="path"></div>
     <div id="stats">
@@ -209,7 +208,6 @@
     <div class="battle" id="battle-card">
       <div class="boss-tag" id="boss-tag" style="display:none">&#128128; BOSS</div>
       <span class="tierlbl" id="q-tier"></span>
-      <span class="srclbl" id="q-src"></span>
       <div class="monster-wrap">
         <div class="monster-aura world" id="monster-aura"></div>
         <div class="monster-emoji" id="monster-emoji">&#128126;</div>
@@ -238,7 +236,7 @@
     <div class="sec-breakdown" id="sec-breakdown"></div>
     <button class="btn gold" onclick="location.reload()">&#128260; Play Again (reshuffled)</button><br>
     <button class="btn ghost" onclick="saveResults()">&#128190; Save Results (practice copy)</button><br>
-    <a class="btn ghost" href="Citadel_Map.html">&#8592; Back to Puzzle Citadel</a>
+    <a class="btn ghost" href="Peaks_Map.html">&#8592; Back to Force Peaks</a>
     <div id="save-status"></div>
     <div class="note">Copyright &copy; 2026 Luikishi. All rights reserved. Have fun !</div>
   </div>
@@ -246,9 +244,9 @@
 </div>
 
 <script>
-/* ================= SAME CONTENT AS Unit_12_Test — unchanged questions/answers/explanations ================= */
-const UNIT_NUM = 0;
-const UNIT_TITLE = "Applied Reasoning: Apex Trials (Compiled)";
+/* ================= SAME CONTENT AS Unit_18_Test — unchanged questions/answers/explanations ================= */
+const UNIT_NUM = 18;
+const UNIT_TITLE = "Physics: Energy Transformations";
 const PASS_BAR = 16;
 
 /* ================= GITHUB SAVE (optional) =================
@@ -290,88 +288,110 @@ async function pushToGitHub(filename, jsonText){
 }
 
 const Q = [
-{ n:1, section:'B', tier:'Intermediate', srcTest:'M1', body:"Two metal rods — one bare, one coated in plastic — both have one end placed in a cup of hot water. Which end will feel warm FIRST at the far end?",
-  options:["Neither end will ever feel warm", "The plastic-coated rod, since plastic holds heat well", "The bare metal rod, since metals conduct heat well", "Both will warm up at exactly the same rate"], ans:3,
-  why:"Metals like copper are good heat conductors; plastic is an insulator and conducts heat poorly.",
-  lessonMore:"Conduction works by passing heat directly through a touching solid, particle to particle — that's exactly why a metal spoon left in hot soup gets warm at the handle too, even though the handle never touched the soup. This same idea is why saucepan handles are made of wood or plastic instead of metal: since those materials are poor conductors, they stop the heat reaching your hand as fast.", monster:"Heat-Race Golem", emoji:"&#128293;" },
-{ n:2, section:'B', tier:'Intermediate', srcTest:'M2', body:"A tide chart shows the water was at its highest point at noon today. Sailors want to know when the water level will next be at its LOWEST point. About how many hours should they expect to wait?",
-  options:["About 3 hours","About 12 hours","About 6 hours","About 24 hours"], ans:3,
-  why:"Low tide falls roughly halfway between two high tides, about 6 hours after a high tide.",
-  lessonMore:"Tides happen because the Moon's gravity pulls ocean water into a bulge — one bulge forms on the side of Earth facing the Moon, and a second bulge forms on the exact opposite side too, since that far side is pulled slightly less and gets left behind. As Earth spins once a day, every coastline passes through both bulges, giving most places roughly two high tides and two low tides each day, spaced about six hours apart.", monster:"Tide-Clock Sentinel", emoji:"&#127754;" },
-{ n:3, section:'B', tier:'Intermediate', srcTest:'M3', body:"At the school fair, three friends drag a wagon: two drag it EAST with 14N and 9N, one drags it WEST with 8N. What is the net force on the wagon, and which way does it move?",
-  options:["31N, east (all added)", "15N, due east", "8N, west", "23N, east"], ans:2,
-  why:"Group by direction first: EAST = 14+9 = 23N. WEST = 8N. Then subtract: 23 − 8 = 15N, moving east.",
-  lessonMore:"With three or more forces, the trick is to treat it like a tug-of-war: sort every force into two piles by direction, add up each pile separately, then compare the two totals — the bigger pile always wins and decides which way things move. This exact method still works no matter how many forces get added, as long as you sort them into piles first instead of trying to combine them all at once in your head.", monster:"Tug-Line Trickster", emoji:"&#128127;" },
-{ n:4, section:'B', tier:'Intermediate', srcTest:'M4', body:"A golf ball, a flat, spread-out sheet of paper, and a tightly crumpled ball of that SAME sheet of paper are dropped together from the same height. Rank them from FIRST to LAST to land.",
-  options:["Flat sheet, then crumpled paper, then golf ball", "Golf ball, then crumpled paper, then flat sheet of paper", "The paper always beats the golf ball, whatever its shape", "Crumpled paper, then golf ball, then flat sheet"], ans:2,
-  why:"The dense, compact golf ball catches the least air resistance and lands first; the crumpled paper is compact too, just lighter, so it lands second; the flat, spread-out sheet catches the most air resistance and lands last.",
-  lessonMore:"It isn't really about 'heavy vs light' — the real factor is how much surface area an object presents to the air compared to its weight. The same sheet of paper, flat versus scrunched into a tight ball, falls at very different speeds even though its mass never changes at all — scrunching it shrinks its surface area a lot, so air resistance grabs onto it much less.", monster:"Fall-Order Sphinx", emoji:"&#127894;" },
-{ n:5, section:'B', tier:'Intermediate', srcTest:'MOCK', body:"Four balls, all with the same volume (100cm³), have different masses: Ball P = 70g, Ball Q = 130g, Ball R = 95g, Ball S = 110g. Water has a density of 1g/cm³ (so 100cm³ of water has a mass of 100g). Which balls will FLOAT in water?",
-  options:["Only Ball P will float","Ball P and Ball R will float","Ball Q and Ball S will float","All four balls will float"], ans:2,
-  why:"An object floats if its density is LESS than water's (mass under 100g for this 100cm&sup3; volume). Ball P (70g) and Ball R (95g) are both under 100g, so they float. Ball Q (130g) and Ball S (110g) are both over 100g, so they sink.",
-  lessonMore:"This kind of question is really a mass-ranking trick in disguise — since all four balls share the same volume, comparing their density is exactly the same as comparing their masses directly, no extra maths needed. Floating and sinking is always a comparison to the specific liquid too: the exact same ball could sink in water but float in a denser liquid, or float in water but sink in a liquid that's less dense.", monster:"Float-or-Sink Sphinx", emoji:"&#9875;&#65039;" },
-{ n:6, section:'C', tier:'Applied', srcTest:'M1', body:"Two identical rocks are compared: one stays on Earth, the other is carried to the Moon. Which statement is TRUE about them afterward?",
-  options:["Mass stays the same in both, but the Moon rock weighs less since gravity there is weaker", "The Moon rock's mass actually shrinks once it leaves Earth's atmosphere and reaches the Moon", "Weight stays exactly identical everywhere, since gravity never changes from place to place", "The Earth rock slowly gains extra mass over time simply by sitting still on the ground"], ans:1,
-  why:"Mass (amount of matter) doesn't change with location, but weight depends on gravity's strength, which is weaker on the Moon.",
-  lessonMore:"Weight depends on how strong the local gravity is pulling on an object's mass — since the Moon's gravity is weaker than Earth's, the exact same rock weighs less there, even though not a single bit of matter has been added or removed. That's different from the surprising fact that on the SAME planet, heavy and light objects fall at the same rate — that's about gravity's effect on falling speed, not about how heavy something feels when you pick it up.", monster:"Rock-and-Moon Oracle", emoji:"&#127765;" },
-{ n:7, section:'C', tier:'Applied', srcTest:'M1', body:"A baked cake cannot be turned back into its original flour, eggs, and sugar, but melted ice can easily be turned back into ice by freezing it again. What BEST explains this difference?",
-  options:["Cakes are baked at a much lower temperature than ice requires to freeze solid", "Baking causes a chemical reaction forming new substances that simple steps can't undo", "Ice is a far rarer and more valuable substance than basic cake ingredients", "There is truly no real difference between these two kinds of processes at all"], ans:2,
-  why:"Baking is a chemical reaction that creates genuinely new substances; melting/freezing is a physical change that's easily reversed.",
-  lessonMore:"The quick checklist is simple: can you get the original substance back using an easy physical step like freezing, evaporating, or reshaping? Melted butter passes that test (cool it and it turns solid again), but baked cake and toasted bread don't — cooking is a chemical reaction that creates genuinely new substances, and no amount of cooling ever turns toast back into plain bread.", monster:"Reverse-or-Not Wraith", emoji:"&#127856;" },
-{ n:8, section:'B', tier:'Intermediate', srcTest:'M1', body:"You give a toy car one firm push on a flat wooden floor, then let go completely. It rolls a short distance before coming to rest on its own. Which force brought it to rest?",
-  options:["Gravity pulling it sideways along the floor","Magnetism from metal hidden in the floorboards","The car simply running out of its own energy supply","Friction between the car's wheels and the floor"], ans:4,
-  why:"Friction between the wheels and floor is a contact force that opposes and slows motion after the push ends.", lessonMore:"The rougher a surface is, the more friction it creates, and more friction means a moving object slows and stops sooner — smooth tile lets a car roll much farther than rough gravel does. That's the exact logic behind the classic fair-test setup for this: release the SAME car from the SAME point on smooth tile, then carpet, then rough gravel, so the only thing that changed was the surface — meaning any difference in how far it rolled before stopping can be fairly blamed on that surface's friction.", monster:"Rolling-Halt Wraith", emoji:"&#128663;" },
-{ n:9, section:'C', tier:'Applied', srcTest:'M2', body:"A child on a playground swing is pulled back and held high in the air, completely still, right before being let go. A friend claims: 'At this highest, stillest point, the swing has mostly kinetic energy, since it's about to start moving again.' What is the BEST correction?",
-  options:["The claim is wrong - at the highest, stillest point, the energy is mostly potential, not kinetic","The claim is correct, since the swing was still moving through the air just one moment before this point","The claim is wrong, but only because playground swings don't actually store or use any energy whatsoever","Kinetic and potential energy are actually just two different names for the exact same underlying quantity"], ans:1,
-  why:"At the highest, momentarily-still point of a swing, the energy is mostly potential (due to height) - kinetic energy is highest at the bottom, where it moves fastest.",
-  lessonMore:"As something falls, its stored potential energy doesn't vanish — it transforms into kinetic energy, so height lost becomes exactly speed gained. A roller coaster cart works the same way: it has its highest potential energy at the top of the tallest hill where it's barely moving, and its highest kinetic energy at the bottom of that same hill where it's moving fastest — the total amount of energy stays the same the whole time, only its form changes.", monster:"Swing-Peak Illusionist", emoji:"&#127934;" },
-{ n:10, section:'C', tier:'Applied', srcTest:'M2', body:"A beachgoer insists: 'A high tide is always followed immediately by another high tide - a low tide never fits in between the two.' What is the BEST correction?",
-  options:["The claim is correct, since tides always repeat the exact same type over and over in a row","The claim is wrong, but only because tide timing is actually completely random and impossible to predict","The claim is wrong - a low tide typically comes next, roughly halfway between the two high tides","The claim is correct, but this pattern only holds true specifically during a full moon"], ans:3,
-  why:"Tides alternate - a low tide typically falls roughly halfway (about 6 hours) between two high tides, not another high tide right away.",
-  lessonMore:"Tides alternate because of how the Moon's gravity creates TWO bulges of ocean water at once — one on the side of Earth facing the Moon, and a second one on the exact opposite side, since that far side gets pulled slightly less and 'left behind.' As Earth spins once a day, every coastline rotates through both bulges and both gaps between them, giving roughly two high tides and two low tides each day.", monster:"Tide-Gap Trickster", emoji:"&#127754;" },
-{ n:11, section:'C', tier:'Applied', srcTest:'M2', body:"A student assumes: 'Since rubber is stretchy and bendy like some plastics, it must be a man-made material.' What is the BEST correction?",
-  options:["The claim is correct, since every stretchy and bendy material is always man-made, without exception","The claim is wrong, but only because rubber is actually a type of mined rock or mineral","The claim is correct, but this is only true specifically for black-coloured rubber products","The claim is wrong - rubber actually comes from the sap of rubber trees, making it a plant material"], ans:4,
-  why:"Rubber comes from the sap of rubber trees, making it a plant material, not a man-made one, despite feeling similar to some plastics.",
-  lessonMore:"Don't judge a material's origin by how it looks or feels — always ask what it actually came from. Rubber trips people up because it feels synthetic like plastic, but a simple checklist settles it fast: did a living plant produce this directly (sap, fibres, wood)? Rubber gets a 'yes' immediately from the tree's sap, so it's a plant material before you'd even need to consider whether it came from an animal or a factory.", monster:"Rubber-Origin Wraith", emoji:"&#127890;" },
-{ n:12, section:'C', tier:'Applied', srcTest:'M3', body:"A student claims: 'A block of solid steel will always sink, no matter its shape, since steel is denser than water.' What is the BEST correction?",
-  options:["The claim is correct — no steel object can ever float, regardless of shape", "Steel actually floats naturally, and the claim has it backwards", "A hollow steel shape, like a ship's hull, can float by displacing enough water", "Density has nothing to do with whether an object floats or sinks"], ans:3,
-  why:"A hollow shape displaces much more water than a solid block of the same mass, letting an object made of denser material still float.",
-  lessonMore:"Steel really is denser than water, so a solid lump of it sinks instantly — the trick is that a ship isn't solid steel. Its hollow hull traps a huge volume of air, spreading the ship's total mass out over a much bigger overall volume, so the ship's OVERALL density (steel plus all that trapped air combined) ends up less than water's, even though the raw material it's built from is denser on its own.", monster:"Steel-Sink Phantom", emoji:"&#9875;&#65039;" },
-{ n:13, section:'C', tier:'Applied', srcTest:'M3', body:"A student says: 'The geocentric and heliocentric models are just two equally good ways of describing the solar system — neither one is more correct.' What is the BEST correction?",
-  options:["The heliocentric model is correct — Venus phases prove it orbits the Sun", "Both models are equally correct and interchangeable", "The geocentric model is actually the correct one, not the heliocentric model", "Neither model has ever been tested against real evidence"], ans:1,
-  why:"Venus showing a full range of phases (not just crescents) is only possible if it orbits the Sun — real evidence that settled the debate in favour of the heliocentric model.",
-  lessonMore:"For thousands of years, believing Earth stood still was actually a reasonable, evidence-based conclusion — the ground under your feet feels perfectly still, while the Sun and stars appear to move across the sky. Without a telescope, both models explained those everyday observations equally well, which is exactly why nobody could prove which one was correct until new evidence — from telescopes — finally settled the debate in favour of the Sun-centred model that Copernicus had proposed.", monster:"Two-Model Sphinx", emoji:"&#127768;" },
-{ n:14, section:'B', tier:'Intermediate', srcTest:'M3', body:"A radiator heats the air in a room. The air just above it warms up, becomes less dense, and rises toward the ceiling, while cooler air near the floor sinks to replace it. What is this process called?",
-  options:["Convection","Evaporation","Condensation","Dissolving"], ans:1,
-  why:"Convection is warm, less-dense fluid rising while cooler, denser fluid sinks, creating a circulating current.", lessonMore:"Convection is one of three ways heat moves — alongside conduction (heat passing through a touching solid, like a metal spoon's handle in hot soup) and radiation (invisible rays crossing empty space, like sunlight reaching Earth) — and the giveaway for convection specifically is a current: warm, less-dense fluid rising while cooler, denser fluid sinks in to replace it, over and over, until everything reaches the same temperature.", monster:"Rising-Current Phantom", emoji:"&#127744;" },
-{ n:15, section:'C', tier:'Applied', srcTest:'M4', body:"For a science fair display, a student has a tub of small plastic beads, table salt, and water all mixed together. They evaporate the whole tub FIRST, without filtering out the beads beforehand. What problem does this create?",
-  options:["No trouble at all — the order of evaporating and filtering never actually changes the final result", "Evaporation only removes the liquid — it does nothing to solid, insoluble beads, which stay stuck in the dried salt", "The heat from evaporating actually breaks the plastic beads down into nothing, so they vanish completely", "Only the water and the beads evaporate together, while the salt is somehow left floating on top"], ans:2,
-  why:"Evaporation only removes the liquid solvent — it does nothing to insoluble solid pieces like plastic beads, so skipping filtering first leaves the beads stuck in with the dried salt.",
-  lessonMore:"Evaporation only works on the liquid solvent — it turns to vapour and escapes into the air, but insoluble solid pieces like beads never turn to gas no matter how much you heat them. That's why order matters: filtering has to come FIRST to trap and remove any insoluble solid, and only THEN should you evaporate the remaining liquid to recover a dissolved solute like salt.", monster:"Bead-Tub Trickster", emoji:"&#128167;" },
-{ n:16, section:'C', tier:'Applied', srcTest:'M4', body:"A tomato plant is classified as a flowering plant, and its ripe tomatoes contain seeds inside juicy flesh. Explain the connection between the flower's job and the tomato fruit — and why a seed's stored food inside it matters for a NEW seedling, using what you know about digestion too.",
-  options:["The flower and the fruit are actually completely unrelated structures with absolutely no real connection to each other at all, not even indirectly", "Tomatoes never actually grow from real flowers at all, and their seeds contain no stored food of any kind whatsoever, ever", "The tomato's seed actually fully digests the fruit around it before germinating, quite similar to how a human stomach digests food", "The flower's ovary becomes the tomato fruit around the seeds; the seed's stored food feeds the tiny embryo until it can grow leaves and make its own food"], ans:4,
-  why:"The ovary develops into the fruit around the seeds after fertilization; the seed's stored food nourishes the new embryo the same way digested nutrients nourish a growing body, until the seedling can photosynthesize on its own.",
-  lessonMore:"A handy habit: whenever you look inside a fruit, mentally split it into 'the seeds' (these were the ovules) and 'everything else around them' (this was the ovary wall that swelled up) — that split works on almost any fruit, from an apple's core to a tomato's pulp. The seed's stored food acts like a tiny food reserve for the embryo, just as your own digestive system has to break big food down into nutrients small enough to absorb into your blood before your body can use them.", monster:"Fruit-Seed Oracle", emoji:"&#127813;" },
-{ n:17, section:'C', tier:'Applied', srcTest:'M4', body:"A student wants to test the claim: \"Cactus spines reduce water loss compared to broad leaves.\" Design the fairest way to test this with two potted plants — a cactus and a broad-leafed plant — over one week.",
-  options:["Give the cactus much less water overall than the broad-leafed plant, then compare which one wilts first", "Keep both plants in identical pots, soil, and sunlight, with the same starting water, then measure water loss over the week", "Put the cactus in full sun and the broad-leafed plant in full shade, then compare their water loss", "Measure water loss across two entirely different weeks, one for each plant, so they don't affect each other"], ans:2,
-  why:"A fair test keeps every other variable (pot, soil, sunlight, starting water) identical between the two plants, changing only their real difference — the type of leaf/spine covering — so any difference in water loss can be trusted.",
-  lessonMore:"A cactus's spines really are shrunk-down leaves — less leaf surface area means less water lost through evaporation, which is exactly the real difference this test is trying to isolate. To prove that's what causes any difference in water loss (and not something else), only the leaf/spine type should differ between the two plants — everything else has to be identical, or you can't tell which factor actually caused the result.", monster:"Cactus-Test Wraith", emoji:"&#127797;" },
-{ n:18, section:'C', tier:'Applied', srcTest:'MOCK', body:"Three bar magnets, X, Y and Z, are lined up in a row, touching end to end: X-Y-Z. X and Y ATTRACT each other. Y and Z REPEL each other. Magnet X's LEFT end (the end not touching Y) is a SOUTH (S) pole. What are the poles at BOTH ends of Magnet Z?",
-  options:["Left end N, right end S","Left end S, right end N","Both ends are N poles","Both ends are S poles"], ans:1,
-  why:"Work one join at a time. X's left is S, so X's right (touching Y) is N. X-Y ATTRACT means unlike poles touch, so Y's left (touching X) must be S — making Y's right (touching Z) N. Y-Z REPEL means LIKE poles touch, so Z's left (touching Y) must also be N — making Z's right end S.",
-  lessonMore:"Chains like this are solved one join at a time, working outward from what you're given — figure out X's poles first, then use the X–Y attract rule to pin down Y's poles, then use the Y–Z repel rule to pin down Z's. The underlying rule never changes (same poles repel, different poles attract) — you're just carefully tracking which specific pole is facing which direction at each join, one step at a time, like following a chain link by link.", monster:"Three-Magnet Enigma", emoji:"&#129418;" },
-{ n:19, section:'C', tier:'Applied', srcTest:'MOCK', body:"Ploy wants to find out if the amount of water affects how tall a sunflower grows. She grows Plant A in a sunny spot with 50ml of water per day, and Plant B in a shady spot with 100ml of water per day. After 3 weeks, Plant B is taller. Ploy concludes: 'more water makes sunflowers grow taller.' What is the main problem with Ploy's experiment?",
-  options:["Sunflowers cannot grow indoors at all","Nothing — more water clearly helped","She changed two things at once, not one","She should have measured weight, not height"], ans:3,
-  why:"A fair test can only change ONE variable at a time while keeping everything else the same. Ploy changed BOTH the water amount and the amount of sunlight between the two plants, so the height difference could be caused by either factor (or both) — she can't fairly conclude it was the water alone.",
-  lessonMore:"This is the classic warning sign from fair testing: whenever two or more things change at once between groups being compared, you can no longer tell which change actually caused the result. To fix Ploy's test, only the water amount should differ between the two plants — sunlight, pot, soil, and everything else needs to be kept identical, or the height difference could just as easily be blamed on the extra sunlight as the water.", monster:"Two-Variable Illusionist", emoji:"&#127803;" },
-{ n:20, section:'C', tier:'Applied', srcTest:'MOCK', body:"Nine identical biscuit pieces were tested in three set-ups, each with 30ml of the same digestive juice: Set-up P used large chunks and took 40 minutes to fully break down. Set-up Q used medium pieces and took 25 minutes. Set-up R used tiny crushed crumbs and took 10 minutes. What conclusion can be drawn from this experiment?",
-  options:["Smaller pieces break down faster due to more surface area","Larger pieces simply taste better than smaller ones","The type of digestive juice makes no difference here","Biscuits only break down once crushed into crumbs"], ans:1,
-  why:"Cutting food into smaller pieces increases its total surface area — more of the biscuit's surface is touching the digestive juice at once, so the chemical breakdown happens faster. This is one reason chewing your food well before swallowing helps digestion.",
-  lessonMore:"This is mechanical digestion at work — physically breaking food into smaller pieces doesn't change WHAT the food is, just its size, but that size change matters enormously. It's the same surface-area trick your small intestine uses with its millions of tiny finger-like bumps to soak up nutrients faster — more exposed surface means digestive juices can act on more of the food at once.", monster:"Crumb-Speed Golem", emoji:"&#127850;" }
+{ n:1, section:'A', tier:'Basic', body:"What is KINETIC energy?",
+  options:["The energy of anything that is actually moving","Energy that is stored, waiting to be used later","Energy that only batteries and fuel contain","Energy that only travels through wires"], ans:1,
+  why:"Kinetic energy is the energy of anything actually moving.",
+  lessonMore:"Potential energy is kinetic energy's opposite number on the forms list — it's stored energy waiting to be released (from height or stretching), while kinetic is what that stored energy becomes once something actually starts moving. Electrical energy is useful precisely because it converts so easily into kinetic energy, along with light, heat, and sound.",
+  monster:"Kinetic Sprite", emoji:"&#128168;" },
+{ n:2, section:'A', tier:'Basic', body:"What is GRAVITATIONAL POTENTIAL energy?",
+  options:["The energy of anything that is actually moving around right now","Energy carried only by sound vibrations, never anything else","Stored energy an object has because of its height above the ground","Energy that disappears completely and permanently once an object stops moving"], ans:3,
+  why:"Gravitational potential energy is stored energy an object has because of how high up it is.",
+  lessonMore:"The higher an object is lifted, the more gravitational potential energy it stores — and a heavier object at the same height stores even more than a lighter one, since both height and mass affect how much energy gets stored up there.",
+  monster:"Potential Phantom", emoji:"&#9968;&#65039;" },
+{ n:3, section:'A', tier:'Basic', body:"In a hydroelectric dam, which part is the huge solid structure that holds the reservoir's water back?",
+  options:["Dam Wall","Turbine","Generator","Penstock"], ans:1,
+  why:"The Dam Wall is the huge solid structure that holds back the reservoir's stored water.",
+  lessonMore:"The dam wall holds back the reservoir, which is the lake of water stored high up behind it — that height is exactly what gives the reservoir's water its gravitational potential energy, ready to be released down through the penstock.",
+  monster:"Wall Warden", emoji:"&#129521;" },
+{ n:4, section:'A', tier:'Basic', body:"Which best describes an energy TRANSFORMATION?",
+  options:["Energy being measured with a ruler","Energy staying in exactly the same form forever","Energy changing from one form into a different form","Energy being created out of nothing"], ans:3,
+  why:"A transformation is energy changing from one form into a different form.",
+  lessonMore:"The big rule behind every transformation is that energy is never created out of nothing and never simply disappears — it only changes form. That's also why 'wasted energy' really just means energy that transformed into a form nobody wanted, like a lightbulb that gets hot as well as making light.",
+  monster:"Chain Wisp", emoji:"&#128279;" },
+
+{ n:5, section:'B', tier:'Intermediate', body:"A solar panel absorbs sunlight and uses it to charge a phone battery. Which transformation chain BEST describes this?",
+  options:["Light energy → chemical energy (stored in the battery)","Sound energy → thermal energy released as heat","Kinetic energy → light energy given off suddenly","Chemical energy → light energy shining outward"], ans:1,
+  why:"The solar panel converts light energy from the sun into chemical energy stored in the battery.",
+  lessonMore:"This chain runs the opposite direction from a torch's chemical → electrical → light chain — here light energy goes in and gets stored as chemical energy instead, ready to be released later, just like any other battery.",
+  monster:"Solarflow Wisp", emoji:"&#9728;&#65039;" },
+{ n:6, section:'B', tier:'Intermediate', body:"Two identical spheres are lifted to the exact same height above the ground, but Sphere A is much heavier than Sphere B. Which sphere has MORE gravitational potential energy?",
+  options:["Sphere B, since it is lighter and much easier to lift up","Both spheres have exactly the same potential energy at that height","Neither sphere has any potential energy while sitting still up there","Sphere A, since a heavier object at the same height stores more potential energy"], ans:4,
+  why:"At the same height, a heavier object stores more gravitational potential energy than a lighter one — both height AND mass affect stored energy.",
+  lessonMore:"The lesson's book example shows height's effect alone — the exact same book stores more energy on a tall bookcase than on a low shelf. Mass works the same way: heavier objects store more potential energy than lighter ones at an identical height, which is exactly the second variable at play with these two spheres.",
+  monster:"Mass Titan", emoji:"&#9878;&#65039;" },
+{ n:7, section:'B', tier:'Intermediate', body:"A diver jumps from a high diving platform, while a second diver of the same weight jumps from a low springboard much closer to the water. Which diver is moving FASTEST the instant before hitting the water?",
+  options:["The diver from the low springboard, since it's a much shorter fall down to the water","Both divers hit the water at exactly the same speed no matter what","Neither diver gains any speed at all while falling toward the water","The diver from the high platform, since more potential energy transformed into kinetic energy"], ans:4,
+  why:"The diver falling from higher up starts with more potential energy, which transforms into more kinetic energy (more speed) by the time they hit the water.",
+  lessonMore:"This is the exact same trade-off a roller coaster cart goes through: the height lost as it drops becomes the speed gained, so the diver moving fastest is always the one that fell from the greatest height, not the one that's heaviest or lightest.",
+  monster:"Freefall Specter", emoji:"&#128166;" },
+{ n:8, section:'B', tier:'Intermediate', body:"A ceiling fan is switched on and its blades begin spinning quickly, pushing air all around the room. Which transformation BEST describes what happens to the electricity powering it?",
+  options:["Electrical energy transforms into chemical energy stored inside the fan's motor casing","Electrical energy transforms into potential energy stored in the spinning blades themselves","Electrical energy transforms into light energy that brightens up the whole room","Electrical energy transforms into kinetic energy, spinning the fan's blades around"], ans:4,
+  why:"The fan's motor converts electrical energy into kinetic energy, which is what spins the blades.",
+  lessonMore:"Electrical energy is especially useful because it converts easily into almost any other form — light, heat, sound, or motion — which is why the same kind of energy flowing through a wire can power a fan's spinning blades just as easily as a lightbulb or speaker.",
+  monster:"Breeze Djinn", emoji:"&#127744;" },
+{ n:9, section:'B', tier:'Intermediate', body:"If a hydroelectric dam's penstock pipe became completely blocked, stopping any water from flowing through it, what would you predict happens to the turbine and generator?",
+  options:["They would spin even faster, since the blocked water builds up extra pressure behind it","They would run exactly as normal, since the penstock isn't actually connected to either part","They would stop spinning and stop generating electricity, since no falling water ever reaches them","They would switch over to using the dam wall's stored energy instead"], ans:3,
+  why:"Without water flowing through the penstock, no falling water reaches the turbine, so it stops spinning and the generator stops producing electricity.",
+  lessonMore:"The full hydroelectric chain is: potential energy in the reservoir → kinetic energy as water falls through the penstock → kinetic energy in the spinning turbine → electrical energy from the generator. Block any one link — like the penstock — and every step after it in the chain grinds to a halt, since each stage depends on receiving energy from the one before it.",
+  monster:"Penstock Phantom", emoji:"&#128679;" },
+{ n:10, section:'B', tier:'Intermediate', body:"An archer pulls back a bowstring, stretching it, and holds it still for a moment before releasing the arrow. While the bowstring is held stretched and still, what form of energy is stored in it?",
+  options:["Kinetic energy, since it's about to move very fast in a moment","Potential energy, since it's stretched and stores energy ready for release","Thermal energy, warmed up from the archer's gripping hands","Sound energy, from the string quietly vibrating back and forth"], ans:2,
+  why:"A stretched bowstring stores potential energy, ready to transform into kinetic energy once released.",
+  lessonMore:"This is the same idea as the stretched rubber band from the Unit 15 recap — while it's held stretched and still, it's storing potential energy, and the moment it's let go, that stored energy transforms into the kinetic energy of it snapping forward.",
+  monster:"Bowstring Specter", emoji:"&#127993;" },
+
+{ n:11, section:'C', tier:'Applied', body:"A wind turbine's blades are pushed around by moving air, and this spinning is used to generate electricity for homes. Which chain BEST matches this process?",
+  options:["Kinetic energy (wind) → kinetic energy (spinning blades) → electrical energy (generator)","Potential energy (wind) → chemical energy (blades) → light energy","Electrical energy (wind) → kinetic energy → potential energy","Thermal energy (wind) → sound energy → kinetic energy"], ans:1,
+  why:"Moving air (kinetic energy) spins the blades (still kinetic energy), and the generator converts that spinning into electrical energy — the same general pattern as a hydroelectric turbine.",
+  lessonMore:"No matter what makes the turbine spin — falling water or moving air — the generator's job never changes: it converts the spinning (kinetic energy) into electrical energy, exactly as the legend describes for a hydroelectric dam's generator.",
+  monster:"Windwhirl Colossus", emoji:"&#127788;&#65039;" },
+{ n:12, section:'C', tier:'Applied', body:"A pendulum swings back and forth, but a student notices it swings a little less high each time, and eventually stops. She claims: 'The pendulum's energy is disappearing a little more with every swing.' What is the BEST correction?",
+  options:["The claim is correct — pendulums genuinely and completely lose all of their built-up energy into nothing at all as time slowly passes by","The claim is wrong — the energy is transforming into thermal energy and sound (mostly from air resistance and friction at the pivot), not disappearing","The claim is correct, but this effect only really happens for pendulums that are longer than exactly one metre in total length","The claim is wrong, because the pendulum is actually gaining a large amount of extra potential energy with every single swing it makes"], ans:2,
+  why:"Energy is never destroyed — the pendulum's energy transforms into thermal energy and sound through air resistance and friction, rather than disappearing.",
+  lessonMore:"This is exactly like a bouncing ball that eventually stops bouncing — its energy hasn't vanished either, it's transformed into thermal energy (a tiny warming of the ball and surface) and sound (the noise of each bounce), just spread out so thinly you can't easily notice it.",
+  monster:"Pendulum Poltergeist", emoji:"&#128368;&#65039;" },
+{ n:13, section:'C', tier:'Applied', body:"A student watches a bicycle coasting freely down a long hill without anyone pedalling. She writes two notes. Note 1: 'The bicycle went faster and faster the further down the hill it rolled.' Note 2: 'This must be because gravitational potential energy is transforming into kinetic energy.' Which note is the OBSERVATION?",
+  options:["Note 2 — gravitational potential energy is transforming into kinetic energy as it goes","Note 1 — the bicycle went faster and faster the further down the hill it rolled","Both notes are equally good observations that she directly saw with her own eyes","Neither note counts as an observation at all, no matter how you look at it"], ans:2,
+  why:"Note 1 describes exactly what she directly saw happening; Note 2 is the conclusion she worked out afterwards.",
+  lessonMore:"The pattern is always the same: the observation is the plain, directly-seen event, and the inference is the explanation or conclusion drawn from it afterward — like a student who watches a toy car speed up down a ramp (the observation) and concludes its kinetic energy must be increasing (the inference).",
+  monster:"Inference Imp", emoji:"&#128269;" },
+{ n:14, section:'C', tier:'Applied', body:"A skier at a ski-jump ramp passes through three points: Point X at the very top before starting, Point Y partway down the ramp, and Point Z at the bottom just as she launches into the air. Rank these three points from HIGHEST to LOWEST gravitational potential energy.",
+  options:["Z, Y, X","Y, X, Z","X, Y, Z","X, Z, Y"], ans:3,
+  why:"Potential energy depends on height — X (top) is highest, Y (partway down) is in between, and Z (bottom) is lowest.",
+  lessonMore:"Ranking potential energy only needs one question: which point is highest up? The decision tree's rule — high up and barely moving means potential energy is at its highest — is exactly why you can rank X, Y, and Z purely by height, without even needing to know their speeds.",
+  monster:"Slope Sentinel", emoji:"&#9975;&#65039;" },
+{ n:15, section:'C', tier:'Applied', body:"Two hydroelectric dams store the same amount of water, but Dam A's reservoir sits 50 metres above its turbines, while Dam B's reservoir sits only 20 metres above its turbines. Which dam would you expect to generate MORE electricity from the same amount of falling water, and why?",
+  options:["Dam B, because a much shorter fall means the water arrives at the turbine noticeably faster","Both dams generate exactly the same amount of electricity no matter what their height is","Neither dam's height has any real effect at all on how much electricity gets generated","Dam A, because the greater height gives the water more gravitational potential energy to transform into electricity"], ans:4,
+  why:"A greater height gives the falling water more gravitational potential energy to transform into electricity, so Dam A would generate more.",
+  lessonMore:"This is exactly why hydroelectric engineers deliberately store water as high up as possible in the first place — the reservoir's height is what gives its water gravitational potential energy, so a taller reservoir has more energy available to transform into electricity for the same amount of water.",
+  monster:"Reservoir Behemoth", emoji:"&#128167;" },
+{ n:16, section:'C', tier:'Applied', body:"A pendulum is pulled to one side and released, then swings through the lowest point of its arc before rising up the other side. At which point is its KINETIC energy at its HIGHEST?",
+  options:["At the moment it's first released, before it starts moving","At the very top of its swing on the opposite side","At the lowest point of its swing, where it moves fastest","Kinetic energy stays exactly the same throughout the whole swing"], ans:3,
+  why:"Kinetic energy is highest where the pendulum moves fastest, which is at the lowest point of its swing.",
+  lessonMore:"It's the same rule that applies to a roller coaster cart: the lowest point of the ride is where the least potential energy and the most kinetic energy (fastest speed) both occur together, since height lost is exactly the speed gained.",
+  monster:"Swing Wraith", emoji:"&#129664;" },
+{ n:17, section:'C', tier:'Applied', body:"A battery-powered leaf blower blows air across a lawn to clear away leaves, and its motor casing feels warm to the touch after being used for a while. Which chain BEST describes what happened to the chemical energy stored in its battery?",
+  options:["Chemical energy (battery) → kinetic energy (blowing air) and thermal energy (warm motor)","Light energy (battery) → chemical energy (blowing air)","Kinetic energy (battery) → chemical energy (warm motor)","Chemical energy (battery) stays exactly as chemical energy the whole time"], ans:1,
+  why:"The chemical energy stored in the battery transforms into kinetic energy (the blowing air) and thermal energy (the warm motor).",
+  lessonMore:"A transformation chain doesn't have to be a single straight line — energy can split into more than one form at once, the same way your body transforms the chemical energy in food into kinetic energy for moving AND thermal energy for keeping you warm, all at the same time.",
+  monster:"Blower Beast", emoji:"&#127811;" },
+{ n:18, section:'C', tier:'Applied', body:"Four objects are observed: a candle burning steadily (I), a book resting on a high shelf (II), a ringing bell (III), and a fully wound-up clock spring, not yet released (IV). Which TWO of these are primarily storing POTENTIAL energy right now?",
+  options:["I and III","II and IV","I and IV","II and III"], ans:2,
+  why:"The book on a high shelf stores gravitational potential energy, and the wound-up spring stores potential energy ready for release; the burning candle is releasing chemical energy and the ringing bell has sound energy.",
+  lessonMore:"This is the same wound-up-spring idea from the wind-up toy example — winding it stores potential energy, and letting it go transforms that stored energy into kinetic energy the moment it's released.",
+  monster:"Vault Keeper", emoji:"&#128274;" },
+{ n:19, section:'C', tier:'Applied', body:"During a dry summer, a hydroelectric dam's reservoir water level drops significantly lower than usual, though the dam keeps operating. What would you predict happens to the electricity it generates from each unit of falling water?",
+  options:["It generates MORE electricity, since there is much less water pressing down on everything below","It generates exactly the same amount of electricity no matter what the water level happens to be","Electricity generation is completely unrelated to the reservoir's water level in every single case","It generates LESS electricity, since the water now falls a shorter height and has less potential energy to transform"], ans:4,
+  why:"A lower reservoir level means a shorter fall, so the water has less gravitational potential energy to transform into electricity.",
+  lessonMore:"Reservoir height is exactly what gives its water gravitational potential energy in the first place, so any drop in water level directly shrinks the amount of energy available to transform into electricity — the same height-controls-energy rule that applies to comparing two differently sized dams.",
+  monster:"Drought Djinn", emoji:"&#127964;&#65039;" },
+{ n:20, section:'C', tier:'Applied', body:"A student says: 'The generator in a hydroelectric dam creates brand new electrical energy out of nothing, powered by the spinning turbine.' What is the BEST correction?",
+  options:["The claim is correct — generators really and truly are a genuine source of completely brand new energy","The claim is wrong — the generator CONVERTS the turbine's existing kinetic energy into electrical energy; it doesn't create new energy from nothing","The claim is correct, but this is only actually true for hydroelectric generators specifically, and not any others","The claim is wrong, because generators actually run entirely on stored chemical energy instead of relying on any kinetic energy at all"], ans:2,
+  why:"The generator converts the turbine's kinetic energy into electrical energy — it transforms existing energy, it doesn't create new energy from nothing.",
+  lessonMore:"This connects straight back to the big rule of conservation of energy: energy can never be created out of nothing and can never simply disappear, only change form. A generator is a perfect example of that rule in action — it takes energy that already exists (the turbine's spin) and simply changes its form to electrical.",
+  monster:"Generator Golem", emoji:"&#9881;&#65039;" },
 ];
 /* ================= END unchanged content ================= */
-
-const SRC_LABEL = { M1:'Milestone 1', M2:'Milestone 2', M3:'Milestone 3', M4:'Milestone 4', MOCK:'ASMOPSS Mock Test' };
 
 function shuffle(arr){
   const a = arr.slice();
@@ -483,7 +503,6 @@ function renderQuestion(){
   document.getElementById('battle-card').classList.toggle('boss', isBoss);
   document.getElementById('q-tier').textContent = q.tier;
   document.getElementById('q-tier').className = 'tierlbl ' + q.tier;
-  document.getElementById('q-src').textContent = q.srcTest ? ('from ' + SRC_LABEL[q.srcTest]) : '';
   document.getElementById('monster-emoji').innerHTML = q.emoji;
   document.getElementById('monster-emoji').className = 'monster-emoji';
   document.getElementById('monster-name').textContent = (isBoss ? 'BOSS: ' : '') + q.monster;
@@ -587,7 +606,7 @@ function showEnd(){
   document.getElementById('rank-emoji').textContent = score >= GOLD_BAR ? '🥇' : (pass ? '🥈' : '🥉');
   document.getElementById('rank-lbl').textContent = score >= GOLD_BAR ? 'Gold Explorer!' : (pass ? 'Silver Explorer!' : 'Trial Survived');
   document.getElementById('end-msg').textContent = pass
-    ? `Great job — that's a PASS! Real reasoning questions pulled straight from the Milestone and Mock tests.`
+    ? `Great job — that's a PASS! Same content as your real Unit 18 test.`
     : `Good effort! Worth a rematch once you've reviewed the tips.`;
   document.getElementById('end-score').textContent = `${score}/${TOTAL} (${pct}%)`;
   countUp('end-coins', coins);
@@ -603,7 +622,7 @@ function showEnd(){
 }
 
 async function saveResults(){
-  const filename = `CIT_Apex_GameMode_Results_${window._lastResults.dateTaken}.json`;
+  const filename = `U18_GameMode_Results_${window._lastResults.dateTaken}.json`;
   const json = JSON.stringify(window._lastResults, null, 2);
   const statusEl = document.getElementById('save-status');
 
@@ -624,7 +643,7 @@ async function saveResults(){
   a.href = URL.createObjectURL(blob);
   a.download = filename;
   document.body.appendChild(a); a.click(); a.remove();
-  if (!GITHUB_CONFIG.enabled) statusEl.textContent = `Downloaded ${filename} (GitHub save not set up yet — separate from the official record — this is a compiled cross-unit trial).`;
+  if (!GITHUB_CONFIG.enabled) statusEl.textContent = `Downloaded ${filename} (GitHub save not set up yet — separate from the official Unit 18 record).`;
 }
 </script>
 </body>
