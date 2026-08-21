@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script defer src="sq-auth.js"></script>
 <title>Chemistry Quest — The Changing Trials (Unit 5)</title>
 <style>
   :root{
@@ -594,6 +596,7 @@ function showEnd(){
     dateTaken:new Date().toISOString().slice(0,10), score, outOf:TOTAL, pct, passBar:PASS_BAR, passed:pass,
     coins, maxStreak, sections:['A','B','C'].map(s=>({name:s,score:sectionTally[s].c,outOf:sectionTally[s].t}))
   };
+  SQAuth.recordAttempt({realm_id:'depths', trial_key:'Alchemist_Unit05_Trial', trial_name:(UNIT_NUM>0?`Unit ${UNIT_NUM}: `:'')+UNIT_TITLE, score, total:TOTAL});
 }
 
 async function saveResults(){

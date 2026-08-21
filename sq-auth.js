@@ -1,0 +1,286 @@
+/* ============================================================
+   Science Quest — shared account + performance tracking
+   Included on every page. Needs the Supabase CDN script tag
+   loaded first (see <head> of each page).
+   ============================================================ */
+(function(){
+  const SUPABASE_URL = "https://psiyoyilakybmspnewoj.supabase.co";
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBzaXlveWlsYWt5Ym1zcG5ld29qIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODcyNjczNTAsImV4cCI6MjEwMjg0MzM1MH0.G1EwlFqn4SAG5xfScTajGqFi7SsSyLrWg8S3Pm5jGjk";
+
+  const REALM_META = {
+    cosmic:  { name:"Cosmic Frontier",   color:"#c77dff" },
+    citadel: { name:"Puzzle Citadel",    color:"#ff8a65" },
+    peaks:   { name:"Force Peaks",       color:"#5fa8ff" },
+    wilds:   { name:"Living Wilds",      color:"#43e97b" },
+    lab:     { name:"Detective's Lab",   color:"#d99a44" },
+    depths:  { name:"Alchemist's Depths",color:"#00e5c9" }
+  };
+  const REALM_ORDER = ["cosmic","citadel","peaks","wilds","lab","depths"];
+
+  const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  const state = { user:null, displayName:null, ready:false };
+  const listeners = [];
+
+  function notify(){ listeners.forEach(fn => { try{ fn(state); }catch(e){} }); }
+
+  /* ---------------- styles (self-contained, works on any page) ---------------- */
+  const style = document.createElement('style');
+  style.textContent = `
+  #sq-acct{position:fixed;top:12px;right:12px;z-index:9999;font-family:'Segoe UI',Arial,sans-serif}
+  #sq-acct-btn{display:flex;align-items:center;gap:7px;background:#120e2cee;border:1.5px solid #FFD70066;border-radius:22px;padding:6px 14px 6px 6px;cursor:pointer;color:#fff3e6;font-size:.8rem;font-weight:700;box-shadow:0 4px 14px #0007;backdrop-filter:blur(4px)}
+  #sq-acct-btn:hover{border-color:#FFD700}
+  #sq-acct-avatar{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,#FFD700,#FFA500);color:#3a2a00;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.85rem;flex-shrink:0}
+  #sq-acct-menu{display:none;position:absolute;top:44px;right:0;background:#120e2cf5;border:1.5px solid #332a5c;border-radius:14px;padding:8px;min-width:180px;box-shadow:0 10px 30px #000a}
+  #sq-acct-menu.open{display:block}
+  #sq-acct-menu button{display:block;width:100%;text-align:left;background:none;border:none;color:#fff3e6;font-size:.82rem;font-weight:700;padding:9px 10px;border-radius:9px;cursor:pointer}
+  #sq-acct-menu button:hover{background:#1c1642}
+  #sq-modal-bg{display:none;position:fixed;inset:0;background:#000000cc;z-index:10000;align-items:center;justify-content:center;padding:16px}
+  #sq-modal-bg.open{display:flex}
+  .sq-modal{background:#120e2c;border:1.5px solid #332a5c;border-radius:18px;padding:24px;max-width:380px;width:100%;color:#fff3e6;font-family:'Segoe UI',Arial,sans-serif;max-height:88vh;overflow-y:auto}
+  .sq-modal h2{margin:0 0 4px;font-size:1.2rem;background:linear-gradient(135deg,#FFD700,#FFA500);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .sq-modal p.sub{color:#c9b3d9;font-size:.8rem;margin:0 0 16px}
+  .sq-field{margin-bottom:12px}
+  .sq-field label{display:block;font-size:.75rem;color:#c9b3d9;margin-bottom:4px;font-weight:700}
+  .sq-field input{width:100%;box-sizing:border-box;background:#1c1642;border:1.5px solid #332a5c;border-radius:9px;padding:9px 11px;color:#fff3e6;font-size:.9rem}
+  .sq-field input:focus{outline:none;border-color:#FFD700}
+  .sq-btn{display:block;width:100%;border:none;border-radius:12px;padding:11px;font-weight:800;font-size:.88rem;cursor:pointer;background:linear-gradient(135deg,#FFD700,#FFA500);color:#3a2a00;margin-top:6px}
+  .sq-btn:disabled{opacity:.6;cursor:default}
+  .sq-btn-ghost{background:none;border:1.5px solid #332a5c;color:#c9b3d9;margin-top:8px}
+  .sq-toggle{text-align:center;font-size:.78rem;color:#c9b3d9;margin-top:14px}
+  .sq-toggle a{color:#FFD700;text-decoration:none;cursor:pointer;font-weight:700}
+  .sq-status{font-size:.78rem;text-align:center;margin-top:10px;min-height:16px;color:#c9b3d9}
+  .sq-status.err{color:#ff8a80}
+  .sq-status.ok{color:#43e97b}
+  .sq-close{position:absolute;top:14px;right:16px;background:none;border:none;color:#c9b3d9;font-size:1.3rem;cursor:pointer;line-height:1}
+  .sq-modal{position:relative}
+  .sq-realm-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #332a5c22}
+  .sq-realm-row:last-child{border-bottom:none}
+  .sq-realm-dot{width:11px;height:11px;border-radius:50%;flex-shrink:0}
+  .sq-realm-info{flex:1;min-width:0}
+  .sq-realm-name{font-size:.85rem;font-weight:800}
+  .sq-realm-stat{font-size:.72rem;color:#c9b3d9}
+  .sq-realm-best{font-size:1rem;font-weight:900;color:#FFD700}
+  .sq-nudge{font-size:.75rem;color:#FFD700;margin-top:6px}
+  `;
+  document.head.appendChild(style);
+
+  /* ---------------- account widget ---------------- */
+  const acct = document.createElement('div');
+  acct.id = 'sq-acct';
+  acct.innerHTML = `
+    <button id="sq-acct-btn"></button>
+    <div id="sq-acct-menu"></div>
+  `;
+  document.body.appendChild(acct);
+
+  const modalBg = document.createElement('div');
+  modalBg.id = 'sq-modal-bg';
+  document.body.appendChild(modalBg);
+
+  function closeModal(){ modalBg.classList.remove('open'); modalBg.innerHTML = ''; }
+  modalBg.addEventListener('click', e => { if (e.target === modalBg) closeModal(); });
+
+  function initials(name){
+    if (!name) return '?';
+    return name.trim().slice(0,1).toUpperCase();
+  }
+
+  function renderWidget(){
+    const btn = document.getElementById('sq-acct-btn');
+    const menu = document.getElementById('sq-acct-menu');
+    if (state.user){
+      const name = state.displayName || state.user.email.split('@')[0];
+      btn.innerHTML = `<span id="sq-acct-avatar">${initials(name)}</span><span>${name}</span>`;
+      btn.onclick = () => menu.classList.toggle('open');
+      menu.innerHTML = `
+        <button id="sq-menu-progress">&#128202; My Progress</button>
+        <button id="sq-menu-signout">&#128682; Sign Out</button>
+      `;
+      document.getElementById('sq-menu-progress').onclick = () => { menu.classList.remove('open'); openProgress(); };
+      document.getElementById('sq-menu-signout').onclick = async () => { menu.classList.remove('open'); await sb.auth.signOut(); };
+    } else {
+      btn.innerHTML = `<span id="sq-acct-avatar">&#128100;</span><span>Sign In</span>`;
+      btn.onclick = () => openAuth('signin');
+      menu.classList.remove('open');
+      menu.innerHTML = '';
+    }
+  }
+
+  document.addEventListener('click', e => {
+    const menu = document.getElementById('sq-acct-menu');
+    if (menu && !acct.contains(e.target)) menu.classList.remove('open');
+  });
+
+  /* ---------------- auth modal ---------------- */
+  function openAuth(mode){
+    mode = mode || 'signin';
+    modalBg.innerHTML = `
+      <div class="sq-modal">
+        <button class="sq-close" id="sq-auth-close">&times;</button>
+        <h2 id="sq-auth-title">${mode === 'signin' ? 'Welcome back!' : 'Create your account'}</h2>
+        <p class="sub">${mode === 'signin' ? 'Sign in to save and track your quiz results.' : 'Sign up to start saving your progress across all 6 realms.'}</p>
+        <div class="sq-field" id="sq-field-name" style="display:${mode==='signup'?'block':'none'}">
+          <label>Display Name</label>
+          <input type="text" id="sq-name" placeholder="What should we call you?" maxlength="30">
+        </div>
+        <div class="sq-field">
+          <label>Email</label>
+          <input type="email" id="sq-email" placeholder="you@example.com">
+        </div>
+        <div class="sq-field">
+          <label>Password</label>
+          <input type="password" id="sq-password" placeholder="At least 6 characters">
+        </div>
+        <button class="sq-btn" id="sq-auth-submit">${mode === 'signin' ? 'Sign In' : 'Sign Up'}</button>
+        <div class="sq-status" id="sq-auth-status"></div>
+        <div class="sq-toggle" id="sq-auth-toggle">
+          ${mode === 'signin' ? `New here? <a id="sq-switch">Create an account</a>` : `Already have an account? <a id="sq-switch">Sign in</a>`}
+        </div>
+      </div>
+    `;
+    modalBg.classList.add('open');
+    document.getElementById('sq-auth-close').onclick = closeModal;
+    document.getElementById('sq-switch').onclick = () => openAuth(mode === 'signin' ? 'signup' : 'signin');
+
+    document.getElementById('sq-auth-submit').onclick = async () => {
+      const email = document.getElementById('sq-email').value.trim();
+      const password = document.getElementById('sq-password').value;
+      const statusEl = document.getElementById('sq-auth-status');
+      const btn = document.getElementById('sq-auth-submit');
+      statusEl.className = 'sq-status';
+      if (!email || !password){ statusEl.textContent = 'Please fill in email and password.'; statusEl.className = 'sq-status err'; return; }
+      btn.disabled = true; statusEl.textContent = 'Working...';
+      try {
+        if (mode === 'signup'){
+          const name = document.getElementById('sq-name').value.trim() || 'Player';
+          const { data, error } = await sb.auth.signUp({ email, password, options:{ data:{ display_name:name } } });
+          if (error) throw error;
+          if (data.session){
+            statusEl.textContent = "You're in!"; statusEl.className = 'sq-status ok';
+            setTimeout(closeModal, 600);
+          } else {
+            statusEl.textContent = 'Account created — check your email to confirm, then sign in.';
+            statusEl.className = 'sq-status ok';
+          }
+        } else {
+          const { error } = await sb.auth.signInWithPassword({ email, password });
+          if (error) throw error;
+          statusEl.textContent = "You're in!"; statusEl.className = 'sq-status ok';
+          setTimeout(closeModal, 500);
+        }
+      } catch(e){
+        statusEl.textContent = e.message || 'Something went wrong.';
+        statusEl.className = 'sq-status err';
+      } finally {
+        btn.disabled = false;
+      }
+    };
+  }
+
+  /* ---------------- progress modal ---------------- */
+  async function openProgress(){
+    modalBg.innerHTML = `
+      <div class="sq-modal">
+        <button class="sq-close" id="sq-prog-close">&times;</button>
+        <h2>My Progress</h2>
+        <p class="sub">Best scores across all 6 realms</p>
+        <div id="sq-prog-body" class="sq-status">Loading...</div>
+      </div>
+    `;
+    modalBg.classList.add('open');
+    document.getElementById('sq-prog-close').onclick = closeModal;
+
+    const { data, error } = await sb
+      .from('attempts')
+      .select('realm_id, score, total, pct, completed_at')
+      .order('completed_at', { ascending:false });
+
+    const body = document.getElementById('sq-prog-body');
+    if (error){ body.textContent = 'Could not load progress: ' + error.message; body.className='sq-status err'; return; }
+    if (!data || !data.length){
+      body.innerHTML = `<div style="text-align:center;padding:10px 0">No trials completed yet — go finish one!</div>`;
+      return;
+    }
+    const byRealm = {};
+    data.forEach(a => {
+      if (!byRealm[a.realm_id]) byRealm[a.realm_id] = [];
+      byRealm[a.realm_id].push(a);
+    });
+    body.innerHTML = REALM_ORDER.map(rid => {
+      const meta = REALM_META[rid];
+      const list = byRealm[rid];
+      if (!list || !list.length){
+        return `<div class="sq-realm-row"><div class="sq-realm-dot" style="background:${meta.color}"></div>
+          <div class="sq-realm-info"><div class="sq-realm-name">${meta.name}</div><div class="sq-realm-stat">Not attempted yet</div></div></div>`;
+      }
+      const best = Math.max(...list.map(a => Number(a.pct)));
+      const attempts = list.length;
+      const last = list[0];
+      return `<div class="sq-realm-row"><div class="sq-realm-dot" style="background:${meta.color}"></div>
+        <div class="sq-realm-info"><div class="sq-realm-name">${meta.name}</div><div class="sq-realm-stat">${attempts} attempt${attempts>1?'s':''} &middot; last ${last.score}/${last.total}</div></div>
+        <div class="sq-realm-best">${best}%</div></div>`;
+    }).join('');
+  }
+
+  /* ---------------- pending-attempt flush (if a trial ended while logged out) ---------------- */
+  function flushPending(){
+    const raw = sessionStorage.getItem('sq_pending_attempt');
+    if (!raw || !state.user) return;
+    sessionStorage.removeItem('sq_pending_attempt');
+    try { recordAttempt(JSON.parse(raw)); } catch(e){}
+  }
+
+  /* ---------------- public API ---------------- */
+  async function recordAttempt(payload){
+    if (!state.user){
+      sessionStorage.setItem('sq_pending_attempt', JSON.stringify(payload));
+      const statusEl = document.getElementById('save-status');
+      if (statusEl) statusEl.insertAdjacentHTML('beforeend', `<div class="sq-nudge">&#11088; Sign in (top-right) to save this result to your progress!</div>`);
+      return { saved:false };
+    }
+    const { error } = await sb.from('attempts').insert({
+      user_id: state.user.id,
+      realm_id: payload.realm_id,
+      trial_key: payload.trial_key,
+      trial_name: payload.trial_name,
+      score: payload.score,
+      total: payload.total
+    });
+    const statusEl = document.getElementById('save-status');
+    if (statusEl){
+      statusEl.insertAdjacentHTML('beforeend', error
+        ? `<div class="sq-nudge" style="color:#ff8a80">Could not save to your account: ${error.message}</div>`
+        : `<div class="sq-nudge" style="color:#43e97b">&#9989; Saved to your account!</div>`);
+    }
+    return { saved: !error, error };
+  }
+
+  window.SQAuth = {
+    recordAttempt,
+    openAuth,
+    openProgress,
+    onChange: (fn) => listeners.push(fn),
+    get user(){ return state.user; }
+  };
+
+  /* ---------------- boot ---------------- */
+  async function boot(){
+    const { data:{ session } } = await sb.auth.getSession();
+    state.user = session ? session.user : null;
+    state.displayName = session ? (session.user.user_metadata && session.user.user_metadata.display_name) : null;
+    state.ready = true;
+    renderWidget();
+    notify();
+    flushPending();
+
+    sb.auth.onAuthStateChange((event, session) => {
+      state.user = session ? session.user : null;
+      state.displayName = session ? (session.user.user_metadata && session.user.user_metadata.display_name) : null;
+      renderWidget();
+      notify();
+      flushPending();
+    });
+  }
+  boot();
+})();
