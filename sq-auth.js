@@ -347,7 +347,6 @@
     const currentName = state.displayName || (state.user ? state.user.email.split('@')[0] : '');
     const provider = (state.user && state.user.app_metadata && state.user.app_metadata.provider) || 'email';
     const providerLabel = provider === 'google' ? 'Google' : 'Email';
-    const verified = !!(state.user && state.user.email_confirmed_at);
     modalBg.innerHTML = `
       <div class="sq-modal">
         <button class="sq-close" id="sq-settings-close">&times;</button>
@@ -357,13 +356,6 @@
         <div class="sq-field">
           <label>Signed up with ${providerLabel}</label>
           <div style="background:#1c1642;border:1.5px solid #332a5c;border-radius:9px;padding:9px 11px;font-size:.85rem;word-break:break-all">${state.user ? state.user.email : ''}</div>
-          <div style="margin-top:6px;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-            ${verified
-              ? `<span style="font-size:.72rem;font-weight:800;color:#43e97b">&#10003; Verified</span>`
-              : `<span style="font-size:.72rem;font-weight:800;color:#ffb648">&#9888; Not verified</span><a id="sq-verify-email" style="font-size:.72rem;font-weight:800;color:#FFD700;cursor:pointer;text-decoration:underline">Send verification email</a>`
-            }
-          </div>
-          ${verified ? '' : `<div class="sq-status" id="sq-verify-status"></div>`}
         </div>
         <div class="sq-field">
           <label>Display Name</label>
@@ -419,22 +411,6 @@
     `;
     modalBg.classList.add('open');
     document.getElementById('sq-settings-close').onclick = closeModal;
-    if (!verified){
-      document.getElementById('sq-verify-email').onclick = async () => {
-        const link = document.getElementById('sq-verify-email');
-        const statusEl = document.getElementById('sq-verify-status');
-        statusEl.className = 'sq-status';
-        link.style.pointerEvents = 'none'; link.style.opacity = '.55';
-        statusEl.textContent = 'Sending...';
-        const { error } = await sb.auth.resend({ type:'signup', email: state.user.email });
-        if (error){
-          statusEl.textContent = error.message; statusEl.className = 'sq-status err';
-          link.style.pointerEvents = ''; link.style.opacity = '';
-        } else {
-          statusEl.textContent = 'Verification email sent — check your inbox!'; statusEl.className = 'sq-status ok';
-        }
-      };
-    }
     wireEyeToggle('sq-eye-current', 'sq-pwd-current');
     wireEyeToggle('sq-eye-new', 'sq-pwd-new');
     wireEyeToggle('sq-eye-new-confirm', 'sq-pwd-new-confirm');
