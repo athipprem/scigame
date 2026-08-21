@@ -579,7 +579,7 @@ function showEnd(){
     dateTaken:new Date().toISOString().slice(0,10), score, outOf:TOTAL, pct, passBar:PASS_BAR, passed:pass,
     coins, maxStreak, sections:['A','B','C'].map(s=>({name:s,score:sectionTally[s].c,outOf:sectionTally[s].t}))
   };
-  SQAuth.recordAttempt({realm_id:'cosmic', trial_key:'Cosmic_Unit28_Trial', trial_name:(UNIT_NUM>0?`Unit ${UNIT_NUM}: `:'')+UNIT_TITLE, score, total:TOTAL});
+  SQAuth.recordAttempt({realm_id:'cosmic', trial_key:'Cosmic_Unit28_Trial', trial_name:(UNIT_NUM>0?`Unit ${UNIT_NUM}: `:'')+UNIT_TITLE, score, total:TOTAL, sections:window._lastResults.sections});
 }
 
 async function saveResults(){

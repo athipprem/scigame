@@ -98,6 +98,11 @@
   button.sq-locked-btn{background:#4a4a4a!important;color:#999!important;cursor:not-allowed!important;opacity:.75}
   #sq-trial-lock-note{font-size:.78rem;color:#c9b3d9;text-align:center;margin-top:8px}
   #sq-trial-lock-note a{color:#FFD700;font-weight:700;text-decoration:underline;cursor:pointer}
+  .sq-section-title{font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;color:#c9b3d9;font-weight:800;margin:20px 0 10px}
+  .sq-section-title:first-of-type{margin-top:4px}
+  .sq-btn-danger{background:linear-gradient(135deg,#ff6b6b,#c62828);color:#fff}
+  .sq-danger-box{border:1.5px solid #ff6b6b44;background:#ff6b6b0d;border-radius:12px;padding:14px;margin-top:10px}
+  .sq-danger-box p{font-size:.78rem;color:#e6c9c9;margin:0 0 10px;line-height:1.5}
   `;
   document.head.appendChild(style);
 
@@ -131,10 +136,10 @@
       btn.onclick = () => menu.classList.toggle('open');
       menu.innerHTML = `
         <button id="sq-menu-progress">&#128202; My Progress</button>
-        <button id="sq-menu-settings">&#9881;&#65039; Profile Settings</button>
+        <button id="sq-menu-settings">&#9881;&#65039; My Profile</button>
         <button id="sq-menu-signout">&#128682; Sign Out</button>
       `;
-      document.getElementById('sq-menu-progress').onclick = () => { menu.classList.remove('open'); openProgress(); };
+      document.getElementById('sq-menu-progress').onclick = () => { menu.classList.remove('open'); location.href = 'My_Progress.html'; };
       document.getElementById('sq-menu-settings').onclick = () => { menu.classList.remove('open'); openProfileSettings(); };
       document.getElementById('sq-menu-signout').onclick = async () => { menu.classList.remove('open'); await sb.auth.signOut(); };
     } else {
@@ -151,8 +156,51 @@
   });
 
   /* ---------------- auth modal ---------------- */
+  function resetRedirectUrl(){
+    return window.location.origin + window.location.pathname.replace(/[^/]+$/, 'Reset_Password.html');
+  }
+
   function openAuth(mode){
     mode = mode || 'signin';
+
+    if (mode === 'forgot'){
+      modalBg.innerHTML = `
+        <div class="sq-modal">
+          <button class="sq-close" id="sq-auth-close">&times;</button>
+          <h2 id="sq-auth-title">Reset your password</h2>
+          <p class="sub">Enter your email and we'll send you a link to set a new password.</p>
+          <div class="sq-field">
+            <label>Email</label>
+            <input type="email" id="sq-email" placeholder="you@example.com">
+          </div>
+          <button class="sq-btn" id="sq-auth-submit">Send Reset Link</button>
+          <div class="sq-status" id="sq-auth-status"></div>
+          <div class="sq-toggle" id="sq-auth-toggle">
+            Remember your password? <a id="sq-switch">Sign in</a>
+          </div>
+        </div>
+      `;
+      modalBg.classList.add('open');
+      document.getElementById('sq-auth-close').onclick = closeModal;
+      document.getElementById('sq-switch').onclick = () => openAuth('signin');
+      document.getElementById('sq-auth-submit').onclick = async () => {
+        const email = document.getElementById('sq-email').value.trim();
+        const statusEl = document.getElementById('sq-auth-status');
+        const btn = document.getElementById('sq-auth-submit');
+        statusEl.className = 'sq-status';
+        if (!email){ statusEl.textContent = 'Enter your email first.'; statusEl.className = 'sq-status err'; return; }
+        btn.disabled = true; statusEl.textContent = 'Sending...';
+        const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo: resetRedirectUrl() });
+        if (error){
+          statusEl.textContent = error.message; statusEl.className = 'sq-status err';
+        } else {
+          statusEl.textContent = 'Check your email for a reset link!'; statusEl.className = 'sq-status ok';
+        }
+        btn.disabled = false;
+      };
+      return;
+    }
+
     modalBg.innerHTML = `
       <div class="sq-modal">
         <button class="sq-close" id="sq-auth-close">&times;</button>
@@ -168,7 +216,7 @@
             <input type="password" id="sq-password" placeholder="${mode === 'signup' ? 'Create a password' : 'Enter your password'}" autocomplete="${mode === 'signup' ? 'new-password' : 'current-password'}">
             <button type="button" class="sq-eye" id="sq-eye-password" aria-label="Show password">${EYE_ICON}</button>
           </div>
-          ${mode === 'signup' ? `<div class="sq-hint">Must be 8+ characters with uppercase, lowercase, a number, and a symbol (e.g. !@#$%).</div>` : ''}
+          ${mode === 'signup' ? `<div class="sq-hint">Must be 8+ characters with uppercase, lowercase, a number, and a symbol (e.g. !@#$%).</div>` : `<div style="text-align:right;margin-top:6px"><a id="sq-forgot" style="color:#FFD700;font-size:.75rem;font-weight:700;text-decoration:none;cursor:pointer">Forgot password?</a></div>`}
         </div>
         <div class="sq-field" id="sq-field-confirm" style="display:${mode==='signup'?'block':'none'}">
           <label>Confirm Password</label>
@@ -192,6 +240,7 @@
     modalBg.classList.add('open');
     document.getElementById('sq-auth-close').onclick = closeModal;
     document.getElementById('sq-switch').onclick = () => openAuth(mode === 'signin' ? 'signup' : 'signin');
+    if (mode === 'signin') document.getElementById('sq-forgot').onclick = () => openAuth('forgot');
     wireEyeToggle('sq-eye-password', 'sq-password');
     if (mode === 'signup') wireEyeToggle('sq-eye-confirm', 'sq-password-confirm');
     document.getElementById('sq-auth-google').onclick = async () => {
@@ -289,24 +338,71 @@
     }).join('');
   }
 
-  /* ---------------- profile settings modal ---------------- */
+  /* ---------------- my profile modal (name, password, delete account) ---------------- */
   function openProfileSettings(){
     const currentName = state.displayName || (state.user ? state.user.email.split('@')[0] : '');
     modalBg.innerHTML = `
       <div class="sq-modal">
         <button class="sq-close" id="sq-settings-close">&times;</button>
-        <h2>Profile Settings</h2>
-        <p class="sub">Change what other people (and your progress view) call you.</p>
+        <h2>My Profile</h2>
+        <p class="sub">Manage your account details.</p>
+
         <div class="sq-field">
           <label>Display Name</label>
           <input type="text" id="sq-settings-name" value="${currentName.replace(/"/g,'&quot;')}" placeholder="What should we call you?" maxlength="30">
         </div>
-        <button class="sq-btn" id="sq-settings-save">Save</button>
+        <button class="sq-btn" id="sq-settings-save">Save Name</button>
         <div class="sq-status" id="sq-settings-status"></div>
+
+        <div class="sq-section-title">Change Password</div>
+        <div class="sq-field">
+          <label>Current Password</label>
+          <div class="sq-pwd-wrap">
+            <input type="password" id="sq-pwd-current" placeholder="Enter your current password" autocomplete="current-password">
+            <button type="button" class="sq-eye" id="sq-eye-current" aria-label="Show password">${EYE_ICON}</button>
+          </div>
+        </div>
+        <div class="sq-field">
+          <label>New Password</label>
+          <div class="sq-pwd-wrap">
+            <input type="password" id="sq-pwd-new" placeholder="Create a new password" autocomplete="new-password">
+            <button type="button" class="sq-eye" id="sq-eye-new" aria-label="Show password">${EYE_ICON}</button>
+          </div>
+          <div class="sq-hint">Must be 8+ characters with uppercase, lowercase, a number, and a symbol (e.g. !@#$%).</div>
+        </div>
+        <div class="sq-field">
+          <label>Confirm New Password</label>
+          <div class="sq-pwd-wrap">
+            <input type="password" id="sq-pwd-new-confirm" placeholder="Re-enter your new password" autocomplete="new-password">
+            <button type="button" class="sq-eye" id="sq-eye-new-confirm" aria-label="Show password">${EYE_ICON}</button>
+          </div>
+        </div>
+        <button class="sq-btn" id="sq-pwd-save">Change Password</button>
+        <div class="sq-status" id="sq-pwd-status"></div>
+
+        <div class="sq-section-title">Danger Zone</div>
+        <button class="sq-btn sq-btn-danger" id="sq-del-open">Delete My Account</button>
+        <div class="sq-danger-box" id="sq-del-box" style="display:none">
+          <p>This permanently deletes your account, display name, and every saved trial result. This can't be undone. Enter your password to confirm.</p>
+          <div class="sq-field">
+            <label>Password</label>
+            <div class="sq-pwd-wrap">
+              <input type="password" id="sq-del-pwd" placeholder="Enter your password" autocomplete="current-password">
+              <button type="button" class="sq-eye" id="sq-eye-del" aria-label="Show password">${EYE_ICON}</button>
+            </div>
+          </div>
+          <button class="sq-btn sq-btn-danger" id="sq-del-confirm">Permanently Delete My Account</button>
+          <div class="sq-status" id="sq-del-status"></div>
+        </div>
       </div>
     `;
     modalBg.classList.add('open');
     document.getElementById('sq-settings-close').onclick = closeModal;
+    wireEyeToggle('sq-eye-current', 'sq-pwd-current');
+    wireEyeToggle('sq-eye-new', 'sq-pwd-new');
+    wireEyeToggle('sq-eye-new-confirm', 'sq-pwd-new-confirm');
+    wireEyeToggle('sq-eye-del', 'sq-del-pwd');
+
     document.getElementById('sq-settings-save').onclick = async () => {
       const newName = document.getElementById('sq-settings-name').value.trim();
       const statusEl = document.getElementById('sq-settings-status');
@@ -320,7 +416,66 @@
         state.displayName = newName;
         renderWidget();
         statusEl.textContent = 'Saved!'; statusEl.className = 'sq-status ok';
-        setTimeout(closeModal, 500);
+        btn.disabled = false;
+      }
+    };
+
+    document.getElementById('sq-pwd-save').onclick = async () => {
+      const current = document.getElementById('sq-pwd-current').value;
+      const next = document.getElementById('sq-pwd-new').value;
+      const confirm = document.getElementById('sq-pwd-new-confirm').value;
+      const statusEl = document.getElementById('sq-pwd-status');
+      const btn = document.getElementById('sq-pwd-save');
+      statusEl.className = 'sq-status';
+      if (!current || !next || !confirm){ statusEl.textContent = 'Fill in all three password fields.'; statusEl.className = 'sq-status err'; return; }
+      if (next !== confirm){ statusEl.textContent = "New passwords don't match — check both fields."; statusEl.className = 'sq-status err'; return; }
+      btn.disabled = true; statusEl.textContent = 'Updating...';
+      const { error } = await sb.auth.updateUser({ current_password: current, password: next });
+      if (error){
+        statusEl.textContent = error.message; statusEl.className = 'sq-status err'; btn.disabled = false;
+      } else {
+        statusEl.textContent = 'Password updated!'; statusEl.className = 'sq-status ok';
+        document.getElementById('sq-pwd-current').value = '';
+        document.getElementById('sq-pwd-new').value = '';
+        document.getElementById('sq-pwd-new-confirm').value = '';
+        btn.disabled = false;
+      }
+    };
+
+    document.getElementById('sq-del-open').onclick = () => {
+      const box = document.getElementById('sq-del-box');
+      box.style.display = box.style.display === 'none' ? 'block' : 'none';
+    };
+
+    document.getElementById('sq-del-confirm').onclick = async () => {
+      const pwd = document.getElementById('sq-del-pwd').value;
+      const statusEl = document.getElementById('sq-del-status');
+      const btn = document.getElementById('sq-del-confirm');
+      statusEl.className = 'sq-status';
+      if (!pwd){ statusEl.textContent = 'Enter your password to confirm.'; statusEl.className = 'sq-status err'; return; }
+      btn.disabled = true; statusEl.textContent = 'Verifying password...';
+      const email = state.user.email;
+      const { error: pwErr } = await sb.auth.signInWithPassword({ email, password: pwd });
+      if (pwErr){
+        statusEl.textContent = 'Incorrect password.'; statusEl.className = 'sq-status err'; btn.disabled = false;
+        return;
+      }
+      statusEl.textContent = 'Deleting your account...';
+      try {
+        const { data:{ session } } = await sb.auth.getSession();
+        const resp = await fetch(`${SUPABASE_URL}/functions/v1/delete-account`, {
+          method: 'POST',
+          headers: { Authorization: `Bearer ${session.access_token}` }
+        });
+        const result = await resp.json().catch(() => ({}));
+        if (!resp.ok) throw new Error(result.error || 'Could not delete account.');
+        statusEl.textContent = 'Account deleted. Bye for now!'; statusEl.className = 'sq-status ok';
+        setTimeout(async () => {
+          try { await sb.auth.signOut(); } catch(e){}
+          location.href = location.pathname.includes('/') ? location.pathname.replace(/[^/]+$/, 'index.html') : 'index.html';
+        }, 1200);
+      } catch(e){
+        statusEl.textContent = e.message || 'Something went wrong.'; statusEl.className = 'sq-status err'; btn.disabled = false;
       }
     };
   }
@@ -422,7 +577,8 @@
       trial_key: payload.trial_key,
       trial_name: payload.trial_name,
       score: payload.score,
-      total: payload.total
+      total: payload.total,
+      sections: payload.sections || null
     });
     const statusEl = document.getElementById('save-status');
     if (statusEl){
@@ -438,7 +594,11 @@
     openAuth,
     openProgress,
     onChange: (fn) => listeners.push(fn),
-    get user(){ return state.user; }
+    get user(){ return state.user; },
+    get ready(){ return state.ready; },
+    get client(){ return sb; },
+    REALM_META,
+    REALM_ORDER
   };
 
   listeners.push(renderReactive);

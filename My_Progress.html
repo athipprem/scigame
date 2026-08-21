@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script defer src="sq-auth.js"></script>
+<title>Science Quest — My Progress</title>
+<style>
+  :root{
+    --bg:#0a1128; --bg2:#16213e; --panel:#11192f; --line:#2a3a5c;
+    --ink:#fff8e6; --grey:#a9b8d9; --gold:#FFD700; --amber:#FFA500;
+    --red:#ff6b6b; --orange:#ffb648; --green:#43e97b;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:'Segoe UI',Arial,sans-serif;background:radial-gradient(circle at 50% -10%,var(--bg2),var(--bg));color:var(--ink);min-height:100vh;padding-bottom:40px}
+  .wrap{max-width:980px;margin:0 auto;padding:20px 16px}
+  header{text-align:center;margin-bottom:20px}
+  h1{font-size:1.6rem;margin:6px 0 4px;background:linear-gradient(135deg,var(--gold),var(--amber));-webkit-background-clip:text;background-clip:text;color:transparent}
+  header p{color:var(--grey);font-size:.85rem;margin:0}
+  #back-link{display:inline-block;margin-top:10px;color:var(--grey);font-size:.8rem;text-decoration:none;border:1.5px solid var(--line);border-radius:20px;padding:5px 13px}
+  #back-link:hover{color:var(--gold);border-color:var(--gold)}
+
+  #gate{text-align:center;padding:60px 20px;color:var(--grey)}
+  #gate button{margin-top:14px;border:none;border-radius:12px;padding:11px 22px;font-weight:800;font-size:.9rem;cursor:pointer;background:linear-gradient(135deg,var(--gold),var(--amber));color:#3a2a00}
+
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+  @media (max-width:760px){.grid2{grid-template-columns:1fr}}
+  .card{background:var(--panel);border:1.5px solid var(--line);border-radius:16px;padding:18px 20px;margin-bottom:16px}
+  .card h3{display:flex;align-items:center;gap:8px;font-size:.78rem;text-transform:uppercase;letter-spacing:.05em;color:var(--gold);font-weight:800;margin:0 0 14px}
+  .card h3 .dot{width:8px;height:8px;border-radius:50%;background:var(--gold);flex-shrink:0}
+  .card .note{font-size:.75rem;color:var(--grey);margin:-8px 0 12px}
+
+  /* radar */
+  #radar-wrap{display:flex;justify-content:center}
+  .radar-legend{display:flex;justify-content:center;gap:16px;margin-top:10px;font-size:.72rem;color:var(--grey);flex-wrap:wrap}
+  .radar-legend span{display:inline-flex;align-items:center;gap:5px}
+  .radar-legend i{width:10px;height:10px;border-radius:50%;display:inline-block}
+
+  /* skill bars */
+  .skill-row{display:flex;align-items:center;gap:10px;padding:8px 0}
+  .skill-name{width:130px;flex-shrink:0;font-size:.8rem;font-weight:700}
+  .skill-bar-track{flex:1;height:9px;background:#0006;border-radius:6px;overflow:hidden}
+  .skill-bar-fill{height:100%;border-radius:6px}
+  .skill-pct{width:42px;text-align:right;font-size:.82rem;font-weight:800;flex-shrink:0}
+  .skill-status{width:16px;text-align:center;flex-shrink:0}
+
+  /* tier cards */
+  .tier-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  @media (max-width:600px){.tier-grid{grid-template-columns:1fr}}
+  .tier-card{border:1.5px solid var(--line);border-radius:12px;padding:14px}
+  .tier-card .tname{font-weight:800;font-size:.85rem;margin-bottom:2px}
+  .tier-card .tsub{font-size:.68rem;color:var(--grey);margin-bottom:10px}
+  .tier-card .tscore{font-size:1.5rem;font-weight:900}
+  .tier-card .tscore small{font-size:.85rem;font-weight:700;color:var(--grey)}
+  .tier-bar-track{height:7px;background:#0006;border-radius:5px;overflow:hidden;margin:8px 0 6px}
+  .tier-bar-fill{height:100%;border-radius:5px}
+  .tier-card .tpct{font-weight:800;font-size:.95rem}
+
+  table{width:100%;border-collapse:collapse;font-size:.82rem}
+  th{text-align:left;color:var(--grey);font-weight:700;font-size:.7rem;text-transform:uppercase;letter-spacing:.04em;padding:6px 8px;border-bottom:1.5px solid var(--line)}
+  td{padding:9px 8px;border-bottom:1px solid #ffffff10}
+  tr:last-child td{border-bottom:none}
+  .realm-tag{display:inline-flex;align-items:center;gap:6px}
+  .realm-tag i{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+  .pct-chip{font-weight:800}
+  .empty-note{color:var(--grey);font-size:.82rem;text-align:center;padding:16px 0}
+
+  select#filter-realm{background:#1c1642;border:1.5px solid var(--line);color:var(--ink);border-radius:9px;padding:6px 10px;font-size:.78rem;font-weight:700}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>&#128202; My Progress</h1>
+    <p>Skill mastery across all 6 realms, built from your best result on every trial.</p>
+    <a id="back-link" href="index.html">&larr; Back to World Map</a>
+  </header>
+
+  <div id="gate">Loading...</div>
+
+  <div id="content" style="display:none">
+    <div class="grid2">
+      <div class="card">
+        <h3><span class="dot"></span>Skills Radar</h3>
+        <div id="radar-wrap"></div>
+        <div class="radar-legend">
+          <span><i style="background:var(--red)"></i>Critical &lt;60%</span>
+          <span><i style="background:var(--orange)"></i>OK 60&ndash;84%</span>
+          <span><i style="background:var(--green)"></i>Great 85%+</span>
+        </div>
+      </div>
+      <div class="card">
+        <h3><span class="dot"></span>Skill vs Target Breakdown</h3>
+        <div class="note" id="skill-sum-note"></div>
+        <div id="skill-bars"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3><span class="dot"></span>By Question Tier</h3>
+      <div class="note">Basic / Intermediate / Applied &mdash; from your best attempt on every trial, tallied across all sections you've played so far.</div>
+      <div class="tier-grid" id="tier-cards"></div>
+    </div>
+
+    <div class="card">
+      <h3><span class="dot"></span>Last 10 Results</h3>
+      <div id="last10-wrap"></div>
+    </div>
+
+    <div class="card">
+      <h3><span class="dot"></span>Highest Record per Trial
+        <select id="filter-realm" style="margin-left:auto"></select>
+      </h3>
+      <div id="best-wrap"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const TIER_LABELS = { A:'Basic Tier', B:'Intermediate Tier', C:'Applied Tier' };
+  const TIER_ORDER = ['A','B','C'];
+  const GOLD_TARGET = 85; // flat mastery target per skill, used for the radar's dashed line + breakdown bars
+
+  // clockwise from top: Biology, Chemistry/Matter, Physics, Earth & Space, Scientific Investigation, Applied Reasoning
+  const SKILL_ORDER = ['wilds','depths','peaks','cosmic','lab','citadel'];
+  const SKILL_LABEL = {
+    wilds:'Biology', depths:'Chemistry / Matter', peaks:'Physics',
+    cosmic:'Earth & Space', lab:'Scientific Investigation', citadel:'Applied Reasoning'
+  };
+
+  function zoneColor(pct){
+    if (pct >= 85) return 'var(--green)';
+    if (pct >= 60) return 'var(--orange)';
+    return 'var(--red)';
+  }
+
+  function renderRadar(skillPct){
+    const size = 320, cx = size/2, cy = size/2, R = 118;
+    const n = SKILL_ORDER.length;
+    function pt(i, r){
+      const theta = (i / n) * Math.PI * 2;
+      return [cx + r * Math.sin(theta), cy - r * Math.cos(theta)];
+    }
+    let svg = `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">`;
+    // grid rings
+    [0.25,0.5,0.75,1].forEach(f => {
+      const ring = SKILL_ORDER.map((s,i) => pt(i, R*f).join(',')).join(' ');
+      svg += `<polygon points="${ring}" fill="none" stroke="#2a3a5c" stroke-width="1"/>`;
+    });
+    // axis lines + labels
+    SKILL_ORDER.forEach((s,i) => {
+      const [x,y] = pt(i, R);
+      svg += `<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="#2a3a5c" stroke-width="1"/>`;
+      const [lx,ly] = pt(i, R+26);
+      svg += `<text x="${lx}" y="${ly}" fill="#a9b8d9" font-size="10.5" font-weight="700" text-anchor="middle" dominant-baseline="middle">${SKILL_LABEL[s]}</text>`;
+    });
+    // target ring (dashed)
+    const targetPts = SKILL_ORDER.map((s,i) => pt(i, R*(GOLD_TARGET/100)).join(',')).join(' ');
+    svg += `<polygon points="${targetPts}" fill="none" stroke="#FFD700" stroke-width="1.5" stroke-dasharray="4,4"/>`;
+    // current
+    const curPts = SKILL_ORDER.map((s,i) => pt(i, R*(Math.min(skillPct[s]||0,100)/100)).join(',')).join(' ');
+    svg += `<polygon points="${curPts}" fill="#FFD70033" stroke="#FFD700" stroke-width="2"/>`;
+    SKILL_ORDER.forEach((s,i) => {
+      const [x,y] = pt(i, R*(Math.min(skillPct[s]||0,100)/100));
+      svg += `<circle cx="${x}" cy="${y}" r="3.5" fill="#FFD700"/>`;
+    });
+    svg += `</svg>`;
+    document.getElementById('radar-wrap').innerHTML = svg;
+  }
+
+  function renderSkillBars(skillPct, attemptedSet){
+    const rows = SKILL_ORDER.map(s => {
+      const played = attemptedSet.has(s);
+      const pct = played ? Math.round(skillPct[s]) : 0;
+      const color = played ? zoneColor(pct) : '#2a3a5c';
+      const check = played ? (pct >= GOLD_TARGET ? '&#10003;' : '') : '&mdash;';
+      return `<div class="skill-row">
+        <div class="skill-name">${SKILL_LABEL[s]}</div>
+        <div class="skill-bar-track"><div class="skill-bar-fill" style="width:${played?pct:0}%;background:${color}"></div></div>
+        <div class="skill-pct">${played ? pct+'%' : '&mdash;'}</div>
+        <div class="skill-status">${check}</div>
+      </div>`;
+    }).join('');
+    document.getElementById('skill-bars').innerHTML = rows;
+    const playedCount = SKILL_ORDER.filter(s => attemptedSet.has(s)).length;
+    const curSum = SKILL_ORDER.reduce((a,s) => a + (attemptedSet.has(s) ? Math.round(skillPct[s]) : 0), 0);
+    const targetSum = GOLD_TARGET * SKILL_ORDER.length;
+    document.getElementById('skill-sum-note').textContent =
+      `Current sum ${curSum} / target sum ${targetSum} (flat ${GOLD_TARGET}% per skill) &mdash; ${playedCount}/6 realms played so far.`.replace('&mdash;','—');
+  }
+
+  function renderTiers(tierTally){
+    const html = TIER_ORDER.map(t => {
+      const { c, o } = tierTally[t];
+      const pct = o > 0 ? Math.round(c/o*100) : 0;
+      const color = o > 0 ? zoneColor(pct) : '#2a3a5c';
+      return `<div class="tier-card">
+        <div class="tname">${TIER_LABELS[t]}</div>
+        <div class="tsub">${o} question${o===1?'':'s'} tallied so far</div>
+        <div class="tscore">${c}<small>/${o||0}</small></div>
+        <div class="tier-bar-track"><div class="tier-bar-fill" style="width:${pct}%;background:${color}"></div></div>
+        <div class="tpct" style="color:${color}">${o>0?pct+'%':'No data yet'}</div>
+      </div>`;
+    }).join('');
+    document.getElementById('tier-cards').innerHTML = html;
+  }
+
+  function realmTag(realmId){
+    const meta = SQAuth.REALM_META[realmId] || { name:realmId, color:'#a9b8d9' };
+    return `<span class="realm-tag"><i style="background:${meta.color}"></i>${meta.name}</span>`;
+  }
+
+  function fmtDate(iso){
+    const d = new Date(iso);
+    return d.toLocaleDateString(undefined, { year:'numeric', month:'short', day:'numeric' });
+  }
+
+  function renderLast10(attempts){
+    if (!attempts.length){ document.getElementById('last10-wrap').innerHTML = `<div class="empty-note">No trials completed yet.</div>`; return; }
+    const rows = attempts.slice(0,10).map(a => `
+      <tr>
+        <td>${realmTag(a.realm_id)}</td>
+        <td>${a.trial_name}</td>
+        <td class="pct-chip" style="color:${zoneColor(Number(a.pct))}">${a.score}/${a.total} (${Math.round(Number(a.pct))}%)</td>
+        <td>${fmtDate(a.completed_at)}</td>
+      </tr>`).join('');
+    document.getElementById('last10-wrap').innerHTML = `
+      <table><thead><tr><th>Realm</th><th>Trial</th><th>Score</th><th>Date</th></tr></thead>
+      <tbody>${rows}</tbody></table>`;
+  }
+
+  function renderBestTable(bestList){
+    const sel = document.getElementById('filter-realm');
+    if (!sel.dataset.wired){
+      sel.dataset.wired = '1';
+      sel.innerHTML = `<option value="all">All Realms</option>` + SQAuth.REALM_ORDER.map(r => `<option value="${r}">${SQAuth.REALM_META[r].name}</option>`).join('');
+      sel.onchange = () => renderBestTable(bestList);
+    }
+    const filter = sel.value || 'all';
+    const filtered = filter === 'all' ? bestList : bestList.filter(a => a.realm_id === filter);
+    if (!filtered.length){ document.getElementById('best-wrap').innerHTML = `<div class="empty-note">No trials completed in this realm yet.</div>`; return; }
+    const rows = filtered.map(a => `
+      <tr>
+        <td>${realmTag(a.realm_id)}</td>
+        <td>${a.trial_name}</td>
+        <td class="pct-chip" style="color:${zoneColor(Number(a.pct))}">${a.score}/${a.total} (${Math.round(Number(a.pct))}%)</td>
+        <td>${fmtDate(a.completed_at)}</td>
+      </tr>`).join('');
+    document.getElementById('best-wrap').innerHTML = `
+      <table><thead><tr><th>Realm</th><th>Trial</th><th>Best Score</th><th>Achieved</th></tr></thead>
+      <tbody>${rows}</tbody></table>`;
+  }
+
+  async function loadProgress(){
+    const client = SQAuth.client;
+    const { data, error } = await client
+      .from('attempts')
+      .select('realm_id, trial_key, trial_name, score, total, pct, sections, completed_at')
+      .order('completed_at', { ascending:false });
+
+    if (error){
+      document.getElementById('content').innerHTML = `<div class="empty-note">Could not load progress: ${error.message}</div>`;
+      document.getElementById('content').style.display = 'block';
+      return;
+    }
+
+    const attempts = data || [];
+
+    // best attempt per trial (used for all skill/tier analysis — raw scores, coins never involved)
+    const bestByTrial = {};
+    attempts.forEach(a => {
+      const existing = bestByTrial[a.trial_key];
+      if (!existing || Number(a.pct) > Number(existing.pct)) bestByTrial[a.trial_key] = a;
+    });
+    const bestList = Object.values(bestByTrial).sort((a,b) => new Date(b.completed_at) - new Date(a.completed_at));
+
+    // per-skill average pct (of best attempts) + per-tier tallies
+    const skillSums = {}, skillCounts = {}, attemptedSet = new Set();
+    const tierTally = { A:{c:0,o:0}, B:{c:0,o:0}, C:{c:0,o:0} };
+    bestList.forEach(a => {
+      const r = a.realm_id;
+      skillSums[r] = (skillSums[r]||0) + Number(a.pct);
+      skillCounts[r] = (skillCounts[r]||0) + 1;
+      attemptedSet.add(r);
+      (a.sections||[]).forEach(sec => {
+        if (tierTally[sec.name]){ tierTally[sec.name].c += sec.score; tierTally[sec.name].o += sec.outOf; }
+      });
+    });
+    const skillPct = {};
+    SKILL_ORDER.forEach(s => { skillPct[s] = skillCounts[s] ? skillSums[s]/skillCounts[s] : 0; });
+
+    renderRadar(skillPct);
+    renderSkillBars(skillPct, attemptedSet);
+    renderTiers(tierTally);
+    renderLast10(attempts);
+    renderBestTable(bestList);
+
+    document.getElementById('gate').style.display = 'none';
+    document.getElementById('content').style.display = 'block';
+  }
+
+  function boot(){
+    if (!SQAuth.ready){ setTimeout(boot, 80); return; }
+    if (!SQAuth.user){
+      document.getElementById('gate').innerHTML = `Sign in to see your progress across all 6 realms.<br><button id="gate-signin">Sign In</button>`;
+      document.getElementById('gate-signin').onclick = () => SQAuth.openAuth('signin');
+      SQAuth.onChange(() => { if (SQAuth.user) loadProgress(); });
+      return;
+    }
+    loadProgress();
+  }
+  boot();
+});
+</script>
+</body>
+</html>
