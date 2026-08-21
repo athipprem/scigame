@@ -135,10 +135,15 @@
       btn.innerHTML = `<span id="sq-acct-avatar">${initials(name)}</span><span>${name}</span>`;
       btn.onclick = () => menu.classList.toggle('open');
       menu.innerHTML = `
+        <button id="sq-menu-map"><img src="favicon.svg" alt="" style="width:14px;height:14px;vertical-align:-2px;margin-right:3px">World Map</button>
         <button id="sq-menu-progress">&#128202; My Progress</button>
         <button id="sq-menu-settings">&#9881;&#65039; My Profile</button>
         <button id="sq-menu-signout">&#128682; Sign Out</button>
       `;
+      document.getElementById('sq-menu-map').onclick = () => {
+        menu.classList.remove('open');
+        location.href = location.pathname.includes('/') ? location.pathname.replace(/[^/]+$/, 'index.html') : 'index.html';
+      };
       document.getElementById('sq-menu-progress').onclick = () => { menu.classList.remove('open'); location.href = 'My_Progress.html'; };
       document.getElementById('sq-menu-settings').onclick = () => { menu.classList.remove('open'); openProfileSettings(); };
       document.getElementById('sq-menu-signout').onclick = async () => {
