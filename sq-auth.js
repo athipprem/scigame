@@ -50,6 +50,7 @@
   .sq-field label{display:block;font-size:.75rem;color:#c9b3d9;margin-bottom:4px;font-weight:700}
   .sq-field input{width:100%;box-sizing:border-box;background:#1c1642;border:1.5px solid #332a5c;border-radius:9px;padding:9px 11px;color:#fff3e6;font-size:.9rem}
   .sq-field input:focus{outline:none;border-color:#FFD700}
+  .sq-hint{font-size:.7rem;color:#c9b3d9;margin-top:5px;line-height:1.4}
   .sq-btn{display:block;width:100%;border:none;border-radius:12px;padding:11px;font-weight:800;font-size:.88rem;cursor:pointer;background:linear-gradient(135deg,#FFD700,#FFA500);color:#3a2a00;margin-top:6px}
   .sq-btn:disabled{opacity:.6;cursor:default}
   .sq-btn-ghost{background:none;border:1.5px solid #332a5c;color:#c9b3d9;margin-top:8px}
@@ -150,7 +151,8 @@
         </div>
         <div class="sq-field">
           <label>Password</label>
-          <input type="password" id="sq-password" placeholder="At least 6 characters">
+          <input type="password" id="sq-password" placeholder="${mode === 'signup' ? 'Create a password' : 'Enter your password'}" autocomplete="${mode === 'signup' ? 'new-password' : 'current-password'}">
+          ${mode === 'signup' ? `<div class="sq-hint">Must be 8+ characters with uppercase, lowercase, a number, and a symbol (e.g. !@#$%).</div>` : ''}
         </div>
         <button class="sq-btn" id="sq-auth-submit">${mode === 'signin' ? 'Sign In' : 'Sign Up'}</button>
         <div class="sq-status" id="sq-auth-status"></div>
