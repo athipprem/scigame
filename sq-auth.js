@@ -17,6 +17,12 @@
   };
   const REALM_ORDER = ["cosmic","citadel","peaks","wilds","lab","depths"];
 
+  // First trial of each realm — free to play without an account (guest mode)
+  const FREE_TRIALS = new Set([
+    "Cosmic_Unit07_Trial", "Citadel_Gatehouse_Trial", "Peaks_Unit03_Trial",
+    "Wilds_Unit01_Trial", "Detective_Unit36_Trial", "Alchemist_Unit05_Trial"
+  ]);
+
   const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
   const state = { user:null, displayName:null, ready:false };
@@ -62,6 +68,16 @@
   .sq-realm-stat{font-size:.72rem;color:#c9b3d9}
   .sq-realm-best{font-size:1rem;font-weight:900;color:#FFD700}
   .sq-nudge{font-size:.75rem;color:#FFD700;margin-top:6px}
+  .sq-divider{display:flex;align-items:center;gap:10px;margin:16px 0;color:#c9b3d9;font-size:.72rem}
+  .sq-divider::before,.sq-divider::after{content:'';flex:1;height:1px;background:#332a5c}
+  .sq-btn-google{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;border:1.5px solid #332a5c;border-radius:12px;padding:10px;font-weight:700;font-size:.85rem;cursor:pointer;background:#fff3e6;color:#241533}
+  .sq-btn-google:hover{filter:brightness(.96)}
+  #sq-gate{display:none;position:fixed;inset:0;z-index:9998;background:#080818ee;backdrop-filter:blur(6px);align-items:center;justify-content:center;padding:16px}
+  #sq-gate.open{display:flex}
+  .sq-gate-card{background:#120e2c;border:1.5px solid #FFD70055;border-radius:20px;padding:32px 26px;max-width:360px;width:100%;text-align:center;color:#fff3e6;font-family:'Segoe UI',Arial,sans-serif;box-shadow:0 14px 40px #000a}
+  .sq-gate-card .emoji{font-size:2.6rem;margin-bottom:10px}
+  .sq-gate-card h2{margin:0 0 8px;font-size:1.15rem;background:linear-gradient(135deg,#FFD700,#FFA500);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .sq-gate-card p{color:#c9b3d9;font-size:.85rem;line-height:1.5;margin:0 0 18px}
   `;
   document.head.appendChild(style);
 
@@ -77,6 +93,10 @@
   const modalBg = document.createElement('div');
   modalBg.id = 'sq-modal-bg';
   document.body.appendChild(modalBg);
+
+  const gateEl = document.createElement('div');
+  gateEl.id = 'sq-gate';
+  document.body.appendChild(gateEl);
 
   function closeModal(){ modalBg.classList.remove('open'); modalBg.innerHTML = ''; }
   modalBg.addEventListener('click', e => { if (e.target === modalBg) closeModal(); });
@@ -134,6 +154,11 @@
         </div>
         <button class="sq-btn" id="sq-auth-submit">${mode === 'signin' ? 'Sign In' : 'Sign Up'}</button>
         <div class="sq-status" id="sq-auth-status"></div>
+        <div class="sq-divider">or</div>
+        <button class="sq-btn-google" id="sq-auth-google">
+          <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.48h4.84a4.14 4.14 0 0 1-1.8 2.72v2.26h2.9c1.7-1.57 2.7-3.88 2.7-6.62z"/><path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.9-2.26c-.8.54-1.84.86-3.06.86-2.35 0-4.34-1.59-5.05-3.72H.96v2.33A9 9 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.95 10.7A5.4 5.4 0 0 1 3.67 9c0-.59.1-1.17.28-1.7V4.97H.96A9 9 0 0 0 0 9c0 1.45.35 2.83.96 4.03l2.99-2.33z"/><path fill="#EA4335" d="M9 3.58c1.32 0 2.51.46 3.44 1.35l2.58-2.58C13.46.89 11.43 0 9 0A9 9 0 0 0 .96 4.97l2.99 2.33C4.66 5.17 6.65 3.58 9 3.58z"/></svg>
+          Continue with Google
+        </button>
         <div class="sq-toggle" id="sq-auth-toggle">
           ${mode === 'signin' ? `New here? <a id="sq-switch">Create an account</a>` : `Already have an account? <a id="sq-switch">Sign in</a>`}
         </div>
@@ -142,6 +167,16 @@
     modalBg.classList.add('open');
     document.getElementById('sq-auth-close').onclick = closeModal;
     document.getElementById('sq-switch').onclick = () => openAuth(mode === 'signin' ? 'signup' : 'signin');
+    document.getElementById('sq-auth-google').onclick = async () => {
+      const statusEl = document.getElementById('sq-auth-status');
+      statusEl.className = 'sq-status';
+      statusEl.textContent = 'Redirecting to Google...';
+      const { error } = await sb.auth.signInWithOAuth({
+        provider: 'google',
+        options: { redirectTo: window.location.href }
+      });
+      if (error){ statusEl.textContent = error.message; statusEl.className = 'sq-status err'; }
+    };
 
     document.getElementById('sq-auth-submit').onclick = async () => {
       const email = document.getElementById('sq-email').value.trim();
@@ -223,6 +258,30 @@
     }).join('');
   }
 
+  /* ---------------- guest-mode gate (only the first trial per realm is free) ---------------- */
+  function renderGate(trialKey){
+    if (FREE_TRIALS.has(trialKey)){ gateEl.classList.remove('open'); return; }
+    if (!state.ready) return; // don't flash the gate before we know the real auth state
+    if (state.user){ gateEl.classList.remove('open'); return; }
+    gateEl.innerHTML = `
+      <div class="sq-gate-card">
+        <div class="emoji">&#128274;</div>
+        <h2>This trial needs an account</h2>
+        <p>Your first trial in each realm is free to try. Sign in (or make a free account) to unlock every trial and save your progress.</p>
+        <button class="sq-btn" id="sq-gate-signin">Sign In / Sign Up</button>
+        <button class="sq-btn sq-btn-ghost" id="sq-gate-back">&#8592; Back to Map</button>
+      </div>
+    `;
+    gateEl.classList.add('open');
+    document.getElementById('sq-gate-signin').onclick = () => openAuth('signin');
+    document.getElementById('sq-gate-back').onclick = () => history.back();
+  }
+
+  function gateTrialPage(trialKey){
+    renderGate(trialKey);
+    listeners.push(() => renderGate(trialKey));
+  }
+
   /* ---------------- pending-attempt flush (if a trial ended while logged out) ---------------- */
   function flushPending(){
     const raw = sessionStorage.getItem('sq_pending_attempt');
@@ -260,6 +319,7 @@
     recordAttempt,
     openAuth,
     openProgress,
+    gateTrialPage,
     onChange: (fn) => listeners.push(fn),
     get user(){ return state.user; }
   };
